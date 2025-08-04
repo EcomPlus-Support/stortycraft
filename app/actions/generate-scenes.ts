@@ -3,15 +3,36 @@
 import { generateText/*, experimental_generateImage as generateImage*/ } from 'ai'
 import { createVertex } from '@ai-sdk/google-vertex'
 import { generateImageCustomizationRest, generateImageRest } from '@/lib/imagen';
+import { getVertexAIConfig, GEMINI_MODELS } from '@/lib/config';
+import { AuthenticationError } from '@/lib/auth';
 
 import { Scene, Scenario, Language } from "../types"
 
+const config = getVertexAIConfig();
+
+// Try setting environment variables explicitly for the AI SDK
+if (!process.env.GOOGLE_CLOUD_PROJECT) {
+  process.env.GOOGLE_CLOUD_PROJECT = config.projectId;
+}
+if (!process.env.GCLOUD_PROJECT) {
+  process.env.GCLOUD_PROJECT = config.projectId;
+}
+
 const vertex = createVertex({
-  project: process.env.PROJECT_ID,
-  location: process.env.LOCATION,
-})
+  project: config.projectId,
+  location: config.location,
+  // Try with explicit googleAuthOptions
+  googleAuthOptions: {
+    projectId: config.projectId,
+    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+  },
+});
 
 export async function generateScenes(pitch: string, numScenes: number, style: string, language: Language) {
+  console.log('Generating scenes with Vertex AI Gemini 2.5 Flash');
+  console.log('Project ID:', process.env.PROJECT_ID || 'fechen-aifatory');
+  console.log('Location:', process.env.LOCATION || 'us-central1');
+  
   try {
     const prompt = `
       You are tasked with generating a creative scenario for a short movie and creating prompts for storyboard illustrations. Follow these instructions carefully:
@@ -110,7 +131,7 @@ Remember, your goal is to create a compelling and visually interesting story tha
 
     console.log('Create a storyboard')
     const { text } = await generateText({
-      model: vertex("gemini-2.0-flash-001"),
+      model: vertex("gemini-2.5-flash"), // Using latest Gemini 2.5 Flash
       prompt,
       temperature: 1
     })
@@ -227,6 +248,20 @@ Remember, your goal is to create a compelling and visually interesting story tha
     return scenario
   } catch (error) {
     console.error('Error generating scenes:', error)
+    
+    // Handle authentication errors specifically
+    if (error instanceof AuthenticationError) {
+      if (error.code === 'invalid_rapt') {
+        throw new Error('Authentication failed: Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.')
+      }
+      throw new Error(`Authentication error: ${error.message}`)
+    }
+    
+    // Check for specific Google OAuth errors in the error message
+    if (error instanceof Error && error.message.includes('invalid_grant')) {
+      throw new Error('Authentication failed: Google credentials have expired. Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.')
+    }
+    
     throw new Error(`Failed to generate scenes: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }

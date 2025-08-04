@@ -53,7 +53,15 @@ export default function Home() {
   }, [generatingScenes]); // Log only when generatingScenes changes
 
   const handleGenerate = async () => {
-    if (pitch.trim() === '' || numScenes < 1) return
+    console.log('handleGenerate called with pitch:', pitch);
+    console.log('pitch.trim():', pitch.trim());
+    console.log('numScenes:', numScenes);
+    
+    if (pitch.trim() === '' || numScenes < 1) {
+      console.log('Validation failed - empty pitch or invalid numScenes');
+      return;
+    }
+    
     setIsLoading(true)
     setErrorMessage(null)
     try {

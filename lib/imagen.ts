@@ -1,25 +1,34 @@
 import { log } from 'console'
 import { GoogleAuth } from 'google-auth-library'
+import { getVertexAIConfig, IMAGEN_MODELS } from './config'
+import { getAuthManager, AuthenticationError } from './auth'
 
 
-const LOCATION = process.env.LOCATION
-const PROJECT_ID = process.env.PROJECT_ID
-const MODEL = 'imagen-3.0-generate-002'
-const MODEL_EDIT = 'imagen-3.0-capability-001'
+const config = getVertexAIConfig();
+const LOCATION = config.location;
+const PROJECT_ID = config.projectId;
+const MODEL = IMAGEN_MODELS['imagen-3.0-generate-002'];
+const MODEL_EDIT = IMAGEN_MODELS['imagen-3.0-capability-001'];
 
 async function getAccessToken(): Promise<string> {
-  const auth = new GoogleAuth({
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-  });
-  const client = await auth.getClient();
-  const accessToken = (await client.getAccessToken()).token;
-  // Check if accessToken is null or undefined
-  if (accessToken) {
-    return accessToken;
-  } else {
-    // Handle the case where accessToken is null or undefined
-    // This could involve throwing an error, retrying, or providing a default value
-    throw new Error('Failed to obtain access token.');
+  console.log('Getting access token for project:', PROJECT_ID);
+  console.log('Location:', LOCATION);
+  
+  const authManager = getAuthManager();
+  try {
+    return await authManager.getAccessToken();
+  } catch (error) {
+    if (error instanceof AuthenticationError) {
+      console.error('Authentication error:', error.message);
+      if (error.description) {
+        console.error('Details:', error.description);
+      }
+      if (error.code === 'invalid_rapt') {
+        console.error('\nAction required: Please run the following command to reauthenticate:');
+        console.error('gcloud auth application-default login\n');
+      }
+    }
+    throw error;
   }
 }
 

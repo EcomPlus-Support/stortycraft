@@ -2,11 +2,13 @@
 
 import { experimental_generateImage as generateImage } from 'ai'
 import { createVertex } from '@ai-sdk/google-vertex'
+import { getVertexAIConfig } from '@/lib/config'
 
+const config = getVertexAIConfig();
 const vertex = createVertex({
-  project: process.env.PROJECT_ID,
-  location: process.env.LOCATION,
-})
+  project: config.projectId,
+  location: config.location,
+});
 
 export async function regenerateImage(prompt: string) {
   try {

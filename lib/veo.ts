@@ -1,9 +1,12 @@
 import { GoogleAuth } from 'google-auth-library';
+import { getVertexAIConfig } from './config';
+import { getAuthManager, AuthenticationError } from './auth';
 
-const LOCATION = process.env.LOCATION
-const PROJECT_ID = process.env.PROJECT_ID
-const MODEL = process.env.MODEL
-const GCS_VIDEOS_STORAGE_URI = process.env.GCS_VIDEOS_STORAGE_URI
+const config = getVertexAIConfig();
+const LOCATION = config.location;
+const PROJECT_ID = config.projectId;
+const MODEL = config.model;
+const GCS_VIDEOS_STORAGE_URI = config.gcsVideosStorageUri;
 
 interface GenerateVideoResponse {
   name: string;
@@ -23,15 +26,25 @@ interface GenerateVideoResponse {
 }
 
 async function getAccessToken(): Promise<string> {
-  const auth = new GoogleAuth({
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-  });
-  const client = await auth.getClient();
-  const accessToken = (await client.getAccessToken()).token;
-  if (accessToken) {
-    return accessToken;
-  } else {
-    throw new Error('Failed to obtain access token.');
+  console.log('Getting access token for Veo video generation');
+  console.log('Project ID:', PROJECT_ID);
+  console.log('Location:', LOCATION);
+  
+  const authManager = getAuthManager();
+  try {
+    return await authManager.getAccessToken();
+  } catch (error) {
+    if (error instanceof AuthenticationError) {
+      console.error('Authentication error:', error.message);
+      if (error.description) {
+        console.error('Details:', error.description);
+      }
+      if (error.code === 'invalid_rapt') {
+        console.error('\nAction required: Please run the following command to reauthenticate:');
+        console.error('gcloud auth application-default login\n');
+      }
+    }
+    throw error;
   }
 }
 

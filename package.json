@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/google-vertex": "^2.1.0",
+    "@google-cloud/aiplatform": "^3.29.0",
     "@ai-sdk/openai": "^1.1.0",
     "@google-cloud/storage": "^7.15.0",
     "@google-cloud/text-to-speech": "^5.8.0",

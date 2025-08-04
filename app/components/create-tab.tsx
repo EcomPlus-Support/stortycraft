@@ -211,7 +211,13 @@ export function CreateTab({
           )}
         </div>
         <Button 
-          onClick={onGenerate} 
+          onClick={() => {
+            console.log('Button clicked!');
+            console.log('Current pitch:', pitch);
+            console.log('Is loading:', isLoading);
+            console.log('Pitch is empty:', pitch.trim() === '');
+            onGenerate();
+          }} 
           disabled={isLoading || pitch.trim() === ''}
           className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
         >
