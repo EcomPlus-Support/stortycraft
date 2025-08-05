@@ -1,39 +1,105 @@
 'use server'
 
-import { generateText/*, experimental_generateImage as generateImage*/ } from 'ai'
-import { createVertex } from '@ai-sdk/google-vertex'
 import { generateImageCustomizationRest, generateImageRest } from '@/lib/imagen';
-import { getVertexAIConfig, GEMINI_MODELS } from '@/lib/config';
+import { getVertexAIConfig, TIMEOUTS } from '@/lib/config';
 import { AuthenticationError } from '@/lib/auth';
+import { safeJsonParse, translateError, cleanJsonResponse, validateScenesData } from '@/lib/error-utils';
+import { generateTextWithGemini, GeminiServiceError, checkGeminiHealth } from '@/lib/gemini-service';
+import { createDebugTracker, logEnvironmentInfo, validateEnvironment } from '@/lib/debug-utils';
 
 import { Scene, Scenario, Language } from "../types"
 
 const config = getVertexAIConfig();
 
-// Try setting environment variables explicitly for the AI SDK
-if (!process.env.GOOGLE_CLOUD_PROJECT) {
-  process.env.GOOGLE_CLOUD_PROJECT = config.projectId;
+/**
+ * Create a fallback scenario when AI parsing fails
+ */
+function createFallbackScenario(pitch: string, numScenes: number, style: string, language: Language): Scenario {
+  console.log('Creating fallback scenario for pitch:', pitch.substring(0, 100))
+  
+  const fallbackScenes: Scene[] = []
+  
+  for (let i = 0; i < numScenes; i++) {
+    fallbackScenes.push({
+      imagePrompt: `${style} style: A compelling scene from the story "${pitch.substring(0, 50)}...". Professional cinematography with dramatic lighting and composition.`,
+      videoPrompt: `Camera slowly moves to reveal the scene. Characters move naturally with emotional expressions that convey the story's message.`,
+      description: `Scene ${i + 1}: The story unfolds as we see the key moment from the pitch come to life.`,
+      voiceover: `This scene brings the story to life with visual impact.`,
+      charactersPresent: []
+    })
+  }
+  
+  return {
+    scenario: `A compelling story based on: ${pitch}. This scenario brings the core message to life through visual storytelling.`,
+    genre: 'Cinematic',
+    mood: 'Inspirational',
+    music: 'Orchestral score that enhances the emotional journey of the story.',
+    language: {
+      name: language.name,
+      code: language.code
+    },
+    characters: [
+      { name: 'Protagonist', description: 'A relatable character who embodies the story\'s main theme' }
+    ],
+    settings: [
+      { name: 'Main Setting', description: 'A visually appealing environment that supports the story narrative' }
+    ],
+    scenes: fallbackScenes
+  }
 }
-if (!process.env.GCLOUD_PROJECT) {
-  process.env.GCLOUD_PROJECT = config.projectId;
-}
-
-const vertex = createVertex({
-  project: config.projectId,
-  location: config.location,
-  // Try with explicit googleAuthOptions
-  googleAuthOptions: {
-    projectId: config.projectId,
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-  },
-});
 
 export async function generateScenes(pitch: string, numScenes: number, style: string, language: Language) {
-  console.log('Generating scenes with Vertex AI Gemini 2.5 Flash');
-  console.log('Project ID:', process.env.PROJECT_ID || 'fechen-aifatory');
-  console.log('Location:', process.env.LOCATION || 'us-central1');
+  const debugTracker = createDebugTracker('generate-scenes');
   
   try {
+    debugTracker.startStep('initialization');
+    console.log('🎬 Generating scenes with enhanced Gemini service');
+    
+    // Log environment information for debugging
+    logEnvironmentInfo();
+    
+    // Validate environment configuration
+    const envValidation = validateEnvironment();
+    if (!envValidation.valid) {
+      console.error('❌ Environment validation failed:', envValidation.issues);
+      debugTracker.addError('initialization', `Environment issues: ${envValidation.issues.join(', ')}`);
+    }
+    if (envValidation.warnings.length > 0) {
+      console.warn('⚠️ Environment warnings:', envValidation.warnings);
+    }
+    
+    console.log('📊 Configuration:', {
+      projectId: config.projectId,
+      location: config.location,
+      geminiModel: config.geminiModel,
+      pitchLength: pitch.length,
+      numScenes,
+      style,
+      language: language.name
+    });
+    debugTracker.endStep('initialization', true);
+    
+    // First, check Gemini service health
+    debugTracker.startStep('health-check');
+    const healthStatus = await checkGeminiHealth();
+    console.log('🏥 Gemini Health Check:', healthStatus);
+    
+    if (!healthStatus.healthy) {
+      console.error('❌ Gemini service is not healthy:', healthStatus.error);
+      debugTracker.endStep('health-check', false, healthStatus.error);
+      debugTracker.addError('health-check', healthStatus.error || 'Service unhealthy');
+      
+      // Return fallback scenario if Gemini is completely unavailable
+      console.log('🔄 Creating fallback scenario due to Gemini unavailability');
+      debugTracker.startStep('fallback-scenario');
+      const fallback = createFallbackScenario(pitch, numScenes, style, language);
+      debugTracker.endStep('fallback-scenario', true);
+      debugTracker.logSummary();
+      return fallback;
+    }
+    debugTracker.endStep('health-check', true);
+  
+    debugTracker.startStep('gemini-text-generation');
     const prompt = `
       You are tasked with generating a creative scenario for a short movie and creating prompts for storyboard illustrations. Follow these instructions carefully:
 1. First, you will be given a story pitch. This story pitch will be the foundation for your scenario.
@@ -129,24 +195,52 @@ Here's an example of how your output should be structured:
 
 Remember, your goal is to create a compelling and visually interesting story that can be effectively illustrated through a storyboard. Be creative, consistent, and detailed in your scenario and prompts.`
 
-    console.log('Create a storyboard')
-    const { text } = await generateText({
-      model: vertex("gemini-2.5-flash"), // Using latest Gemini 2.5 Flash
-      prompt,
-      temperature: 1
-    })
-
-    console.log('text', text)
+    console.log('🎯 Creating storyboard with Gemini...');
+    
+    const text = await generateTextWithGemini(prompt, {
+      temperature: 1,
+      maxTokens: 8192,
+      timeout: TIMEOUTS.GEMINI_TEXT_GENERATION
+    });
+    
+    console.log(`✅ Gemini response received:`, {
+      textLength: text.length,
+      textPreview: text.substring(0, 200) + '...'
+    });
+    debugTracker.endStep('gemini-text-generation', true);
 
     if (!text) {
-      throw new Error('No text generated from the AI model')
+      debugTracker.endStep('gemini-text-generation', false, 'No text generated');
+      throw new Error('No text generated from the AI model');
     }
 
-    let scenario: Scenario
-    let scenes: Scene[]
+    debugTracker.startStep('response-parsing');
+    let scenario: Scenario;
+    let scenes: Scene[];
     try {
-      const cleanedText = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
-      const parsedScenario = JSON.parse(cleanedText);
+      const cleanedText = cleanJsonResponse(text);
+      const parseResult = safeJsonParse(cleanedText);
+      
+      if (!parseResult.success) {
+        // Log the actual response for debugging
+        console.error('Failed to parse AI response, raw text:', text.substring(0, 500));
+        debugTracker.addError('response-parsing', `Parse error: ${parseResult.error.message}`);
+        
+        throw new Error(`${parseResult.error.title}: ${parseResult.error.message}${
+          parseResult.error.actionable ? ` ${parseResult.error.actionable}` : ''
+        }`);
+      }
+      
+      // Validate the scenes structure
+      const scenesValidation = validateScenesData(parseResult.data);
+      if (!scenesValidation.valid) {
+        debugTracker.addError('response-parsing', `Validation error: ${scenesValidation.error.message}`);
+        throw new Error(`${scenesValidation.error.title}: ${scenesValidation.error.message}${
+          scenesValidation.error.actionable ? ` ${scenesValidation.error.actionable}` : ''
+        }`);
+      }
+      
+      const parsedScenario = scenesValidation.data;
       
       // Ensure the language is set correctly
       scenario = {
@@ -157,35 +251,46 @@ Remember, your goal is to create a compelling and visually interesting story tha
         }
       };
       
-      console.log(scenario.scenario)
-      console.log(scenario.characters)
-      console.log(scenario.settings)
+      console.log('📝 Scenario:', scenario.scenario);
+      console.log('👥 Characters:', scenario.characters.map(c => c.name));
+      console.log('🏞️ Settings:', scenario.settings.map(s => s.name));
       scenes = scenario.scenes;
-      console.log(scenes)
+      console.log('🎬 Scenes generated:', scenes.length);
+      debugTracker.endStep('response-parsing', true);
     } catch (parseError) {
-      console.error('Error parsing AI response:', text)
-      throw new Error(`Failed to parse AI response: ${parseError instanceof Error ? parseError.message : 'Unknown error'}`)
+      console.error('Error parsing AI response:', parseError);
+      debugTracker.endStep('response-parsing', false, parseError instanceof Error ? parseError.message : 'Unknown parsing error');
+      debugTracker.addError('response-parsing', parseError instanceof Error ? parseError : 'Unknown parsing error');
+      const friendlyError = translateError(parseError);
+      throw new Error(`${friendlyError.title}: ${friendlyError.message}${
+        friendlyError.actionable ? ` ${friendlyError.actionable}` : ''
+      }`);
     }
 
     if (!Array.isArray(scenes)) {
-      throw new Error('Invalid scene data structure: expected an array')
+      debugTracker.addError('validation', 'Invalid scene data structure: expected an array');
+      throw new Error('Invalid scene data structure: expected an array');
     }
 
+    debugTracker.startStep('character-image-generation');
     const charactersWithImages = await Promise.all(scenario.characters.map(async (character, index) => {
       try {
-        console.log(`Generating image for scene ${index + 1}`);
+        console.log(`Generating image for character ${index + 1}: ${character.name}`);
         const resultJson = await generateImageRest(`${style}: ${character.description}`, "1:1");
         if (resultJson.predictions[0].raiFilteredReason) {
-            throw new Error(resultJson.predictions[0].raiFilteredReason)
+            debugTracker.addError('character-image-generation', `Character ${character.name}: ${resultJson.predictions[0].raiFilteredReason}`);
+            throw new Error(resultJson.predictions[0].raiFilteredReason);
         } else {
-            console.log('Generated image base64:', resultJson.predictions[0].bytesBase64Encoded.substring(0, 50) + '...');
+            console.log(`✅ Generated character image for ${character.name}:`, resultJson.predictions[0].bytesBase64Encoded.substring(0, 50) + '...');
             return { ...character, imageBase64: resultJson.predictions[0].bytesBase64Encoded };
         }
       } catch (error) {
-        console.error('Error generating image:', error);
+        console.error(`❌ Error generating character image for ${character.name}:`, error);
+        debugTracker.addError('character-image-generation', `Character ${character.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         return { ...character, imageBase64: '' };
       }
-    }))
+    }));
+    debugTracker.endStep('character-image-generation', true);
 
     scenario.characters = charactersWithImages
 
@@ -205,6 +310,7 @@ Remember, your goal is to create a compelling and visually interesting story tha
       scenes = scenes.slice(0, numScenes)
     }
 
+    debugTracker.startStep('scene-image-generation');
     // Generate images for each scene
     const scenesWithImages = await Promise.all(scenes.map(async (scene, index) => {
       try {
@@ -214,7 +320,7 @@ Remember, your goal is to create a compelling and visually interesting story tha
         //   n: 1,
         //   aspectRatio: '16:9'
         // });
-        console.log(`Generating image for scene ${index + 1}`);
+        console.log(`🎨 Generating image for scene ${index + 1}`);
         let resultJson;
         if (false && scene.charactersPresent.length > 0) {
           const presentCharacters = charactersWithImages.filter(character =>
@@ -232,37 +338,96 @@ Remember, your goal is to create a compelling and visually interesting story tha
           resultJson = await generateImageRest(scene.imagePrompt);
         }
         if (resultJson.predictions[0].raiFilteredReason) {
-            throw new Error(resultJson.predictions[0].raiFilteredReason)
+            debugTracker.addError('scene-image-generation', `Scene ${index + 1}: ${resultJson.predictions[0].raiFilteredReason}`);
+            throw new Error(resultJson.predictions[0].raiFilteredReason);
         } else {
-            console.log('Generated image base64:', resultJson.predictions[0].bytesBase64Encoded.substring(0, 50) + '...');
+            console.log(`✅ Generated scene ${index + 1} image:`, resultJson.predictions[0].bytesBase64Encoded.substring(0, 50) + '...');
             return { ...scene, imageBase64: resultJson.predictions[0].bytesBase64Encoded };
         }
       } catch (error) {
-        console.error('Error generating image:', error);
+        console.error(`❌ Error generating scene ${index + 1} image:`, error);
+        debugTracker.addError('scene-image-generation', `Scene ${index + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         return { ...scene, imageBase64: '' };
       }
     }));
+    debugTracker.endStep('scene-image-generation', true);
 
-    scenario.scenes = scenesWithImages
-
-    return scenario
+    scenario.scenes = scenesWithImages;
+    
+    debugTracker.logSummary();
+    console.log('🎉 Scene generation completed successfully!');
+    return scenario;
   } catch (error) {
-    console.error('Error generating scenes:', error)
+    console.error('❌ Error generating scenes:', error);
+    debugTracker.addError('generate-scenes', error instanceof Error ? error : 'Unknown error');
+    
+    // Handle Gemini service errors with more specific messaging
+    if (error instanceof GeminiServiceError) {
+      console.error('🔴 Gemini Service Error:', {
+        code: error.code,
+        isRetryable: error.isRetryable,
+        originalError: error.originalError?.message
+      });
+      
+      // If it's a model availability issue, return fallback
+      if (error.code === 'NO_MODELS_AVAILABLE' || error.code === 'MODEL_UNAVAILABLE') {
+        console.log('🔄 Creating fallback scenario due to model unavailability');
+        debugTracker.startStep('fallback-scenario');
+        const fallback = createFallbackScenario(pitch, numScenes, style, language);
+        debugTracker.endStep('fallback-scenario', true);
+        debugTracker.logSummary();
+        return fallback;
+      }
+      
+      // For auth errors, provide specific guidance
+      if (error.code === 'AUTH_ERROR') {
+        debugTracker.logSummary();
+        throw new Error('Authentication failed: Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.');
+      }
+      
+      debugTracker.logSummary();
+      throw new Error(`Gemini service error: ${error.message}`);
+    }
     
     // Handle authentication errors specifically
     if (error instanceof AuthenticationError) {
       if (error.code === 'invalid_rapt') {
-        throw new Error('Authentication failed: Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.')
+        debugTracker.logSummary();
+        throw new Error('Authentication failed: Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.');
       }
-      throw new Error(`Authentication error: ${error.message}`)
+      debugTracker.logSummary();
+      throw new Error(`Authentication error: ${error.message}`);
     }
     
     // Check for specific Google OAuth errors in the error message
     if (error instanceof Error && error.message.includes('invalid_grant')) {
-      throw new Error('Authentication failed: Google credentials have expired. Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.')
+      debugTracker.logSummary();
+      throw new Error('Authentication failed: Google credentials have expired. Please ask your administrator to run "gcloud auth application-default login" to reauthenticate.');
     }
     
-    throw new Error(`Failed to generate scenes: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    // For any other errors, log details and provide fallback
+    console.error('🔄 Unexpected error, creating fallback scenario:', error);
+    const friendlyError = translateError(error);
+    
+    // If we can't generate scenes normally, return a fallback
+    if (friendlyError.type === 'error') {
+      console.log('🔄 Creating fallback scenario due to unexpected error');
+      debugTracker.startStep('fallback-scenario');
+      const fallback = createFallbackScenario(pitch, numScenes, style, language);
+      debugTracker.endStep('fallback-scenario', true);
+      debugTracker.logSummary();
+      return fallback;
+    }
+    
+    debugTracker.logSummary();
+    throw new Error(`Failed to generate scenes: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  } finally {
+    // Always log debug summary, even if there was an error
+    try {
+      debugTracker.logSummary();
+    } catch (logError) {
+      console.error('Error logging debug summary:', logError);
+    }
   }
 }
 
