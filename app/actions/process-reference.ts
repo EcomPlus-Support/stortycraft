@@ -9,6 +9,8 @@ import { logger } from '@/lib/logger'
 import { analyzeContentComplexity, detectContentType, type ReferenceSource as AnalyzerReferenceSource } from '@/lib/content-analyzer'
 import { calculateOptimalTokens, generateOptimizedPrompt } from '@/lib/token-optimizer'
 import { parseAiJsonResponse, type ReferenceContentSchema } from '@/lib/json-parser-simplified'
+import { StructuredOutputService, type StructuredPitch } from '@/lib/structured-output-service'
+import { GeminiDirectService } from '@/lib/gemini-direct'
 
 // Add timeout configuration for external APIs
 const API_TIMEOUT = 30000 // 30 seconds
@@ -16,6 +18,19 @@ const API_TIMEOUT = 30000 // 30 seconds
 // Simple in-memory cache for development (use Redis in production)
 const contentCache = new Map<string, unknown>()
 const CACHE_TTL = 3600000 // 1 hour in milliseconds
+
+// Helper function to get proper language display name
+function getLanguageDisplayName(language?: string): string {
+  const languageMap: Record<string, string> = {
+    '繁體中文': 'Traditional Chinese',
+    '简体中文': 'Simplified Chinese',
+    'English': 'English',
+    'zh-TW': 'Traditional Chinese',
+    'zh-CN': 'Simplified Chinese',
+    'en-US': 'English'
+  }
+  return languageMap[language || ''] || 'English'
+}
 
 export interface ReferenceSource {
   id: string
@@ -46,6 +61,9 @@ export interface ReferenceContent {
   warning?: string
   createdAt: Date
   updatedAt: Date
+  // New structured output fields
+  structuredPitch?: StructuredPitch
+  isStructuredOutput?: boolean
 }
 
 export async function extractYouTubeMetadata(url: string): Promise<Partial<ReferenceSource>> {
@@ -152,7 +170,8 @@ export async function extractYouTubeMetadata(url: string): Promise<Partial<Refer
 export async function processReferenceContent(
   source: ReferenceSource,
   targetStyle?: string,
-  targetLanguage?: string
+  targetLanguage?: string,
+  useStructuredOutput?: boolean
 ): Promise<ReferenceContent> {
   return await performanceMonitor.trackOperation('reference_content_processing', async (): Promise<ReferenceContent> => {
   const startTime = Date.now()
@@ -246,8 +265,67 @@ export async function processReferenceContent(
       shortsStyle: complexity.shortsStyle,
       topicsComplexity: complexity.topicsComplexity,
       tokenAllocation: tokenAllocation.maxTokens,
-      reasoning: tokenAllocation.reasoning
+      reasoning: tokenAllocation.reasoning,
+      useStructuredOutput: useStructuredOutput
     })
+    
+    // Check if we should use structured output (Traditional Chinese)
+    if (useStructuredOutput && (targetLanguage === '繁體中文' || targetLanguage === 'Traditional Chinese' || targetLanguage === 'zh-TW')) {
+      console.log('🏗️ Using structured output system for Traditional Chinese generation')
+      
+      try {
+        // Create instance of GeminiDirectService
+        const geminiDirect = new GeminiDirectService()
+        const structuredService = new StructuredOutputService(geminiDirect)
+        
+        const structuredPitch = await structuredService.generateStructuredPitch(
+          content,
+          contentQuality
+        )
+        
+        if (structuredPitch) {
+          console.log('✅ Structured output generation successful!')
+          
+          const referenceContent: ReferenceContent = {
+            id: generateId(),
+            source: {
+              ...source,
+              processingStatus: 'completed'
+            },
+            extractedContent: {
+              title: source.title || 'Untitled',
+              description: source.description || '',
+              transcript: source.transcript || '',
+              keyTopics: structuredPitch.tags || structuredPitch.characters.map(c => c.name),
+              sentiment: 'positive',
+              duration: source.duration || 0
+            },
+            generatedPitch: structuredPitch.finalPitch,
+            contentQuality,
+            warning,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            // Structured output specific fields
+            structuredPitch: structuredPitch,
+            isStructuredOutput: true
+          }
+          
+          // Cache the processed result
+          setCachedContent(cacheKey, referenceContent)
+          
+          const processingTime = Date.now() - startTime
+          console.log(`Structured content processing completed in ${processingTime}ms`)
+          
+          return referenceContent
+        } else {
+          console.log('⚠️ Structured output failed, falling back to standard generation')
+          // Continue with standard generation below
+        }
+      } catch (structuredError) {
+        console.log('⚠️ Structured output error, falling back to standard generation:', structuredError)
+        // Continue with standard generation below
+      }
+    }
     
     const contentQualityContext = contentQuality === 'full' 
       ? 'You have access to the full transcript/content.'
@@ -286,7 +364,8 @@ Your tasks:
    - Detailed scene descriptions including environment, lighting, location
    - Emotional journey and character development
    - Visual storytelling elements that work for ${targetStyle || 'Live-Action'} style
-   - Suitable tone for ${targetLanguage || 'English'} audience
+   - Suitable tone for ${getLanguageDisplayName(targetLanguage)} audience
+   - Generate the pitch in ${getLanguageDisplayName(targetLanguage)} language
    - Sufficient detail for complete scene generation (minimum 200 words)
 
 3. **Quality Standards**: The pitch must:
@@ -382,7 +461,9 @@ REQUIRED JSON RESPONSE FORMAT (copy this structure exactly):
       contentQuality,
       warning,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      // Standard output fields
+      isStructuredOutput: false
     }
 
     // Cache the processed result
@@ -579,13 +660,35 @@ function generateContentHash(source: ReferenceSource, style?: string, language?:
 function createFallbackPitch(source: ReferenceSource, targetStyle?: string, targetLanguage?: string): string {
   const title = source.title || 'Untitled Content'
   const hasDescription = source.description && source.description.length > 20
+  const displayLanguage = getLanguageDisplayName(targetLanguage)
   
-  if (hasDescription) {
-    const shortDesc = (source.description || '').substring(0, 100).replace(/\s+/g, ' ').trim()
-    return `Discover the story behind "${title}" - a compelling narrative that explores ${shortDesc}${shortDesc.length >= 100 ? '...' : ''}. This ${targetStyle?.toLowerCase() || 'video'} brings the content to life in a visually engaging way.`
-  } else {
-    return `Experience "${title}" in a new way. This ${targetStyle?.toLowerCase() || 'video'} transforms the original content into a compelling visual story that captures your attention and delivers the message effectively.`
+  // Language-specific fallback pitches
+  const pitchTemplates: Record<string, (title: string, desc: string, style: string) => string> = {
+    'Traditional Chinese': (title, desc, style) => {
+      if (hasDescription) {
+        return `探索「${title}」背後的故事 - 一個引人入勝的敘事，探討${desc}${desc.length >= 100 ? '...' : ''}。這部${style}將內容以視覺化的方式生動呈現。`
+      }
+      return `以全新的方式體驗「${title}」。這部${style}將原始內容轉化為引人入勝的視覺故事，捕捉您的注意力並有效傳達訊息。`
+    },
+    'Simplified Chinese': (title, desc, style) => {
+      if (hasDescription) {
+        return `探索「${title}」背后的故事 - 一个引人入胜的叙事，探讨${desc}${desc.length >= 100 ? '...' : ''}。这部${style}将内容以视觉化的方式生动呈现。`
+      }
+      return `以全新的方式体验「${title}」。这部${style}将原始内容转化为引人入胜的视觉故事，捕捉您的注意力并有效传达信息。`
+    },
+    'English': (title, desc, style) => {
+      if (hasDescription) {
+        return `Discover the story behind "${title}" - a compelling narrative that explores ${desc}${desc.length >= 100 ? '...' : ''}. This ${style} brings the content to life in a visually engaging way.`
+      }
+      return `Experience "${title}" in a new way. This ${style} transforms the original content into a compelling visual story that captures your attention and delivers the message effectively.`
+    }
   }
+  
+  const shortDesc = hasDescription ? (source.description || '').substring(0, 100).replace(/\s+/g, ' ').trim() : ''
+  const styleText = targetStyle?.toLowerCase() || 'video'
+  
+  const pitchGenerator = pitchTemplates[displayLanguage] || pitchTemplates['English']
+  return pitchGenerator(title, shortDesc, styleText)
 }
 
 /**

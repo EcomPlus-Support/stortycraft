@@ -11,7 +11,19 @@ interface GeminiResponse {
   }>;
 }
 
-export async function generateTextDirect(prompt: string, temperature: number = 1): Promise<string> {
+export class GeminiDirectService {
+  async generateText(prompt: string, options?: {
+    temperature?: number;
+    maxOutputTokens?: number;
+  }): Promise<string> {
+    const temperature = options?.temperature ?? 0.7;
+    const maxOutputTokens = options?.maxOutputTokens ?? 8192;
+    
+    return generateTextDirect(prompt, temperature, maxOutputTokens);
+  }
+}
+
+export async function generateTextDirect(prompt: string, temperature: number = 1, maxOutputTokens: number = 8192): Promise<string> {
   const config = getVertexAIConfig();
   const authManager = getAuthManager();
   
@@ -28,13 +40,14 @@ export async function generateTextDirect(prompt: string, temperature: number = 1
         },
         body: JSON.stringify({
           contents: [{
+            role: 'user',
             parts: [{
               text: prompt
             }]
           }],
           generationConfig: {
             temperature: temperature,
-            maxOutputTokens: 8192,
+            maxOutputTokens: maxOutputTokens,
           }
         })
       }
@@ -48,9 +61,12 @@ export async function generateTextDirect(prompt: string, temperature: number = 1
 
     const result: GeminiResponse = await response.json();
     
+    console.log('Gemini response structure:', JSON.stringify(result, null, 2));
+    
     if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
       return result.candidates[0].content.parts[0].text;
     } else {
+      console.error('Unexpected Gemini response structure:', result);
       throw new Error('No text generated from Gemini');
     }
   } catch (error) {

@@ -1,13 +1,12 @@
 'use server'
 
-import { generateImageCustomizationRest, generateImageRest } from '@/lib/imagen';
 import { getVertexAIConfig } from '@/lib/config';
 import { AuthenticationError } from '@/lib/auth';
 import { generateTextDirect } from '@/lib/gemini-direct';
 
-import { Scene, Scenario, Language } from "../types"
+import { Language } from "../types"
 
-export async function generateScenesDirectTest(pitch: string, numScenes: number, style: string, language: Language) {
+export async function generateScenesDirectTest(_pitch: string, _numScenes: number, _style: string, _language: Language) {
   console.log('Testing direct Gemini API call...');
   const config = getVertexAIConfig();
   console.log('Project ID:', config.projectId);

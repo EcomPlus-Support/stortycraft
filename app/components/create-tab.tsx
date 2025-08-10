@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea"
 import { StyleSelector, type Style } from "./style-selector"
 import { Loader2, Upload } from 'lucide-react'
 import Image from 'next/image'
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
@@ -15,43 +17,11 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { type Language } from '../types'
+import { type UserFriendlyError } from '@/lib/error-utils'
+import { ErrorDisplay } from '@/components/ui/error-display'
+import { SUPPORTED_LANGUAGES } from '../constants/languages'
 
-const LANGUAGES: Language[] = [
-  { name: "Arabic (Generic)", code: "ar-XA" },
-  { name: "Bengali (India)", code: "bn-IN" },
-  { name: "Dutch (Belgium)", code: "nl-BE" },
-  { name: "Dutch (Netherlands)", code: "nl-NL" },
-  { name: "English (Australia)", code: "en-AU" },
-  { name: "English (India)", code: "en-IN" },
-  { name: "English (United Kingdom)", code: "en-GB" },
-  { name: "English (United States)", code: "en-US" },
-  { name: "French (Canada)", code: "fr-CA" },
-  { name: "French (France)", code: "fr-FR" },
-  { name: "German (Germany)", code: "de-DE" },
-  { name: "Gujarati (India)", code: "gu-IN" },
-  { name: "Hindi (India)", code: "hi-IN" },
-  { name: "Indonesian (Indonesia)", code: "id-ID" },
-  { name: "Italian (Italy)", code: "it-IT" },
-  { name: "Japanese (Japan)", code: "ja-JP" },
-  { name: "Kannada (India)", code: "kn-IN" },
-  { name: "Korean (South Korea)", code: "ko-KR" },
-  { name: "Malayalam (India)", code: "ml-IN" },
-  { name: "Mandarin Chinese (China)", code: "cmn-CN" },
-  { name: "Marathi (India)", code: "mr-IN" },
-  { name: "Polish (Poland)", code: "pl-PL" },
-  { name: "Portuguese (Brazil)", code: "pt-BR" },
-  { name: "Russian (Russia)", code: "ru-RU" },
-  { name: "Spanish (Spain)", code: "es-ES" },
-  { name: "Spanish (United States)", code: "es-US" },
-  { name: "Swahili (Kenya)", code: "sw-KE" },
-  { name: "Tamil (India)", code: "ta-IN" },
-  { name: "Telugu (India)", code: "te-IN" },
-  { name: "Thai (Thailand)", code: "th-TH" },
-  { name: "Turkish (Turkey)", code: "tr-TR" },
-  { name: "Ukrainian (Ukraine)", code: "uk-UA" },
-  { name: "Urdu (India)", code: "ur-IN" },
-  { name: "Vietnamese (Vietnam)", code: "vi-VN" }
-];
+// Using shared language constants for consistency
 
 interface CreateTabProps {
   pitch: string
@@ -65,11 +35,13 @@ interface CreateTabProps {
   logoOverlay: string | null
   setLogoOverlay: (logo: string | null) => void
   isLoading: boolean
-  errorMessage: string | null
+  errorMessage: UserFriendlyError | null
   onGenerate: () => Promise<void>
   styles: Style[]
   onLogoUpload: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>
   onLogoRemove: () => void
+  useStructuredOutput: boolean
+  setUseStructuredOutput: (use: boolean) => void
 }
 
 export function CreateTab({
@@ -88,7 +60,9 @@ export function CreateTab({
   onGenerate,
   styles,
   onLogoUpload,
-  onLogoRemove
+  onLogoRemove,
+  useStructuredOutput,
+  setUseStructuredOutput
 }: CreateTabProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -118,7 +92,7 @@ export function CreateTab({
           <Select 
             value={language.code} 
             onValueChange={(code) => {
-              const selectedLanguage = LANGUAGES.find(lang => lang.code === code);
+              const selectedLanguage = SUPPORTED_LANGUAGES.find(lang => lang.code === code);
               if (selectedLanguage) {
                 setLanguage(selectedLanguage);
               }
@@ -130,13 +104,28 @@ export function CreateTab({
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              {LANGUAGES.map((lang) => (
+              {SUPPORTED_LANGUAGES.map((lang) => (
                 <SelectItem key={lang.code} value={lang.code}>
                   {lang.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+        </div>
+        {/* Structured Output Toggle */}
+        <div className="flex items-center space-x-2">
+          <Label htmlFor="structured-output" className="text-sm font-medium">
+            增強精確度系統 (Enhanced Precision System):
+          </Label>
+          <Switch
+            id="structured-output"
+            checked={useStructuredOutput}
+            onCheckedChange={setUseStructuredOutput}
+            disabled={language.code !== 'zh-TW'}
+          />
+          <span className="text-xs text-muted-foreground">
+            只限繁體中文
+          </span>
         </div>
         <div className="flex items-center space-x-2">
           <label htmlFor="numScenes" className="text-sm font-medium">
@@ -231,9 +220,7 @@ export function CreateTab({
           )}
         </Button>
         {errorMessage && (
-          <div className="mt-4 p-8 bg-red-100 border border-red-400 text-red-700 rounded whitespace-pre-wrap">
-            {errorMessage}
-          </div>
+          <ErrorDisplay error={errorMessage} className="mt-4" />
         )}
       </div>
     </div>

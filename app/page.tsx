@@ -1,20 +1,24 @@
 'use client'
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { BookOpen, Film, LayoutGrid, PenLine } from 'lucide-react'
+import { BookOpen, Film, LayoutGrid, PenLine, Link } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { generateScenes } from './actions/generate-scenes'
+import { generateScenesStructured } from './actions/generate-scenes-structured'
 import { editVideo } from './actions/generate-video'
 import { regenerateImage } from './actions/regenerate-image'
 import { resizeImage } from './actions/resize-image'
 import { saveImageToPublic } from './actions/upload-image'
 import { CreateTab } from './components/create-tab'
+import { ReferenceTab } from './components/reference-tab'
 import { ScenarioTab } from "./components/scenario-tab"
 import { StoryboardTab } from './components/storyboard-tab'
 import { type Style } from "./components/style-selector"
 import { VideoTab } from './components/video-tab'
 import { Scenario, Scene, type Language } from './types'
 import Image from 'next/image'
+import { translateError, type UserFriendlyError } from '@/lib/error-utils'
+import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './constants/languages'
 
 const styles: Style[] = [
   { name: "Live-Action", image: "/styles/cinematic.jpg" },
@@ -24,10 +28,7 @@ const styles: Style[] = [
   { name: "Claymation Animation", image: "/styles/claymation.jpg" },
 ]
 
-const DEFAULT_LANGUAGE: Language = {
-  name: "English (United States)",
-  code: "en-US"
-};
+// Default language imported from constants
 
 export default function Home() {
   const [pitch, setPitch] = useState('')
@@ -42,9 +43,10 @@ export default function Home() {
   const [scenario, setScenario] = useState<Scenario>()
   const [scenes, setScenes] = useState<Array<Scene>>([])
   const [generatingScenes, setGeneratingScenes] = useState<Set<number>>(new Set());
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<UserFriendlyError | null>(null)
   const [videoUri, setVideoUri] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<string>("create")
+  const [activeTab, setActiveTab] = useState<string>("reference")
+  const [useStructuredOutput, setUseStructuredOutput] = useState(false)
 
   const FALLBACK_URL = "https://videos.pexels.com/video-files/4276282/4276282-hd_1920_1080_25fps.mp4"
 
@@ -65,7 +67,17 @@ export default function Home() {
     setIsLoading(true)
     setErrorMessage(null)
     try {
-      const scenario = await generateScenes(pitch, numScenes, style, language)
+      // Choose generation method based on settings
+      const scenario = useStructuredOutput && language.code === 'zh-TW'
+        ? await generateScenesStructured(pitch, numScenes, style, language.name, logoOverlay)
+        : await generateScenes(pitch, numScenes, style, language)
+      
+      console.log('Scene generation completed:', {
+        useStructuredOutput,
+        language: language.code,
+        method: useStructuredOutput && language.code === 'zh-TW' ? 'structured' : 'standard'
+      })
+      
       setScenario(scenario)
       if (logoOverlay) {
         scenario.logoOverlay = logoOverlay
@@ -74,7 +86,7 @@ export default function Home() {
       setActiveTab("scenario") // Switch to scenario tab after successful generation
     } catch (error) {
       console.error('Error generating scenes:', error)
-      setErrorMessage(error instanceof Error ? error.message : 'An unknown error occurred while generating scenes')
+      setErrorMessage(translateError(error))
       setScenes([]) // Clear any partially generated scenes
     } finally {
       setIsLoading(false)
@@ -100,7 +112,7 @@ export default function Home() {
       setScenes(regeneratedScenes)
     } catch (error) {
       console.error("Error regenerating images:", error)
-      setErrorMessage(`Failed to regenerate image(s): ${error instanceof Error ? error.message : "Unknown error"}`)
+      setErrorMessage(translateError(error))
     } finally {
       setIsLoading(false)
     }
@@ -119,7 +131,7 @@ export default function Home() {
       setScenes(updatedScenes)
     } catch (error) {
       console.error("Error regenerating images:", error)
-      setErrorMessage(`Failed to regenerate image(s): ${error instanceof Error ? error.message : "Unknown error"}`)
+      setErrorMessage(translateError(error))
     } finally {
       setGeneratingScenes(prev => {
         const updated = new Set(prev);
@@ -156,12 +168,17 @@ export default function Home() {
           setVideoUri(FALLBACK_URL)
         }
       } else {
-        setErrorMessage("All scenes should have a generated video")
+        setErrorMessage({
+          title: 'Missing Content',
+          message: 'All scenes need generated videos before creating the final video.',
+          actionable: 'Please generate videos for all scenes first.',
+          type: 'warning'
+        })
         setVideoUri(FALLBACK_URL)
       }
     } catch (error) {
       console.error("Error generating video:", error)
-      setErrorMessage(error instanceof Error ? error.message : "An unknown error occurred while generating video")
+      setErrorMessage(translateError(error))
     } finally {
       setIsVideoLoading(false)
     }
@@ -224,11 +241,7 @@ export default function Home() {
       );
     } catch (error) {
       console.error("[Client] Error generating video:", error);
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "An unknown error occurred while generating video"
-      );
+      setErrorMessage(translateError(error));
 
       const videoUri = FALLBACK_URL;
       setScenes(prevScenes =>
@@ -269,7 +282,7 @@ export default function Home() {
       reader.readAsDataURL(file)
     } catch (error) {
       console.error("Error uploading image:", error)
-      setErrorMessage(error instanceof Error ? error.message : "An unknown error occurred while uploading the image")
+      setErrorMessage(translateError(error))
     }
   }
 
@@ -328,6 +341,10 @@ export default function Home() {
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="w-full">
+          <TabsTrigger value="reference" className="me-2">
+            <Link className="w-4 h-4 me-2 text-muted-foreground group-hover:text-foreground group-data-[state=active]:text-primary" />
+            Reference
+          </TabsTrigger>
           <TabsTrigger value="create" className="me-2">
             <PenLine className="w-4 h-4 me-2 text-muted-foreground group-hover:text-foreground group-data-[state=active]:text-primary" />
             Create
@@ -345,6 +362,19 @@ export default function Home() {
             Video
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="reference">
+          <ReferenceTab
+            pitch={pitch}
+            setPitch={setPitch}
+            style={style}
+            language={language}
+            onPitchGenerated={(generatedPitch) => {
+              setPitch(generatedPitch)
+              setActiveTab("create")
+            }}
+          />
+        </TabsContent>
 
         <TabsContent value="create">
           <CreateTab
@@ -364,6 +394,8 @@ export default function Home() {
             styles={styles}
             onLogoUpload={handleLogoUpload}
             onLogoRemove={handleLogoRemove}
+            useStructuredOutput={useStructuredOutput}
+            setUseStructuredOutput={setUseStructuredOutput}
           />
         </TabsContent>
 

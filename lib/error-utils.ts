@@ -367,8 +367,11 @@ export function cleanJsonResponse(text: string): string {
   
   console.log('Cleaning JSON response, original length:', text.length)
   
-  // Remove markdown code blocks
-  let cleaned = text.replace(/```json|```/g, '').trim()
+  // Remove markdown code blocks more thoroughly
+  let cleaned = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').replace(/```/g, '').trim()
+  
+  // Remove any potential markdown artifacts
+  cleaned = cleaned.replace(/^[\s\n]*```[\s\n]*/g, '').replace(/[\s\n]*```[\s\n]*$/g, '')
   
   // Remove any leading/trailing non-JSON text
   const jsonStart = cleaned.indexOf('{')

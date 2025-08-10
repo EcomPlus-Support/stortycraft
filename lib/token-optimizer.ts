@@ -292,13 +292,25 @@ export function generateOptimizedPrompt(
   targetStyle?: string,
   targetLanguage?: string
 ): string {
+  // Language mapping for proper instructions
+  const languageInstructions: Record<string, string> = {
+    '繁體中文': 'Generate all content in Traditional Chinese (繁體中文)',
+    '简体中文': 'Generate all content in Simplified Chinese (简体中文)',
+    'English': 'Generate all content in English',
+    'zh-TW': 'Generate all content in Traditional Chinese (繁體中文)',
+    'zh-CN': 'Generate all content in Simplified Chinese (简体中文)',
+    'en-US': 'Generate all content in English'
+  }
+  
+  const languageInstruction = languageInstructions[targetLanguage || ''] || 'Generate all content in English'
+  
   // YouTube Shorts 專用 prompt 增強
   if (complexity.isShorts) {
     return generateShortsPrompt(complexity, basePrompt, targetStyle, targetLanguage)
   }
   
   // 一般內容的 prompt 優化
-  let enhancedPrompt = basePrompt
+  let enhancedPrompt = basePrompt + `\n\nIMPORTANT: ${languageInstruction}`
   
   // 根據內容複雜度調整指令
   if (complexity.topicsComplexity === 'complex') {
@@ -317,6 +329,9 @@ export function generateOptimizedPrompt(
 - Create a pitch that promises viewers will see how different pieces connect`
   }
   
+  // Add final language reminder
+  enhancedPrompt += `\n\nREMEMBER: ${languageInstruction}`
+  
   return enhancedPrompt
 }
 
@@ -329,6 +344,18 @@ function generateShortsPrompt(
   targetStyle?: string,
   targetLanguage?: string
 ): string {
+  // Language mapping for proper instructions
+  const languageInstructions: Record<string, string> = {
+    '繁體中文': 'Generate all content in Traditional Chinese (繁體中文)',
+    '简体中文': 'Generate all content in Simplified Chinese (简体中文)',
+    'English': 'Generate all content in English',
+    'zh-TW': 'Generate all content in Traditional Chinese (繁體中文)',
+    'zh-CN': 'Generate all content in Simplified Chinese (简体中文)',
+    'en-US': 'Generate all content in English'
+  }
+  
+  const languageInstruction = languageInstructions[targetLanguage || ''] || 'Generate all content in English'
+  
   const shortsGuidance = `
 YOUTUBE SHORTS SPECIFIC REQUIREMENTS:
 This is YouTube Shorts content (≤60 seconds) requiring special attention to:
@@ -390,5 +417,7 @@ SHORTS PITCH REQUIREMENTS:
 3. 情感或驚喜高潮 (分享動機)
 4. 結尾鉤子 (互動誘因或懸念)
 
-確保 pitch 適合行動裝置快速瀏覽，語言簡潔有力，每句話都有存在的必要性。`
+確保 pitch 適合行動裝置快速瀏覽，語言簡潔有力，每句話都有存在的必要性。
+
+FINAL INSTRUCTION: ${languageInstruction}`
 }

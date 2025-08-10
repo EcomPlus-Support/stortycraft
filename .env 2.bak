@@ -20,11 +20,5 @@ USE_COSMO=false
 # Explicit project configuration for AI SDK
 GOOGLE_CLOUD_PROJECT=fechen-aifactory
 GCLOUD_PROJECT=fechen-aifactory
-# Service Account Authentication - Temporarily disabled
+# Service Account Authentication
 GOOGLE_APPLICATION_CREDENTIALS=/Users/shouian99/.config/gcloud/storycraft-service-account-key.json
-
-# YouTube API Configuration
-YOUTUBE_API_KEY=AIzaSyD9NxYUpUAUgGdX-ZDiAFgucRL4Me9-Umc
-
-# Gemini Model Configuration
-GEMINI_MODEL=gemini-2.5-flash

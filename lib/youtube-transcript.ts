@@ -233,59 +233,87 @@ function decodeXMLEntities(text: string): string {
  */
 export async function extractVideoInsightsFromMetadata(
   videoId: string,
-  apiKey: string
+  apiKey: string,
+  retries: number = 3
 ): Promise<{ title: string; description: string; insights: string } | null> {
-  try {
-    console.log(`Extracting enhanced metadata for video: ${videoId}`);
-    
-    const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=snippet,contentDetails,statistics`,
-      {
-        headers: {
-          'Accept': 'application/json',
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      console.log(`Extracting enhanced metadata for video: ${videoId} (attempt ${attempt}/${retries})`);
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      
+      const response = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=snippet,contentDetails,statistics`,
+        {
+          headers: {
+            'Accept': 'application/json',
+          },
+          signal: controller.signal
         }
+      );
+      
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch video metadata: ${response.status}`);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch video metadata: ${response.status}`);
+      const data = await response.json();
+      const video = data.items?.[0];
+      
+      if (!video) {
+        return null;
+      }
+
+      const snippet = video.snippet;
+      const stats = video.statistics;
+      const details = video.contentDetails;
+      
+      // Extract meaningful insights from available metadata
+      const insights = generateVideoInsights({
+        title: snippet.title,
+        description: snippet.description,
+        tags: snippet.tags || [],
+        categoryId: snippet.categoryId,
+        publishedAt: snippet.publishedAt,
+        channelTitle: snippet.channelTitle,
+        viewCount: stats?.viewCount,
+        likeCount: stats?.likeCount,
+        commentCount: stats?.commentCount,
+        duration: details?.duration
+      });
+      
+      return {
+        title: snippet.title,
+        description: snippet.description,
+        insights
+      };
+      
+    } catch (error: any) {
+      console.error(`Enhanced metadata extraction attempt ${attempt} failed:`, error);
+      
+      // Check for network errors that are worth retrying
+      if (attempt < retries && (
+        error?.code === 'ECONNRESET' ||
+        error?.code === 'ETIMEDOUT' ||
+        error?.name === 'AbortError' ||
+        error?.message?.includes('fetch')
+      )) {
+        console.log(`Retrying metadata extraction in ${attempt * 1000}ms...`);
+        await new Promise(resolve => setTimeout(resolve, attempt * 1000));
+        continue;
+      }
+      
+      // For the last attempt or non-retryable errors, return null
+      if (attempt === retries) {
+        console.error('All metadata extraction attempts failed:', error);
+        return null;
+      }
     }
-
-    const data = await response.json();
-    const video = data.items?.[0];
-    
-    if (!video) {
-      return null;
-    }
-
-    const snippet = video.snippet;
-    const stats = video.statistics;
-    const details = video.contentDetails;
-    
-    // Extract meaningful insights from available metadata
-    const insights = generateVideoInsights({
-      title: snippet.title,
-      description: snippet.description,
-      tags: snippet.tags || [],
-      categoryId: snippet.categoryId,
-      publishedAt: snippet.publishedAt,
-      channelTitle: snippet.channelTitle,
-      viewCount: stats?.viewCount,
-      likeCount: stats?.likeCount,
-      commentCount: stats?.commentCount,
-      duration: details?.duration
-    });
-    
-    return {
-      title: snippet.title,
-      description: snippet.description,
-      insights
-    };
-    
-  } catch (error) {
-    console.error('Enhanced metadata extraction failed:', error);
-    return null;
   }
+  
+  return null;
 }
 
 /**

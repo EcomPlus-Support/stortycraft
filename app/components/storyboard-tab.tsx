@@ -6,13 +6,15 @@ import { Loader2, FileSlidersIcon as Slideshow, Video } from 'lucide-react'
 import { Scene } from "../types"
 import { SlideshowModal } from './slideshow-modal'
 import { useState } from 'react'
+import { type UserFriendlyError } from '@/lib/error-utils'
+import { ErrorDisplay } from '@/components/ui/error-display'
 
 interface StoryboardTabProps {
   scenes: Scene[]
   isLoading: boolean
   isVideoLoading: boolean
   generatingScenes: Set<number>
-  errorMessage: string | null
+  errorMessage: UserFriendlyError | null
   onRegenerateAllImages: () => Promise<void>
   onGenerateAllVideos: () => Promise<void>
   onUpdateScene: (index: number, updatedScene: Scene) => void
@@ -96,9 +98,7 @@ export function StoryboardTab({
         ))}
       </div>
       {errorMessage && (
-        <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded whitespace-pre-wrap">
-          {errorMessage}
-        </div>
+        <ErrorDisplay error={errorMessage} className="mt-4" />
       )}
       {scenes.length > 0 && (
         <SlideshowModal

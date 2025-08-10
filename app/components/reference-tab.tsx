@@ -15,7 +15,8 @@ import {
   FileText, 
   CheckCircle, 
   Copy,
-  RefreshCw
+  RefreshCw,
+  Globe
 } from 'lucide-react'
 import Image from 'next/image'
 import { extractYouTubeMetadata, processReferenceContent, type ReferenceSource, type ReferenceContent } from '../actions/process-reference'
@@ -23,6 +24,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { InfoIcon } from 'lucide-react'
 import { translateError, type UserFriendlyError } from '@/lib/error-utils'
 import { ErrorDisplay } from '@/components/ui/error-display'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Label } from "@/components/ui/label"
+import { SUPPORTED_LANGUAGES } from '../constants/languages'
 
 interface ReferenceTabProps {
   pitch: string
@@ -32,10 +42,11 @@ interface ReferenceTabProps {
   onPitchGenerated?: (pitch: string) => void
 }
 
+// Using shared language constants for consistency
+
 export function ReferenceTab({
   setPitch,
   style,
-  language,
   onPitchGenerated
 }: ReferenceTabProps) {
   const [activeInputType, setActiveInputType] = useState<'youtube' | 'text' | 'audio'>('youtube')
@@ -47,6 +58,7 @@ export function ReferenceTab({
   const [currentSource, setCurrentSource] = useState<ReferenceSource | null>(null)
   const [generatedContent, setGeneratedContent] = useState<ReferenceContent | null>(null)
   const [error, setError] = useState<UserFriendlyError | null>(null)
+  const [selectedPitchLanguage, setSelectedPitchLanguage] = useState(SUPPORTED_LANGUAGES[0]) // Default to Traditional Chinese
   // const audioInputRef = useRef<HTMLInputElement>(null) // For future audio upload feature
 
   const handleYouTubeProcess = async () => {
@@ -79,7 +91,7 @@ export function ReferenceTab({
       setProcessingStep('Analyzing content with AI...')
 
       // Step 2: Process with AI
-      const content = await processReferenceContent(source, style, language.name)
+      const content = await processReferenceContent(source, style, selectedPitchLanguage.name)
       setProgress(100)
       setProcessingStep('Complete!')
 
@@ -119,7 +131,7 @@ export function ReferenceTab({
       setCurrentSource(source)
       setProgress(50)
 
-      const content = await processReferenceContent(source, style, language.name)
+      const content = await processReferenceContent(source, style, selectedPitchLanguage.name)
       setProgress(100)
       setProcessingStep('Complete!')
 
@@ -163,6 +175,36 @@ export function ReferenceTab({
           Transform existing content into compelling video pitches using AI
         </p>
       </div>
+
+      {/* Language Selection */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex items-center gap-4">
+            <Globe className="w-5 h-5 text-gray-500" />
+            <Label htmlFor="pitch-language" className="font-medium">
+              Pitch 語言選擇 (Pitch Language):
+            </Label>
+            <Select
+              value={selectedPitchLanguage.code}
+              onValueChange={(code) => {
+                const lang = SUPPORTED_LANGUAGES.find(l => l.code === code)
+                if (lang) setSelectedPitchLanguage(lang)
+              }}
+            >
+              <SelectTrigger id="pitch-language" className="w-[200px]">
+                <SelectValue>{selectedPitchLanguage.name}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {SUPPORTED_LANGUAGES.map(lang => (
+                  <SelectItem key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
 
       {!generatedContent && (
         <Tabs value={activeInputType} onValueChange={(value) => setActiveInputType(value as 'youtube' | 'text' | 'audio')}>
