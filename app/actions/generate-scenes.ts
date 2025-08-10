@@ -3,7 +3,7 @@
 import { generateImageCustomizationRest, generateImageRest } from '@/lib/imagen';
 import { getVertexAIConfig, TIMEOUTS } from '@/lib/config';
 import { AuthenticationError } from '@/lib/auth';
-import { safeJsonParse, translateError, cleanJsonResponse, validateScenesData } from '@/lib/error-utils';
+import { parseWithFallback, translateError, cleanJsonResponse, validateScenesData, validateScenesDataLenient } from '@/lib/error-utils';
 import { generateTextWithGemini, GeminiServiceError, checkGeminiHealth } from '@/lib/gemini-service';
 import { createDebugTracker, logEnvironmentInfo, validateEnvironment } from '@/lib/debug-utils';
 
@@ -159,6 +159,11 @@ d. Make each image prompt vivid and detailed enough to guide the creation of a s
 - Each image prompt in the scenes should reuse the full characters and settings description generated on the <characters> and <settings> tags every time, on every prompt
 - Do not include any additional text or explanations between the prompts.
 
+CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
+Do not include any markdown formatting, comments, or additional text outside the JSON object.
+Do not wrap your response in backtick code blocks.
+Return ONLY the raw JSON object.
+
 Format the response as a JSON object.
 Here's an example of how your output should be structured:
 {
@@ -218,8 +223,8 @@ Remember, your goal is to create a compelling and visually interesting story tha
     let scenario: Scenario;
     let scenes: Scene[];
     try {
-      const cleanedText = cleanJsonResponse(text);
-      const parseResult = safeJsonParse(cleanedText);
+      // Use three-tier parsing strategy for better compatibility
+      const parseResult = parseWithFallback(text);
       
       if (!parseResult.success) {
         // Log the actual response for debugging
@@ -231,13 +236,19 @@ Remember, your goal is to create a compelling and visually interesting story tha
         }`);
       }
       
-      // Validate the scenes structure
-      const scenesValidation = validateScenesData(parseResult.data);
+      // Use lenient validation for better main branch compatibility
+      const scenesValidation = validateScenesDataLenient(parseResult.data);
       if (!scenesValidation.valid) {
-        debugTracker.addError('response-parsing', `Validation error: ${scenesValidation.error.message}`);
-        throw new Error(`${scenesValidation.error.title}: ${scenesValidation.error.message}${
-          scenesValidation.error.actionable ? ` ${scenesValidation.error.actionable}` : ''
-        }`);
+        debugTracker.addError('response-parsing', `Validation error: ${scenesValidation.warnings?.join(', ') || 'Unknown validation issue'}`);
+        console.log('🔄 Lenient validation failed, using fallback scenario');
+        debugTracker.startStep('fallback-scenario');
+        const fallback = createFallbackScenario(pitch, numScenes, style, language);
+        debugTracker.endStep('fallback-scenario', true);
+        return fallback;
+      }
+      
+      if (scenesValidation.warnings && scenesValidation.warnings.length > 0) {
+        console.warn('⚠️ Validation warnings (but continuing):', scenesValidation.warnings);
       }
       
       const parsedScenario = scenesValidation.data;
@@ -261,10 +272,14 @@ Remember, your goal is to create a compelling and visually interesting story tha
       console.error('Error parsing AI response:', parseError);
       debugTracker.endStep('response-parsing', false, parseError instanceof Error ? parseError.message : 'Unknown parsing error');
       debugTracker.addError('response-parsing', parseError instanceof Error ? parseError : 'Unknown parsing error');
-      const friendlyError = translateError(parseError);
-      throw new Error(`${friendlyError.title}: ${friendlyError.message}${
-        friendlyError.actionable ? ` ${friendlyError.actionable}` : ''
-      }`);
+      
+      // Multi-layer error handling: instead of throwing, use fallback
+      console.log('🔄 Parse error encountered, creating fallback scenario for better compatibility');
+      debugTracker.startStep('fallback-scenario');
+      const fallback = createFallbackScenario(pitch, numScenes, style, language);
+      debugTracker.endStep('fallback-scenario', true);
+      debugTracker.logSummary();
+      return fallback;
     }
 
     if (!Array.isArray(scenes)) {

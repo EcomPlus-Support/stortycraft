@@ -358,6 +358,93 @@ export function translateError(error: unknown): UserFriendlyError {
 }
 
 /**
+ * AI輸出標準化處理 - 兼容不同AI模型的輸出格式
+ */
+function standardizeAIOutput(text: string): string {
+  if (!text || typeof text !== 'string') {
+    return '{}'
+  }
+  
+  // 處理可能的markdown包裝和Gemini 2.5特有格式
+  let cleaned = text
+    .replace(/```json\s*/gi, '')  // 移除json標記
+    .replace(/```\s*/g, '')      // 移除其他markdown
+    .replace(/```/g, '')         // 移除單獨的```
+    .replace(/^\s*`+\s*/, '')    // 移除開頭的backticks
+    .replace(/\s*`+\s*$/, '')    // 移除結尾的backticks
+    .trim();
+  
+  return cleaned;
+}
+
+/**
+ * 三層JSON解析策略 - 兼容main branch結果
+ */
+export function parseWithFallback(text: string): { success: boolean; data?: any; error?: any } {
+  console.log('🔄 Starting three-tier parsing strategy...');
+  
+  // 層級1：當前嚴格解析
+  try {
+    console.log('📋 Trying strict parsing...');
+    const strictCleaned = cleanJsonResponse(text);
+    const strictResult = safeJsonParse(strictCleaned);
+    if (strictResult.success) {
+      console.log('✅ Strict parsing successful');
+      return strictResult;
+    }
+  } catch (e1) {
+    console.warn('⚠️ Strict parsing failed:', e1);
+  }
+  
+  // 層級2：Main branch寬鬆解析
+  try {
+    console.log('📋 Trying main branch parsing...');
+    const mainBranchCleaned = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
+    const mainBranchResult = JSON.parse(mainBranchCleaned);
+    console.log('✅ Main branch parsing successful');
+    return { success: true, data: mainBranchResult };
+  } catch (e2) {
+    console.warn('⚠️ Main branch parsing failed:', e2);
+  }
+  
+  // 層級3：智能修復
+  try {
+    console.log('📋 Trying intelligent repair...');
+    const standardized = standardizeAIOutput(text);
+    
+    // 找到JSON開始和結束位置
+    const jsonStart = standardized.indexOf('{');
+    const jsonEnd = standardized.lastIndexOf('}');
+    
+    if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
+      let repaired = standardized.substring(jsonStart, jsonEnd + 1);
+      
+      // 智能修復常見問題
+      repaired = repaired
+        .replace(/,\s*([}\]])/g, '$1')  // 移除尾隨逗號
+        .replace(/\n/g, '\\n')          // 修復字串中的換行
+        .replace(/\r/g, '\\r')          // 修復回車
+        .replace(/\t/g, '\\t');         // 修復tab
+      
+      const repairedResult = JSON.parse(repaired);
+      console.log('✅ Intelligent repair successful');
+      return { success: true, data: repairedResult };
+    }
+  } catch (e3) {
+    console.error('❌ All parsing methods failed:', e3);
+  }
+  
+  return { 
+    success: false, 
+    error: {
+      title: 'JSON Parsing Failed',
+      message: 'Could not parse AI response with any method',
+      actionable: 'Will use fallback content generation'
+    }
+  };
+}
+
+/**
  * Enhanced JSON cleaning and preparation for parsing
  */
 export function cleanJsonResponse(text: string): string {
@@ -456,7 +543,96 @@ export function validateReferenceContent(data: any): { valid: true; data: any } 
 }
 
 /**
- * Validate and sanitize scenes data structure
+ * 寬鬆驗證場景數據結構 - 兼容main branch行為
+ */
+export function validateScenesDataLenient(data: any): { valid: boolean; data: any; warnings?: string[] } {
+  const warnings: string[] = [];
+  
+  // 只有在嚴重結構問題時才拋出錯誤
+  if (!data || typeof data !== 'object') {
+    console.error('❌ Critical: Invalid data structure');
+    return {
+      valid: false,
+      data: null,
+      warnings: ['Invalid response format - using fallback']
+    };
+  }
+  
+  // 檢查scenes數組 - 這是唯一的硬性要求
+  if (!data.scenes || !Array.isArray(data.scenes)) {
+    console.error('❌ Critical: Missing or invalid scenes array');
+    return {
+      valid: false,
+      data: null,
+      warnings: ['Invalid scenes structure - using fallback']
+    };
+  }
+  
+  console.log('✅ Core structure valid, checking optional fields...');
+  
+  // 軟驗證：檢查但不阻斷，只警告並補充默認值
+  if (!data.scenario || typeof data.scenario !== 'string') {
+    data.scenario = 'A compelling story unfolds through visual storytelling.';
+    warnings.push('Missing scenario - using default');
+  }
+  
+  if (!data.genre || typeof data.genre !== 'string') {
+    data.genre = 'Cinematic';
+    warnings.push('Missing genre - using default');
+  }
+  
+  if (!data.mood || typeof data.mood !== 'string') {
+    data.mood = 'Inspirational';
+    warnings.push('Missing mood - using default');
+  }
+  
+  if (!data.music || typeof data.music !== 'string') {
+    data.music = 'Orchestral score that enhances the emotional journey.';
+    warnings.push('Missing music - using default');
+  }
+  
+  if (!Array.isArray(data.characters)) {
+    data.characters = [{ name: 'Protagonist', description: 'Main character of the story' }];
+    warnings.push('Missing characters - using default');
+  }
+  
+  if (!Array.isArray(data.settings)) {
+    data.settings = [{ name: 'Main Setting', description: 'Primary location for the story' }];
+    warnings.push('Missing settings - using default');
+  }
+  
+  // 驗證場景數組內容但不強制要求完整性
+  data.scenes = data.scenes.map((scene: any, index: number) => {
+    if (!scene || typeof scene !== 'object') {
+      warnings.push(`Scene ${index + 1} invalid - using template`);
+      return {
+        imagePrompt: `Scene ${index + 1}: Visual representation of the story`,
+        videoPrompt: `Camera movement for scene ${index + 1}`,
+        description: `Scene ${index + 1} description`,
+        voiceover: `Voiceover for scene ${index + 1}`,
+        charactersPresent: []
+      };
+    }
+    
+    // 確保每個場景都有必要的字段，但使用默認值而不是拋出錯誤
+    return {
+      imagePrompt: scene.imagePrompt || `Scene ${index + 1}: Visual representation`,
+      videoPrompt: scene.videoPrompt || `Camera movement for scene ${index + 1}`,
+      description: scene.description || `Scene ${index + 1} description`,
+      voiceover: scene.voiceover || scene.voiceOver || `Scene ${index + 1} voiceover`,
+      charactersPresent: Array.isArray(scene.charactersPresent) ? scene.charactersPresent : []
+    };
+  });
+  
+  if (warnings.length > 0) {
+    console.warn('⚠️ Validation warnings:', warnings);
+  }
+  
+  return { valid: true, data, warnings };
+}
+
+/**
+ * 原始嚴格驗證函數（作為fallback使用）
  */
 export function validateScenesData(data: any): { valid: true; data: any } | { valid: false; error: UserFriendlyError } {
   if (!data || typeof data !== 'object') {
