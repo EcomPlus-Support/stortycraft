@@ -1010,3 +1010,1759 @@ Environment: fechen-aifactory/us-central1/gemini-2.5-flash
 📊 === END SUMMARY ===
 
  POST / 200 in 31258ms
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+ ✓ Compiled in 499ms (2234 modules)
+ ✓ Compiled in 347ms (2234 modules)
+ ⨯ ./app/actions/generate-scenes.ts
+Error: 
+  [31mx[0m Expected a semicolon
+     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/app/actions/generate-scenes.ts[0m:161:1]
+ [2m161[0m | 
+ [2m162[0m | CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
+ [2m163[0m | Do not include any markdown formatting, comments, or additional text outside the JSON object.
+ [2m164[0m | Do not wrap your response in ```json``` code blocks.
+     : [31;1m                                ^^^^[0m
+ [2m165[0m | Return ONLY the raw JSON object.
+ [2m166[0m | 
+ [2m167[0m | Format the response as a JSON object.
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/actions/generate-scenes.ts
+./app/page.tsx
+ ⨯ ./app/actions/generate-scenes.ts
+Error: 
+  [31mx[0m Expected a semicolon
+     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/app/actions/generate-scenes.ts[0m:161:1]
+ [2m161[0m | 
+ [2m162[0m | CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
+ [2m163[0m | Do not include any markdown formatting, comments, or additional text outside the JSON object.
+ [2m164[0m | Do not wrap your response in ```json``` code blocks.
+     : [31;1m                                ^^^^[0m
+ [2m165[0m | Return ONLY the raw JSON object.
+ [2m166[0m | 
+ [2m167[0m | Format the response as a JSON object.
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/actions/generate-scenes.ts
+./app/page.tsx
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+ ○ Compiling /_error ...
+ ⨯ ./app/actions/generate-scenes.ts
+Error: 
+  [31mx[0m Expected a semicolon
+     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/app/actions/generate-scenes.ts[0m:161:1]
+ [2m161[0m | 
+ [2m162[0m | CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
+ [2m163[0m | Do not include any markdown formatting, comments, or additional text outside the JSON object.
+ [2m164[0m | Do not wrap your response in ```json``` code blocks.
+     : [31;1m                                ^^^^[0m
+ [2m165[0m | Return ONLY the raw JSON object.
+ [2m166[0m | 
+ [2m167[0m | Format the response as a JSON object.
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/actions/generate-scenes.ts
+./app/page.tsx
+ GET / 500 in 1950ms
+ GET / 500 in 16ms
+ ✓ Compiled /_error in 1023ms (2474 modules)
+Component rendered
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET / 200 in 253ms
+ ✓ Compiled /_not-found in 472ms (2463 modules)
+ ✓ Compiled /favicon.ico in 147ms (1547 modules)
+ GET /favicon.ico 200 in 201ms
+ GET /favicon.ico 200 in 11ms
+Component rendered
+ GET / 200 in 88ms
+Vertex AI Configuration:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Veo Model: veo-001
+  Gemini Model: gemini-2.5-flash
+  GCS Videos Storage URI: Not set
+  YouTube API Key: Set
+Vertex AI Configuration:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Veo Model: veo-001
+  Gemini Model: gemini-2.5-flash
+  GCS Videos Storage URI: Not set
+  YouTube API Key: Set
+Initializing Gemini Service with config: {
+  projectId: 'fechen-aifactory',
+  location: 'us-central1',
+  model: 'gemini-2.5-flash',
+  timeout: 60000
+}
+Vertex AI client initialized successfully
+Vertex AI Configuration:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Veo Model: veo-001
+  Gemini Model: gemini-2.5-flash
+  GCS Videos Storage URI: Not set
+  YouTube API Key: Set
+🔍 Debug tracking started for: generate-scenes
+📍 Starting step: initialization
+🎬 Generating scenes with enhanced Gemini service
+🌍 Environment Information:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Gemini Model: gemini-2.5-flash
+  Veo Model: veo-001
+  Node Environment: development
+  GCS Storage URI: NOT SET
+  YouTube API Key: SET
+⚠️ Environment warnings: [ 'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail' ]
+📊 Configuration: {
+  projectId: 'fechen-aifactory',
+  location: 'us-central1',
+  geminiModel: 'gemini-2.5-flash',
+  pitchLength: 493,
+  numScenes: 8,
+  style: 'Live-Action',
+  language: '繁體中文'
+}
+✅ Completed step: initialization (0ms)
+📍 Starting step: health-check
+Testing model availability: gemini-2.5-flash
+Model gemini-2.5-flash responded in 925ms with: HEALTHY
+🏥 Gemini Health Check: {
+  healthy: true,
+  model: 'gemini-2.5-flash',
+  region: 'us-central1',
+  responseTime: 925
+}
+✅ Completed step: health-check (925ms)
+📍 Starting step: gemini-text-generation
+🎯 Creating storyboard with Gemini...
+Generating text with Gemini: {
+  model: 'gemini-2.5-flash',
+  promptLength: 5090,
+  temperature: 1,
+  maxTokens: 8192,
+  timeout: 60000
+}
+Attempt 1/3 with model: gemini-2.5-flash
+Generated text successfully in 36342ms: { textLength: 0, textPreview: '...' }
+Attempt 1 failed: {
+  error: 'No response generated from Gemini',
+  model: 'gemini-2.5-flash',
+  isTimeout: false
+}
+Retrying in 1000ms...
+Attempt 2/3 with model: gemini-2.5-flash
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 30ms
+Generated text successfully in 29246ms: {
+  textLength: 12892,
+  textPreview: '{\n' +
+    ' "scenario": "電影開場，鏡頭從一團正在冒煙的火星特寫拉開，緩慢擴大，揭示出熊熊燃燒的加州森林野火。火勢迅速蔓延，濃煙蔽日，展現出大自然的無情破壞力。\\n\\n傳統的應對方式隨之呈現：鏡...'
+}
+✅ Gemini response received: {
+  textLength: 12892,
+  textPreview: '{\n' +
+    ' "scenario": "電影開場，鏡頭從一團正在冒煙的火星特寫拉開，緩慢擴大，揭示出熊熊燃燒的加州森林野火。火勢迅速蔓延，濃煙蔽日，展現出大自然的無情破壞力。\\n\\n傳統的應對方式隨之呈現：鏡頭切換至一個繁忙的消防局指揮中心，值班人員接獲緊急火災通知，迅速在巨大地圖上標示火點。消防員緊急調派，數輛消防車鳴笛，緩慢地在蜿蜒的山路上艱難前行。無人機視角俯瞰，顯示出消防車與火場之間遙遠的距離，而...'
+}
+✅ Completed step: gemini-text-generation (66601ms)
+📍 Starting step: response-parsing
+🔄 Starting three-tier parsing strategy...
+📋 Trying strict parsing...
+Cleaning JSON response, original length: 12892
+Cleaned JSON length: 12860
+JSON structure check - braces balanced: true
+📋 Trying main branch parsing...
+✅ Main branch parsing successful
+✅ Core structure valid, checking optional fields...
+📝 Scenario: 電影開場，鏡頭從一團正在冒煙的火星特寫拉開，緩慢擴大，揭示出熊熊燃燒的加州森林野火。火勢迅速蔓延，濃煙蔽日，展現出大自然的無情破壞力。
+
+傳統的應對方式隨之呈現：鏡頭切換至一個繁忙的消防局指揮中心，值班人員接獲緊急火災通知，迅速在巨大地圖上標示火點。消防員緊急調派，數輛消防車鳴笛，緩慢地在蜿蜒的山路上艱難前行。無人機視角俯瞰，顯示出消防車與火場之間遙遠的距離，而火勢在此期間不斷升級，形成一片火海。
+
+在絕望感達到高點時，畫面突然轉暗，隨後浮現出「AEGIS Autonomous Emergency Guardian Integrated System」的白色字樣，預示著解決方案的出現。
+
+鏡頭轉向AEGIS的數據中心，精密的AI系統開始運作。數百個位於深山各處的感測器在地圖上亮起紅點，實時傳輸火場的溫度、風向、風速等數據。系統精準地分析火勢蔓延趨勢，並發出高優先級警告。
+
+一聲令下，AEGIS無人機隊從隱藏的發射點迅速升空。數百架流線型無人機以驚人的速度劃破天際，遠超在第二幕中緩慢行駛的消防車。鏡頭特寫一架無人機，然後迅速拉遠，展現整個無人機隊如同黑色箭頭般，直接衝向火勢最猛烈的深山腹地。
+
+第一批約50架無人機抵達野火邊緣，它們精準地以10平方公尺的間隔排列。這些無人機迅速投下特製滅火彈，引發一系列小型、精準的爆炸，有效地控制並撲滅了初期火源。
+
+緊接著，第二批無人機攜帶大量蓄水箱抵達。它們精準地對準餘燼和尚未完全撲滅的區域，傾瀉而下，將火勢徹底撲滅，確保不會死灰復燃。
+
+畫面再次轉暗，簡潔有力的標語「Detected in Seconds. Extinguished with Precision」浮現，強調了AEGIS系統的效率與精準。
+
+最後，在黑色背景上，白色的「AEGIS」標誌靜靜地呈現，留下深刻的印象。
+👥 Characters: [ '森林野火', '傳統消防隊', 'AEGIS系統', 'AEGIS無人機隊' ]
+🏞️ Settings: [ '加州森林', '消防局指揮中心', '山區蜿蜒公路', 'AEGIS數據中心' ]
+🎬 Scenes generated: 8
+✅ Completed step: response-parsing (7ms)
+📍 Starting step: character-image-generation
+Generating image for character 1: 森林野火
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Refreshing authentication...
+Generating image for character 2: 傳統消防隊
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Refreshing authentication...
+Generating image for character 3: AEGIS系統
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Refreshing authentication...
+Generating image for character 4: AEGIS無人機隊
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Refreshing authentication...
+Fetching new access token...
+Fetching new access token...
+Fetching new access token...
+Fetching new access token...
+Successfully obtained access token
+Successfully obtained access token
+Successfully obtained access token
+Successfully obtained access token
+✅ Generated character image for 傳統消防隊: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for AEGIS無人機隊: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for AEGIS系統: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for 森林野火: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Completed step: character-image-generation (11646ms)
+📍 Starting step: scene-image-generation
+🎨 Generating image for scene 1
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 2
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 3
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 4
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 5
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 6
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 7
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 8
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Completed step: scene-image-generation (8931ms)
+🔍 Debug summary for generate-scenes: {
+  totalTime: '88111ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
+}
+
+📊 === DEBUG SUMMARY ===
+Operation: generate-scenes
+Total Time: 88111ms
+Environment: fechen-aifactory/us-central1/gemini-2.5-flash
+
+⏱️ Step Performance:
+  ✅ initialization: 0ms
+  ✅ health-check: 925ms
+  ✅ gemini-text-generation: 66601ms
+  ✅ response-parsing: 7ms
+  ✅ character-image-generation: 11646ms
+  ✅ scene-image-generation: 8931ms
+📊 === END SUMMARY ===
+
+🎉 Scene generation completed successfully!
+🔍 Debug summary for generate-scenes: {
+  totalTime: '88111ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
+}
+
+📊 === DEBUG SUMMARY ===
+Operation: generate-scenes
+Total Time: 88111ms
+Environment: fechen-aifactory/us-central1/gemini-2.5-flash
+
+⏱️ Step Performance:
+  ✅ initialization: 0ms
+  ✅ health-check: 925ms
+  ✅ gemini-text-generation: 66601ms
+  ✅ response-parsing: 7ms
+  ✅ character-image-generation: 11646ms
+  ✅ scene-image-generation: 8931ms
+📊 === END SUMMARY ===
+
+ POST / 200 in 88802ms
+Attempting transcript extraction for video: gg-dXisTWDI
+Checking transcript availability for video: gg-dXisTWDI
+Found 1 caption track(s) available
+Best caption track: zh-TW (standard)
+Attempting caption download (likely to fail due to OAuth requirement)
+Caption download requires OAuth 2.0 authentication (expected failure)
+Caption content download failed (OAuth required) - this is expected behavior
+No usable transcript content available for this video
+Transcript not available, extracting enhanced metadata...
+Extracting enhanced metadata for video: gg-dXisTWDI (attempt 1/3)
+Enhanced metadata extracted successfully
+ POST / 200 in 487ms
+Processing reference content with enhanced Gemini service
+Source type: youtube
+Has transcript: false
+Description length: 1998
+Testing model availability: gemini-2.5-flash
+Model gemini-2.5-flash responded in 765ms with: HEALTHY
+Gemini Health Check: {
+  healthy: true,
+  model: 'gemini-2.5-flash',
+  region: 'us-central1',
+  responseTime: 765
+}
+Using enhanced description content
+Content Complexity Analysis: {
+  contentType: 'youtube_long_form',
+  isShorts: false,
+  shortsStyle: undefined,
+  topicsComplexity: 'moderate',
+  tokenAllocation: 5019,
+  reasoning: 'Long-form YouTube video (19min) + +500 (moderate complexity) +19 (detailed description) = 5019 tokens',
+  useStructuredOutput: undefined
+}
+Generating text with Gemini: {
+  model: 'gemini-2.5-flash',
+  promptLength: 4827,
+  temperature: 0.3,
+  maxTokens: 5019,
+  timeout: 90000
+}
+Attempt 1/3 with model: gemini-2.5-flash
+Generated text successfully in 21359ms: {
+  textLength: 1993,
+  textPreview: '{\n' +
+    '  "analysis": {\n' +
+    '    "keyTopics": [\n' +
+    '      "AI短影音製作",\n' +
+    '      "財富自由潛力",\n' +
+    '      "YouTube演算法策略",\n' +
+    '      "貓...'
+}
+🔧 Starting enhanced JSON parsing for AI response
+Raw AI response length: 1993
+First 200 chars: {
+  "analysis": {
+    "keyTopics": [
+      "AI短影音製作",
+      "財富自由潛力",
+      "YouTube演算法策略",
+      "貓咪AI內容",
+      "實作教學"
+    ],
+    "sentiment": "positive",
+    "coreMessage": "本影片透過實測，展示如何運用AI工具製作貓咪短
+✅ Enhanced JSON parsing successful!
+Repair attempts: 0
+Parse time: 1ms
+Content processing completed in 22129ms
+ POST / 200 in 22146ms
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+🔍 Debug tracking started for: generate-scenes
+📍 Starting step: initialization
+🎬 Generating scenes with enhanced Gemini service
+🌍 Environment Information:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Gemini Model: gemini-2.5-flash
+  Veo Model: veo-001
+  Node Environment: development
+  GCS Storage URI: NOT SET
+  YouTube API Key: SET
+⚠️ Environment warnings: [ 'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail' ]
+📊 Configuration: {
+  projectId: 'fechen-aifactory',
+  location: 'us-central1',
+  geminiModel: 'gemini-2.5-flash',
+  pitchLength: 1352,
+  numScenes: 8,
+  style: 'Live-Action',
+  language: '繁體中文'
+}
+✅ Completed step: initialization (0ms)
+📍 Starting step: health-check
+Testing model availability: gemini-2.5-flash
+Model gemini-2.5-flash responded in 745ms with: HEALTHY
+🏥 Gemini Health Check: {
+  healthy: true,
+  model: 'gemini-2.5-flash',
+  region: 'us-central1',
+  responseTime: 745
+}
+✅ Completed step: health-check (747ms)
+📍 Starting step: gemini-text-generation
+🎯 Creating storyboard with Gemini...
+Generating text with Gemini: {
+  model: 'gemini-2.5-flash',
+  promptLength: 5949,
+  temperature: 1,
+  maxTokens: 8192,
+  timeout: 60000
+}
+Attempt 1/3 with model: gemini-2.5-flash
+Generated text successfully in 23310ms: {
+  textLength: 9545,
+  textPreview: '```json\n' +
+    '{\n' +
+    ' "scenario": "這是一部關於個人成長與財富自由的微電影。故事主角阿明，一位對現狀感到倦怠的上班族，在深夜的出租屋裡，偶然看到YouTuber老高關於「AI短影音財富自由...'
+}
+✅ Gemini response received: {
+  textLength: 9545,
+  textPreview: '```json\n' +
+    '{\n' +
+    ' "scenario": "這是一部關於個人成長與財富自由的微電影。故事主角阿明，一位對現狀感到倦怠的上班族，在深夜的出租屋裡，偶然看到YouTuber老高關於「AI短影音財富自由」的影片。他從最初的懷疑，到被影片中可愛的AI貓咪短片吸引，決定親身實測。電影將透過蒙太奇手法，展現阿明從摸索、掙扎到學習掌握AI工具（如Midjourney、DALL·E、Runway等）的過程。他...'
+}
+✅ Completed step: gemini-text-generation (23310ms)
+📍 Starting step: response-parsing
+🔄 Starting three-tier parsing strategy...
+📋 Trying strict parsing...
+Cleaning JSON response, original length: 9545
+Cleaned JSON length: 9499
+JSON structure check - braces balanced: true
+📋 Trying main branch parsing...
+✅ Main branch parsing successful
+✅ Core structure valid, checking optional fields...
+📝 Scenario: 這是一部關於個人成長與財富自由的微電影。故事主角阿明，一位對現狀感到倦怠的上班族，在深夜的出租屋裡，偶然看到YouTuber老高關於「AI短影音財富自由」的影片。他從最初的懷疑，到被影片中可愛的AI貓咪短片吸引，決定親身實測。電影將透過蒙太奇手法，展現阿明從摸索、掙扎到學習掌握AI工具（如Midjourney、DALL·E、Runway等）的過程。他經歷了初期頻道觀看數低迷的挫折，但憑藉對數據的分析和對「完播率與視覺hook」的鑽研，最終製作出一部爆紅的AI貓咪短片，觀看數飆升。阿明將這次成功系統化，建立起「貓咪工廠GPT」，規模化生產內容。電影結局，阿明擺脫了朝九晚五的束縛，在陽光灑落的咖啡廳或居家辦公空間，悠閒地享受著財富自由，身旁有隻真實的貓咪，象徵他從虛擬世界中實現的真實自由。他面對鏡頭，自信地分享自己的轉變與成功，證明AI短影音不僅是工具，更是通往無限可能的大門。
+👥 Characters: [ '阿明', 'AI貓咪', '真實貓咪' ]
+🏞️ Settings: [ '阿明狹小、略顯雜亂的出租屋', '阿明的書桌', '陽光灑落的咖啡廳', '居家辦公空間' ]
+🎬 Scenes generated: 8
+✅ Completed step: response-parsing (4ms)
+📍 Starting step: character-image-generation
+Generating image for character 1: 阿明
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+Generating image for character 2: AI貓咪
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+Generating image for character 3: 真實貓咪
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Generated character image for 阿明: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for AI貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for 真實貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Completed step: character-image-generation (11168ms)
+📍 Starting step: scene-image-generation
+🎨 Generating image for scene 1
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 2
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 3
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 4
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 5
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 6
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 7
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 8
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Completed step: scene-image-generation (7192ms)
+🔍 Debug summary for generate-scenes: {
+  totalTime: '42422ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
+}
+
+📊 === DEBUG SUMMARY ===
+Operation: generate-scenes
+Total Time: 42422ms
+Environment: fechen-aifactory/us-central1/gemini-2.5-flash
+
+⏱️ Step Performance:
+  ✅ initialization: 0ms
+  ✅ health-check: 747ms
+  ✅ gemini-text-generation: 23310ms
+  ✅ response-parsing: 4ms
+  ✅ character-image-generation: 11168ms
+  ✅ scene-image-generation: 7192ms
+📊 === END SUMMARY ===
+
+🎉 Scene generation completed successfully!
+🔍 Debug summary for generate-scenes: {
+  totalTime: '42423ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
+}
+
+📊 === DEBUG SUMMARY ===
+Operation: generate-scenes
+Total Time: 42423ms
+Environment: fechen-aifactory/us-central1/gemini-2.5-flash
+
+⏱️ Step Performance:
+  ✅ initialization: 0ms
+  ✅ health-check: 747ms
+  ✅ gemini-text-generation: 23310ms
+  ✅ response-parsing: 4ms
+  ✅ character-image-generation: 11168ms
+  ✅ scene-image-generation: 7192ms
+📊 === END SUMMARY ===
+
+ POST / 200 in 42979ms
+🔍 Debug tracking started for: generate-scenes
+📍 Starting step: initialization
+🎬 Generating scenes with enhanced Gemini service
+🌍 Environment Information:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Gemini Model: gemini-2.5-flash
+  Veo Model: veo-001
+  Node Environment: development
+  GCS Storage URI: NOT SET
+  YouTube API Key: SET
+⚠️ Environment warnings: [ 'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail' ]
+📊 Configuration: {
+  projectId: 'fechen-aifactory',
+  location: 'us-central1',
+  geminiModel: 'gemini-2.5-flash',
+  pitchLength: 1332,
+  numScenes: 8,
+  style: 'Live-Action',
+  language: '繁體中文'
+}
+✅ Completed step: initialization (1ms)
+📍 Starting step: health-check
+Testing model availability: gemini-2.5-flash
+Model gemini-2.5-flash responded in 1551ms with: HEALTHY
+🏥 Gemini Health Check: {
+  healthy: true,
+  model: 'gemini-2.5-flash',
+  region: 'us-central1',
+  responseTime: 1551
+}
+✅ Completed step: health-check (1551ms)
+📍 Starting step: gemini-text-generation
+🎯 Creating storyboard with Gemini...
+Generating text with Gemini: {
+  model: 'gemini-2.5-flash',
+  promptLength: 5929,
+  temperature: 1,
+  maxTokens: 8192,
+  timeout: 60000
+}
+Attempt 1/3 with model: gemini-2.5-flash
+Generated text successfully in 29305ms: {
+  textLength: 9110,
+  textPreview: '```json\n' +
+    '{\n' +
+    ' "scenario": "阿明，一位對朝九晚五感到厭倦的藍髮上班族，在疲憊的深夜裡，偶然在螢幕上看到老高關於「AI短影音財富自由」的影片。從最初的懷疑到被影片中AI貓咪的魅力所吸...'
+}
+✅ Gemini response received: {
+  textLength: 9110,
+  textPreview: '```json\n' +
+    '{\n' +
+    ' "scenario": "阿明，一位對朝九晚五感到厭倦的藍髮上班族，在疲憊的深夜裡，偶然在螢幕上看到老高關於「AI短影音財富自由」的影片。從最初的懷疑到被影片中AI貓咪的魅力所吸引，他決定親身實測。故事追溯了他從摸索AI工具的掙扎、面對頻道初期觀看數低谷的挫折，到最終透過堅持和策略調整，製作出一支爆紅的AI貓咪短片，從而實現了財富自由的歷程。影片結尾，阿明在陽光灑落的居家辦公...'
+}
+✅ Completed step: gemini-text-generation (29312ms)
+📍 Starting step: response-parsing
+🔄 Starting three-tier parsing strategy...
+📋 Trying strict parsing...
+Cleaning JSON response, original length: 9110
+Cleaned JSON length: 9065
+JSON structure check - braces balanced: true
+📋 Trying main branch parsing...
+✅ Main branch parsing successful
+✅ Core structure valid, checking optional fields...
+📝 Scenario: 阿明，一位對朝九晚五感到厭倦的藍髮上班族，在疲憊的深夜裡，偶然在螢幕上看到老高關於「AI短影音財富自由」的影片。從最初的懷疑到被影片中AI貓咪的魅力所吸引，他決定親身實測。故事追溯了他從摸索AI工具的掙扎、面對頻道初期觀看數低谷的挫折，到最終透過堅持和策略調整，製作出一支爆紅的AI貓咪短片，從而實現了財富自由的歷程。影片結尾，阿明在陽光灑落的居家辦公空間中，享受著自由的滋味，身旁還有隻真實的貓咪，象徵著他從虛擬世界中獲得的真實豐盛。這不僅是他個人的突破，更是對AI短影音無限可能性的有力證明。
+👥 Characters: [ '阿明', '老高', '虛擬貓咪', '真實貓咪' ]
+🏞️ Settings: [ '阿明的出租屋', '阿明的書桌', '陽光灑落的居家辦公空間' ]
+🎬 Scenes generated: 8
+✅ Completed step: response-parsing (4ms)
+📍 Starting step: character-image-generation
+Generating image for character 1: 阿明
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+Generating image for character 2: 老高
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+Generating image for character 3: 虛擬貓咪
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+Generating image for character 4: 真實貓咪
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Generated character image for 阿明: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for 老高: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for 虛擬貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for 真實貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Completed step: character-image-generation (10892ms)
+📍 Starting step: scene-image-generation
+🎨 Generating image for scene 1
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 2
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 3
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 4
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 5
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 6
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 7
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 8
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Completed step: scene-image-generation (7714ms)
+🔍 Debug summary for generate-scenes: {
+  totalTime: '49475ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
+}
+
+📊 === DEBUG SUMMARY ===
+Operation: generate-scenes
+Total Time: 49475ms
+Environment: fechen-aifactory/us-central1/gemini-2.5-flash
+
+⏱️ Step Performance:
+  ✅ initialization: 1ms
+  ✅ health-check: 1551ms
+  ✅ gemini-text-generation: 29312ms
+  ✅ response-parsing: 4ms
+  ✅ character-image-generation: 10892ms
+  ✅ scene-image-generation: 7714ms
+📊 === END SUMMARY ===
+
+🎉 Scene generation completed successfully!
+🔍 Debug summary for generate-scenes: {
+  totalTime: '49476ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
+}
+
+📊 === DEBUG SUMMARY ===
+Operation: generate-scenes
+Total Time: 49476ms
+Environment: fechen-aifactory/us-central1/gemini-2.5-flash
+
+⏱️ Step Performance:
+  ✅ initialization: 1ms
+  ✅ health-check: 1551ms
+  ✅ gemini-text-generation: 29312ms
+  ✅ response-parsing: 4ms
+  ✅ character-image-generation: 10892ms
+  ✅ scene-image-generation: 7714ms
+📊 === END SUMMARY ===
+
+ POST / 200 in 50005ms
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 4
+   Average Response Time: 11585.50ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 2
+   Average Response Time: 11290.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+🎨 Regenerating image with enhanced error handling: {
+  promptLength: 453,
+  promptPreview: 'Live-Action style. A thirty-something male office worker with blue hair, energetically working at hi...'
+}
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Fetching new access token...
+Successfully obtained access token
+✅ Image generated successfully in 7386ms
+✅ Generated image base64: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+ POST / 200 in 7489ms
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
