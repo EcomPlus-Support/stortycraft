@@ -2,7 +2,6 @@
 
 // Force dynamic rendering to prevent build-time external calls
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BookOpen, Film, LayoutGrid, PenLine, Link } from 'lucide-react'

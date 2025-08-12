@@ -3,7 +3,6 @@ import { runGeminiTests } from '@/lib/test-gemini'
 
 // Force dynamic rendering to prevent build-time external calls
 export const dynamic = 'force-dynamic'
-export const revalidate = 0
 
 export async function GET() {
   // Skip external calls during build time
