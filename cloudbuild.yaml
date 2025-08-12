@@ -55,7 +55,6 @@ steps:
         GEMINI_MODEL=gemini-2.5-flash,
         NODE_ENV=production,
         NEXT_TELEMETRY_DISABLED=1,
-        PORT=3000,
         HOSTNAME=0.0.0.0,
         GCS_VIDEOS_STORAGE_URI=gs://${_BUCKET_NAME}/videos/
       - '--set-secrets'
