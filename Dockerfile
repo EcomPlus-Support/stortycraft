@@ -10,7 +10,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies with clean slate
-RUN npm ci --only=production --ignore-scripts
+# Use npm install with production flag due to lock file sync issues
+RUN npm install --omit=dev --ignore-scripts --no-fund --no-audit
 
 # Copy environment configuration for build
 COPY .env.docker .env
