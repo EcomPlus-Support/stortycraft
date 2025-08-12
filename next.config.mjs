@@ -37,8 +37,9 @@ const nextConfig = {
   env: {
     BUILD_PHASE: process.env.BUILD_PHASE || 'build',
   },
-  // Handle build-time API timeouts - increased timeout
-  staticPageGenerationTimeout: 10,
+  // Disable static generation completely to avoid build-time external calls
+  trailingSlash: false,
+  generateEtags: false,
   // ESLint configuration for build
   eslint: {
     // Only run ESLint on these directories during build
