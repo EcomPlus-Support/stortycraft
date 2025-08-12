@@ -86,12 +86,22 @@ if [[ -n "$YOUTUBE_API_KEY" ]]; then
         --replication-policy="automatic" 2>/dev/null || \
     echo -n "$YOUTUBE_API_KEY" | gcloud secrets versions add youtube-api-key --data-file=-
     
-    # Grant access to service account
+    # Grant access to service accounts (both application and default compute)
     gcloud secrets add-iam-policy-binding youtube-api-key \
         --member="serviceAccount:${SERVICE_ACCOUNT}@${PROJECT_ID}.iam.gserviceaccount.com" \
         --role="roles/secretmanager.secretAccessor"
+    
+    # IMPORTANT: Also grant access to default compute service account
+    gcloud secrets add-iam-policy-binding youtube-api-key \
+        --member="serviceAccount:${PROJECT_ID//-/}-compute@developer.gserviceaccount.com" \
+        --role="roles/secretmanager.secretAccessor"
 else
-    echo -e "${YELLOW}⚠️  YOUTUBE_API_KEY not set. You'll need to add it manually to Secret Manager.${NC}"
+    echo -e "${RED}❌ CRITICAL: YOUTUBE_API_KEY not set!${NC}"
+    echo -e "${YELLOW}The YouTube API key is REQUIRED for production. Please:${NC}"
+    echo -e "${YELLOW}1. Export YOUTUBE_API_KEY environment variable${NC}"
+    echo -e "${YELLOW}2. Or manually create the secret:${NC}"
+    echo -e "${YELLOW}   gcloud secrets create youtube-api-key --data-file=-${NC}"
+    echo -e "${YELLOW}See docs/PRODUCTION_SETUP.md for details.${NC}"
 fi
 
 # Build and deploy using Cloud Build

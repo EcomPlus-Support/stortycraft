@@ -6,6 +6,7 @@
 2. **GCP Project** with billing enabled
 3. **Required APIs** enabled (will be done by script)
 4. **Environment Variables** configured
+5. **YouTube API Key** - See [Production Setup Guide](./docs/PRODUCTION_SETUP.md) for critical setup steps
 
 ## Quick Deployment
 
