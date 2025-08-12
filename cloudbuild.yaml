@@ -44,19 +44,7 @@ steps:
       - '--port'
       - '3000'
       - '--set-env-vars'
-      - |
-        PROJECT_ID=$PROJECT_ID,
-        LOCATION=us-central1,
-        MODEL=veo-001,
-        USE_SIGNED_URL=true,
-        USE_COSMO=false,
-        GOOGLE_CLOUD_PROJECT=$PROJECT_ID,
-        GCLOUD_PROJECT=$PROJECT_ID,
-        GEMINI_MODEL=gemini-2.5-flash,
-        NODE_ENV=production,
-        NEXT_TELEMETRY_DISABLED=1,
-        HOSTNAME=0.0.0.0,
-        GCS_VIDEOS_STORAGE_URI=gs://${_BUCKET_NAME}/videos/
+      - 'NODE_ENV=production,NEXT_TELEMETRY_DISABLED=1'
 
 images:
   - 'gcr.io/$PROJECT_ID/storycraft:latest'
