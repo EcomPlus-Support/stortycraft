@@ -1,7 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { runGeminiTests } from '@/lib/test-gemini'
 
+// Force dynamic rendering to prevent build-time external calls
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET() {
+  // Skip external calls during build time
+  if (process.env.BUILD_TIME === 'true' || process.env.DISABLE_EXTERNAL_CALLS === 'true') {
+    return NextResponse.json({
+      success: true,
+      results: [],
+      buildTime: true,
+      timestamp: new Date().toISOString(),
+      endpoint: '/api/test/gemini'
+    });
+  }
   try {
     console.log('🧪 Running comprehensive Gemini tests...');
     

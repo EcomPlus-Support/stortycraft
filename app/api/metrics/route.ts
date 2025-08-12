@@ -4,6 +4,10 @@ import { getCacheManager } from '@/lib/cache';
 import { logger } from '@/lib/logger';
 import { getErrorResponse } from '@/lib/errors';
 
+// Force dynamic rendering to prevent build-time external calls
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 /**
  * Comprehensive metrics API endpoint
  * 

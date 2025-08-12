@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server'
 import { checkGeminiHealth } from '@/lib/gemini-service'
 
+// Force dynamic rendering to prevent build-time external calls
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET() {
+  // Skip external calls during build time
+  if (process.env.BUILD_TIME === 'true' || process.env.DISABLE_EXTERNAL_CALLS === 'true') {
+    return NextResponse.json({
+      healthy: true,
+      service: 'gemini',
+      buildTime: true,
+      timestamp: new Date().toISOString(),
+      checkDuration: 0
+    });
+  }
   try {
     console.log('🏥 Health check requested for Gemini service');
     const startTime = Date.now();

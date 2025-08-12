@@ -8,6 +8,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { performanceMonitor, healthChecks } from '@/lib/performance-monitor';
 import { getVertexAIConfig } from '@/lib/config';
 
+// Force dynamic rendering to prevent build-time external calls
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET(request: NextRequest) {
   try {
     // Skip external calls during build time
