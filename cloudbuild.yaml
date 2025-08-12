@@ -4,7 +4,9 @@ steps:
     args: 
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/storycraft:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/storycraft:${SHORT_SHA}'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/storycraft:latest'
       - '--build-arg'
       - 'NODE_ENV=production'
       - '--build-arg'
@@ -13,7 +15,9 @@ steps:
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/storycraft:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/storycraft:${SHORT_SHA}']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/storycraft:latest']
 
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -23,7 +27,7 @@ steps:
       - 'deploy'
       - 'storycraft'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/storycraft:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/storycraft:${SHORT_SHA}'
       - '--region'
       - 'us-central1'
       - '--platform'
@@ -64,7 +68,8 @@ steps:
       - '${_SERVICE_ACCOUNT}'
 
 images:
-  - 'gcr.io/$PROJECT_ID/storycraft:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/storycraft:${SHORT_SHA}'
+  - 'gcr.io/$PROJECT_ID/storycraft:latest'
 
 options:
   logging: CLOUD_LOGGING_ONLY
