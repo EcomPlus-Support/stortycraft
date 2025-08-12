@@ -7,776 +7,24 @@
   - Environments: .env
 
  ✓ Starting...
- ✓ Ready in 4.3s
+ ✓ Ready in 1737ms
+ ✓ Compiled /api/health in 326ms (105 modules)
+ GET /api/health 200 in 418ms
  ○ Compiling / ...
- ✓ Compiled / in 3.2s (2257 modules)
+ ✓ Compiled / in 5.8s (2350 modules)
 Component rendered
- GET / 200 in 3654ms
- ○ Compiling /_not-found ...
- ✓ Compiled /favicon.ico in 1520ms (2269 modules)
- GET /favicon.ico 200 in 737ms
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1334ms
- GET /favicon.ico 200 in 21ms
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Initializing Gemini Service with config: {
-  projectId: 'fechen-aifactory',
-  location: 'us-central1',
-  model: 'gemini-2.5-flash',
-  timeout: 60000
-}
-Vertex AI client initialized successfully
-Attempting transcript extraction for video: snyvim1b4aw
-Checking transcript availability for video: snyvim1b4aw
-Found 1 caption track(s) available
-Best caption track: zh-TW (standard)
-Attempting caption download (likely to fail due to OAuth requirement)
-Caption download requires OAuth 2.0 authentication (expected failure)
-Caption content download failed (OAuth required) - this is expected behavior
-No usable transcript content available for this video
-Transcript not available, extracting enhanced metadata...
-Extracting enhanced metadata for video: snyvim1b4aw
-Enhanced metadata extraction failed: TypeError: fetch failed
-    at node:internal/deps/undici/undici:13510:13
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async extractVideoInsightsFromMetadata (webpack-internal:///(action-browser)/./lib/youtube-transcript.ts:192:26)
-    at async _lib_performance_monitor__WEBPACK_IMPORTED_MODULE_5__.performanceMonitor.trackOperation.url.url (webpack-internal:///(action-browser)/./app/actions/process-reference.ts:95:38)
-    at async PerformanceMonitor.trackOperation (webpack-internal:///(action-browser)/./lib/performance-monitor.ts:22:28)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) {
-  [cause]: Error: read ECONNRESET
-      at TLSWrap.onStreamRead (node:internal/stream_base_commons:218:20)
-      at TLSWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
-    errno: -54,
-    code: 'ECONNRESET',
-    syscall: 'read'
-  }
-}
- POST / 200 in 667ms
-Processing reference content with enhanced Gemini service
-Source type: youtube
-Has transcript: false
-Description length: 433
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 1784ms with: HEALTHY
-Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 1785
-}
-Using enhanced description content
-Content Complexity Analysis: {
-  contentType: 'youtube_medium',
-  isShorts: false,
-  shortsStyle: undefined,
-  topicsComplexity: 'simple',
-  tokenAllocation: 3500,
-  reasoning: 'Medium YouTube video (60-300s) + No complexity adjustments = 3500 tokens',
-  useStructuredOutput: undefined
-}
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 3251,
-  temperature: 0.3,
-  maxTokens: 3500,
-  timeout: 60000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 18866ms: {
-  textLength: 2265,
-  textPreview: '{\n' +
-    '  "analysis": {\n' +
-    '    "keyTopics": [\n' +
-    '      "歧路旅人2",\n' +
-    '      "快速升級攻略",\n' +
-    '      "後期遊戲策略",\n' +
-    '      "角色扮演遊戲機制"...'
-}
-🔧 Starting enhanced JSON parsing for AI response
-Raw AI response length: 2265
-First 200 chars: {
-  "analysis": {
-    "keyTopics": [
-      "歧路旅人2",
-      "快速升級攻略",
-      "後期遊戲策略",
-      "角色扮演遊戲機制",
-      "HD-2D視覺風格"
-    ],
-    "sentiment": "positive",
-    "coreMessage": "提供《歧路旅人2》玩家一套高效的後期升級策略，幫
-✅ Enhanced JSON parsing successful!
-Repair attempts: 2
-Parse time: 3ms
-Content processing completed in 20670ms
- POST / 200 in 20691ms
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-🔍 Debug tracking started for: generate-scenes
-📍 Starting step: initialization
-🎬 Generating scenes with enhanced Gemini service
-🌍 Environment Information:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Gemini Model: NOT SET
-  Veo Model: veo-001
-  Node Environment: development
-  GCS Storage URI: NOT SET
-  YouTube API Key: SET
-⚠️ Environment warnings: [
-  'GEMINI_MODEL is not set - will use default gemini-1.5-pro-002',
-  'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail'
-]
-📊 Configuration: {
-  projectId: 'fechen-aifactory',
-  location: 'us-central1',
-  geminiModel: 'gemini-pro',
-  pitchLength: 1667,
-  numScenes: 8,
-  style: 'Live-Action',
-  language: '繁體中文'
-}
-✅ Completed step: initialization (0ms)
-📍 Starting step: health-check
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 1520ms with: HEALTHY
-🏥 Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 1521
-}
-✅ Completed step: health-check (1521ms)
-📍 Starting step: gemini-text-generation
-🎯 Creating storyboard with Gemini...
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 6005,
-  temperature: 1,
-  maxTokens: 8192,
-  timeout: 60000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 27003ms: {
-  textLength: 9352,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "【影片標題：人生LV.99：你的專屬「艾隆德」升級法】\\n\\n**開場：**\\n影片從一個壓抑的書房開始。畫面特寫一位年輕、疲憊的女性，她眉頭緊鎖，眼神...'
-}
-✅ Gemini response received: {
-  textLength: 9352,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "【影片標題：人生LV.99：你的專屬「艾隆德」升級法】\\n\\n**開場：**\\n影片從一個壓抑的書房開始。畫面特寫一位年輕、疲憊的女性，她眉頭緊鎖，眼神中充滿了挫敗感。鏡頭緩緩拉遠，呈現出一個雜亂不堪的書桌，上面堆滿了專業書籍、散亂的文件和未完成的專案。光線昏暗，只有一盞檯燈微弱地照亮桌面，營造出停滯不前的氛圍。窗外，陰沉的天空下著小雨，雨滴輕輕敲打...'
-}
-✅ Completed step: gemini-text-generation (27005ms)
-📍 Starting step: response-parsing
-Cleaning JSON response, original length: 9352
-Cleaned JSON length: 9322
-JSON structure check - braces balanced: true
-Failed to parse AI response, raw text: ```json
-{
- "scenario": "【影片標題：人生LV.99：你的專屬「艾隆德」升級法】\n\n**開場：**\n影片從一個壓抑的書房開始。畫面特寫一位年輕、疲憊的女性，她眉頭緊鎖，眼神中充滿了挫敗感。鏡頭緩緩拉遠，呈現出一個雜亂不堪的書桌，上面堆滿了專業書籍、散亂的文件和未完成的專案。光線昏暗，只有一盞檯燈微弱地照亮桌面，營造出停滯不前的氛圍。窗外，陰沉的天空下著小雨，雨滴輕輕敲打著玻璃。\n畫外音傳來一聲沉重的嘆息：「怎麼努力，都感覺停滯不前…」\n\n**角色介紹：**\n主角是一位約莫二十多歲的女性，聰慧但目前深陷困境。她並非在玩遊戲，而是在現實生活中面臨著巨大的「關卡」——可能是學業研究的瓶頸、職場專案的挑戰，或是個人成長的迷茫。她渴望突破，達到自己人生的「LV.99」，但卻始終找不到正確的方法，感到心力交瘁。\n\n**第一幕：困境與迷茫 (開端)**\n書房裡，年輕女性雙手抱頭，坐在書桌前。電腦螢幕上顯示著複雜難解的數據模型或學術論文，她顯然已陷入僵局。她拿起筆又無力地放下，桌面上散落著無數失敗的草稿，象徵著她無助的掙扎。昏暗雜亂的房間映照出她內心的混亂與停
-🚨 Error in response-parsing: Parse error: There was an issue processing the AI response.
-Error parsing AI response: Error: Response Processing Error: There was an issue processing the AI response. Please try again.
-    at generateScenes (webpack-internal:///(action-browser)/./app/actions/generate-scenes.ts:225:23)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-❌ Completed step: response-parsing (12ms) - Response Processing Error: There was an issue processing the AI response. Please try again.
-🚨 Error in response-parsing: Response Processing Error: There was an issue processing the AI response. Please try again.
-❌ Error generating scenes: Error: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-    at generateScenes (webpack-internal:///(action-browser)/./app/actions/generate-scenes.ts:253:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🚨 Error in generate-scenes: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-🔄 Unexpected error, creating fallback scenario: Error: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-    at generateScenes (webpack-internal:///(action-browser)/./app/actions/generate-scenes.ts:253:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🔄 Creating fallback scenario due to unexpected error
-📍 Starting step: fallback-scenario
-Creating fallback scenario for pitch: 【影片標題：人生LV.99：你的專屬「艾隆德」升級法】
-**開場鉤子：**\n畫面從一個特寫鏡頭開始：一張年輕、疲憊的臉龐，眉頭深鎖，眼神中充滿了挫敗感。鏡頭緩緩拉遠，呈現出一個略顯雜亂的書房，書桌上
-✅ Completed step: fallback-scenario (1ms)
-🔍 Debug summary for generate-scenes: {
-  totalTime: '28547ms',
-  stepsCompleted: 5,
-  errorsEncountered: 3,
-  successRate: '80%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 28547ms
-Environment: fechen-aifactory/us-central1/not-set
-
-❌ Errors encountered:
-  1. response-parsing: Parse error: There was an issue processing the AI response.
-  2. response-parsing: Response Processing Error: There was an issue processing the AI response. Please try again.
-  3. generate-scenes: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-
-⏱️ Step Performance:
-  ✅ initialization: 0ms
-  ✅ health-check: 1521ms
-  ✅ gemini-text-generation: 27005ms
-  ❌ response-parsing: 12ms
-  ✅ fallback-scenario: 1ms
-📊 === END SUMMARY ===
-
-🔍 Debug summary for generate-scenes: {
-  totalTime: '28548ms',
-  stepsCompleted: 5,
-  errorsEncountered: 3,
-  successRate: '80%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 28548ms
-Environment: fechen-aifactory/us-central1/not-set
-
-❌ Errors encountered:
-  1. response-parsing: Parse error: There was an issue processing the AI response.
-  2. response-parsing: Response Processing Error: There was an issue processing the AI response. Please try again.
-  3. generate-scenes: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-
-⏱️ Step Performance:
-  ✅ initialization: 0ms
-  ✅ health-check: 1521ms
-  ✅ gemini-text-generation: 27005ms
-  ❌ response-parsing: 12ms
-  ✅ fallback-scenario: 1ms
-📊 === END SUMMARY ===
-
- POST / 200 in 28572ms
-Attempting transcript extraction for video: Y7a_ooX7gOM
-Checking transcript availability for video: Y7a_ooX7gOM
-No captions available for this video
-No usable transcript content available for this video
-Transcript not available, extracting enhanced metadata...
-Extracting enhanced metadata for video: Y7a_ooX7gOM
-Enhanced metadata extracted successfully
- POST / 200 in 699ms
-Processing reference content with enhanced Gemini service
-Source type: youtube
-Has transcript: false
-Description length: 936
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 719ms with: HEALTHY
-Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 719
-}
-Using enhanced description content
-Content Complexity Analysis: {
-  contentType: 'youtube_long_form',
-  isShorts: false,
-  shortsStyle: undefined,
-  topicsComplexity: 'moderate',
-  tokenAllocation: 5009,
-  reasoning: 'Long-form YouTube video (11min) + +500 (moderate complexity) +9 (detailed description) = 5009 tokens',
-  useStructuredOutput: undefined
-}
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 3692,
-  temperature: 0.3,
-  maxTokens: 5009,
-  timeout: 90000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 23699ms: {
-  textLength: 1529,
-  textPreview: '{\n' +
-    '  "analysis": {\n' +
-    '    "keyTopics": [\n' +
-    '      "《真‧三國無雙》25週年慶祝",\n' +
-    '      "《真‧三國無雙 起源》大型DLC",\n' +
-    '      "過往系列作品...'
-}
-🔧 Starting enhanced JSON parsing for AI response
-Raw AI response length: 1529
-First 200 chars: {
-  "analysis": {
-    "keyTopics": [
-      "《真‧三國無雙》25週年慶祝",
-      "《真‧三國無雙 起源》大型DLC",
-      "過往系列作品高畫質復刻",
-      "資深玩家視角分析與回顧",
-      "光榮未來動向與玩家期待"
-    ],
-    "sentiment": "positive",
-    "coreMessag
-❌ All enhanced parsing strategies failed
-Parse errors: [
-  'Direct parsing failed: Unterminated string in JSON at position 1529',
-  'Basic cleaning schema error: generatedPitch must be a non-empty string'
-]
-Creating intelligent fallback response...
-Content processing completed in 24430ms
- POST / 200 in 24444ms
-🎬 Generating scenes from structured pitch
-Environment Information:
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: undefined
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Refreshing authentication...
-Fetching new access token...
-Successfully obtained access token
-Gemini API Error: {
-  error: {
-    code: 400,
-    message: 'Please use a valid role: user, model.',
-    status: 'INVALID_ARGUMENT'
-  }
-}
-Error calling Gemini directly: Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:47:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateCharacters (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-Error in structured output generation: Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:47:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateCharacters (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🔴 ERROR: Error generating structured scenes Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:47:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateCharacters (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) undefined
- POST / 500 in 648ms
- ⨯ lib/gemini-direct.ts (58:13) @ generateTextDirect
- ⨯ Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (./lib/gemini-direct.ts:47:19)
-    at async StructuredOutputService.generateCharacters (./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (./app/actions/generate-scenes-structured.ts:33:31)
-digest: "2804120234"
-[0m [90m 56 |[39m       [36mconst[39m error [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m[0m
-[0m [90m 57 |[39m       console[33m.[39merror([32m'Gemini API Error:'[39m[33m,[39m error)[33m;[39m[0m
-[0m[31m[1m>[22m[39m[90m 58 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m([32m`Gemini API failed: ${JSON.stringify(error)}`[39m)[33m;[39m[0m
-[0m [90m    |[39m             [31m[1m^[22m[39m[0m
-[0m [90m 59 |[39m     }[0m
-[0m [90m 60 |[39m[0m
-[0m [90m 61 |[39m     [36mconst[39m result[33m:[39m [33mGeminiResponse[39m [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m[0m
-🎬 Generating scenes from structured pitch
-Environment Information:
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: undefined
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-pro
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Using cached access token
-Gemini API Error: {
-  error: {
-    code: 400,
-    message: 'Please use a valid role: user, model.',
-    status: 'INVALID_ARGUMENT'
-  }
-}
-Error calling Gemini directly: Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:47:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateCharacters (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-Error in structured output generation: Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:47:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateCharacters (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🔴 ERROR: Error generating structured scenes Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:47:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateCharacters (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) undefined
- ⨯ lib/gemini-direct.ts (58:13) @ generateTextDirect
- ⨯ Error: Gemini API failed: {"error":{"code":400,"message":"Please use a valid role: user, model.","status":"INVALID_ARGUMENT"}}
-    at generateTextDirect (./lib/gemini-direct.ts:47:19)
-    at async StructuredOutputService.generateCharacters (./lib/structured-output-service.ts:55:26)
-    at async StructuredOutputService.generateStructuredPitch (./lib/structured-output-service.ts:12:32)
-    at async generateScenesStructured (./app/actions/generate-scenes-structured.ts:33:31)
-digest: "2804120234"
-[0m [90m 56 |[39m       [36mconst[39m error [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m[0m
-[0m [90m 57 |[39m       console[33m.[39merror([32m'Gemini API Error:'[39m[33m,[39m error)[33m;[39m[0m
-[0m[31m[1m>[22m[39m[90m 58 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m([32m`Gemini API failed: ${JSON.stringify(error)}`[39m)[33m;[39m[0m
-[0m [90m    |[39m             [31m[1m^[22m[39m[0m
-[0m [90m 59 |[39m     }[0m
-[0m [90m 60 |[39m[0m
-[0m [90m 61 |[39m     [36mconst[39m result[33m:[39m [33mGeminiResponse[39m [33m=[39m [36mawait[39m response[33m.[39mjson()[33m;[39m[0m
- POST / 500 in 371ms
- ✓ Compiled in 508ms (1474 modules)
- ✓ Compiled in 460ms (2234 modules)
-   Reload env: .env
- ✓ Compiled in 137ms (2234 modules)
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-🎬 Generating scenes from structured pitch
-Environment Information:
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: undefined
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Refreshing authentication...
-Fetching new access token...
-Successfully obtained access token
- ✓ Compiled in 171ms (2234 modules)
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Using cached access token
-Error calling Gemini directly: Error: No text generated from Gemini
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:54:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateScenes (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:111:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:14:28)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-Error in structured output generation: Error: No text generated from Gemini
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:54:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateScenes (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:111:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:14:28)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🔴 ERROR: Error generating structured scenes Error: No text generated from Gemini
-    at generateTextDirect (webpack-internal:///(action-browser)/./lib/gemini-direct.ts:54:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async StructuredOutputService.generateScenes (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:111:26)
-    at async StructuredOutputService.generateStructuredPitch (webpack-internal:///(action-browser)/./lib/structured-output-service.ts:14:28)
-    at async generateScenesStructured (webpack-internal:///(action-browser)/./app/actions/generate-scenes-structured.ts:33:31)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) undefined
- ⨯ lib/gemini-direct.ts (67:13) @ generateTextDirect
- ⨯ Error: No text generated from Gemini
-    at generateTextDirect (./lib/gemini-direct.ts:54:19)
-    at async StructuredOutputService.generateScenes (./lib/structured-output-service.ts:111:26)
-    at async StructuredOutputService.generateStructuredPitch (./lib/structured-output-service.ts:14:28)
-    at async generateScenesStructured (./app/actions/generate-scenes-structured.ts:33:31)
-digest: "406129011"
-[0m [90m 65 |[39m       [36mreturn[39m result[33m.[39mcandidates[[35m0[39m][33m.[39mcontent[33m.[39mparts[[35m0[39m][33m.[39mtext[33m;[39m[0m
-[0m [90m 66 |[39m     } [36melse[39m {[0m
-[0m[31m[1m>[22m[39m[90m 67 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m([32m'No text generated from Gemini'[39m)[33m;[39m[0m
-[0m [90m    |[39m             [31m[1m^[22m[39m[0m
-[0m [90m 68 |[39m     }[0m
-[0m [90m 69 |[39m   } [36mcatch[39m (error) {[0m
-[0m [90m 70 |[39m     console[33m.[39merror([32m'Error calling Gemini directly:'[39m[33m,[39m error)[33m;[39m[0m
- POST / 500 in 24003ms
- ✓ Compiled in 128ms (1474 modules)
-Component rendered
- GET / 200 in 206ms
- ○ Compiling /_not-found ...
- ✓ Compiled /_not-found in 800ms (2237 modules)
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 884ms
- ✓ Compiled /favicon.ico in 209ms (1507 modules)
- GET /favicon.ico 200 in 334ms
- GET /favicon.ico 200 in 16ms
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
+ GET / 200 in 6848ms
+ ✓ Compiled in 904ms (784 modules)
+ ✓ Compiled in 91ms (770 modules)
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 3.2s (1589 modules)
+ GET /favicon.ico 200 in 3325ms
+ GET /favicon.ico 200 in 9ms
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
 Vertex AI Configuration:
   Project ID: fechen-aifactory
   Location: us-central1
@@ -791,6 +39,63 @@ Initializing Gemini Service with config: {
   timeout: 60000
 }
 Vertex AI client initialized successfully
+🔴 ERROR: Error extracting YouTube metadata Error: Invalid YouTube URL
+    at _lib_performance_monitor__WEBPACK_IMPORTED_MODULE_5__.performanceMonitor.trackOperation.url.url (webpack-internal:///(action-browser)/./app/actions/process-reference.ts:59:23)
+    at PerformanceMonitor.trackOperation (webpack-internal:///(action-browser)/./lib/performance-monitor.ts:22:34)
+    at extractYouTubeMetadata (webpack-internal:///(action-browser)/./app/actions/process-reference.ts:54:85)
+    at endpoint (webpack-internal:///(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fgenerate-scenes.ts%22%2C%5B%22generateScenes%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fgenerate-scenes-structured.ts%22%2C%5B%22generateScenesStructured%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fgenerate-video.ts%22%2C%5B%22generateVideos%22%2C%22editVideo%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fregenerate-image.ts%22%2C%5B%22regenerateImage%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fresize-image.ts%22%2C%5B%22resizeImage%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fupload-image.ts%22%2C%5B%22saveImageToPublic%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fprocess-reference.ts%22%2C%5B%22processReferenceContent%22%2C%22extractYouTubeMetadata%22%5D%5D%5D&__client_imported__=true!:16:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
+    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
+    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
+    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
+    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) undefined
+ POST / 200 in 183ms
+🔴 ERROR: Error extracting YouTube metadata Error: Invalid YouTube URL
+    at _lib_performance_monitor__WEBPACK_IMPORTED_MODULE_5__.performanceMonitor.trackOperation.url.url (webpack-internal:///(action-browser)/./app/actions/process-reference.ts:59:23)
+    at PerformanceMonitor.trackOperation (webpack-internal:///(action-browser)/./lib/performance-monitor.ts:22:34)
+    at extractYouTubeMetadata (webpack-internal:///(action-browser)/./app/actions/process-reference.ts:54:85)
+    at endpoint (webpack-internal:///(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fgenerate-scenes.ts%22%2C%5B%22generateScenes%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fgenerate-scenes-structured.ts%22%2C%5B%22generateScenesStructured%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fgenerate-video.ts%22%2C%5B%22generateVideos%22%2C%22editVideo%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fregenerate-image.ts%22%2C%5B%22regenerateImage%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fresize-image.ts%22%2C%5B%22resizeImage%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fupload-image.ts%22%2C%5B%22saveImageToPublic%22%5D%5D%2C%5B%22%2FUsers%2Fshouian99%2FDesktop%2Fmacmbp%2Fsaas_app%2Fstorycraft-main%2Fapp%2Factions%2Fprocess-reference.ts%22%2C%5B%22processReferenceContent%22%2C%22extractYouTubeMetadata%22%5D%5D%5D&__client_imported__=true!:16:17)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
+    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
+    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
+    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
+    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) undefined
+ POST / 200 in 14ms
+Vertex AI Configuration:
+  Project ID: fechen-aifactory
+  Location: us-central1
+  Veo Model: veo-001
+  Gemini Model: gemini-2.5-flash
+  GCS Videos Storage URI: Not set
+  YouTube API Key: Set
 Vertex AI Configuration:
   Project ID: fechen-aifactory
   Location: us-central1
@@ -814,7 +119,7 @@ Vertex AI Configuration:
   projectId: 'fechen-aifactory',
   location: 'us-central1',
   geminiModel: 'gemini-2.5-flash',
-  pitchLength: 493,
+  pitchLength: 494,
   numScenes: 8,
   style: '2D Animation',
   language: '繁體中文'
@@ -822,1013 +127,227 @@ Vertex AI Configuration:
 ✅ Completed step: initialization (1ms)
 📍 Starting step: health-check
 Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 1890ms with: HEALTHY
+Model gemini-2.5-flash responded in 1954ms with: HEALTHY
 🏥 Gemini Health Check: {
   healthy: true,
   model: 'gemini-2.5-flash',
   region: 'us-central1',
-  responseTime: 1891
+  responseTime: 1954
 }
-✅ Completed step: health-check (1891ms)
+✅ Completed step: health-check (1955ms)
 📍 Starting step: gemini-text-generation
 🎯 Creating storyboard with Gemini...
 Generating text with Gemini: {
   model: 'gemini-2.5-flash',
-  promptLength: 4832,
+  promptLength: 5092,
   temperature: 1,
   maxTokens: 8192,
   timeout: 60000
 }
 Attempt 1/3 with model: gemini-2.5-flash
- ⨯ ./lib/youtube-transcript.ts
-Error: 
-  [31mx[0m 'import', and 'export' cannot be used outside of module code
-     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/lib/youtube-transcript.ts[0m:353:1]
- [2m353[0m | /**
- [2m354[0m |  * Utility function to validate YouTube video accessibility
- [2m355[0m |  */
- [2m356[0m | export async function isYouTubeVideoAccessible(videoId: string, apiKey: string): Promise<boolean> {
-     : [31;1m^^^^^^[0m
- [2m357[0m |   try {
- [2m358[0m |     const response = await fetch(
- [2m359[0m |       `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=${apiKey}&part=status`
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./lib/youtube-transcript.ts
-./app/actions/process-reference.ts
- ✓ Compiled in 190ms (1507 modules)
-Generated text successfully in 29245ms: {
-  textLength: 10781,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "一場加州深山野火迅速蔓延，攝影機從火苗近景拉遠，展示火焰吞噬森林的駭人景象。傳統的應變措施緩慢展開：消防局接到緊急通知，調度人力與消防車艱難地從遠方駛向...'
+Generated text successfully in 39660ms: {
+  textLength: 10632,
+  textPreview: '{\n' +
+    ' "scenario": "這部廣告影片描繪了一場在加州山林深處爆發的毀滅性野火，以及AEGIS（Autonomous Emergency Guardian Integrated System）如...'
 }
 ✅ Gemini response received: {
-  textLength: 10781,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "一場加州深山野火迅速蔓延，攝影機從火苗近景拉遠，展示火焰吞噬森林的駭人景象。傳統的應變措施緩慢展開：消防局接到緊急通知，調度人力與消防車艱難地從遠方駛向火場，而空拍鏡頭則突顯了路途遙遠與火勢的失控。就在危機達到頂點時，畫面切換到「AEGIS Autonomous Emergency Guardian Integrated System」的字樣。隨後，...'
+  textLength: 10632,
+  textPreview: '{\n' +
+    ' "scenario": "這部廣告影片描繪了一場在加州山林深處爆發的毀滅性野火，以及AEGIS（Autonomous Emergency Guardian Integrated System）如何革新傳統滅火方式。故事始於一簇火苗迅速蔓延成燎原之勢，鏡頭從燃燒的森林近景拉遠，展現廣闊的火海和不斷擴大的威脅。傳統的消防應對方式顯得緩慢且困難重重，消防車在崎嶇山路上艱難前行，而火勢卻不斷加劇。隨...'
 }
-✅ Completed step: gemini-text-generation (29247ms)
+✅ Completed step: gemini-text-generation (39676ms)
 📍 Starting step: response-parsing
-Cleaning JSON response, original length: 10781
-Cleaned JSON length: 10757
+🔄 Starting three-tier parsing strategy...
+📋 Trying strict parsing...
+Cleaning JSON response, original length: 10632
+Cleaned JSON length: 10646
 JSON structure check - braces balanced: true
-Failed to parse AI response, raw text: ```json
-{
- "scenario": "一場加州深山野火迅速蔓延，攝影機從火苗近景拉遠，展示火焰吞噬森林的駭人景象。傳統的應變措施緩慢展開：消防局接到緊急通知，調度人力與消防車艱難地從遠方駛向火場，而空拍鏡頭則突顯了路途遙遠與火勢的失控。就在危機達到頂點時，畫面切換到「AEGIS Autonomous Emergency Guardian Integrated System」的字樣。隨後，AEGIS系統啟動，遍布深山的感測器閃爍紅光，精準偵測火場的溫度、風向與風勢，並發出即時預警。緊接著，數十架AEGIS無人機組成的龐大機隊以驚人的速度衝向火場，遠超地面消防車的速度。第一批無人機精準抵達火勢最猛烈的區域，在預定間隔引爆特製滅火彈，瞬間壓制火勢。緊隨其後，第二批無人機攜帶大量蓄水抵達，對殘餘火點進行精準撲滅，防止火勢復燃。最終，畫面顯示「Detected in Seconds. Extinguished with Precision.」，並以黑底白字的「AEGIS」標誌完美收尾。",
- "genre": "Cinematic",
- "mood": "Inspirational",
-🚨 Error in response-parsing: Parse error: There was an issue processing the AI response.
-Error parsing AI response: Error: Response Processing Error: There was an issue processing the AI response. Please try again.
-    at generateScenes (webpack-internal:///(action-browser)/./app/actions/generate-scenes.ts:225:23)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-❌ Completed step: response-parsing (8ms) - Response Processing Error: There was an issue processing the AI response. Please try again.
-🚨 Error in response-parsing: Response Processing Error: There was an issue processing the AI response. Please try again.
-❌ Error generating scenes: Error: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-    at generateScenes (webpack-internal:///(action-browser)/./app/actions/generate-scenes.ts:253:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🚨 Error in generate-scenes: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-🔄 Unexpected error, creating fallback scenario: Error: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
-    at generateScenes (webpack-internal:///(action-browser)/./app/actions/generate-scenes.ts:253:19)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:39:418
-    at async rk (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:38:8146)
-    at async r3 (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-page.runtime.dev.js:41:1256)
-    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1427:30)
-    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
-    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
-    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
-    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
-    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
-    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
-    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
-    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
-    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
-    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
-    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
-    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
-    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
-    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13)
-🔄 Creating fallback scenario due to unexpected error
-📍 Starting step: fallback-scenario
-Creating fallback scenario for pitch: 第1幕
-攝影機從近處拍攝森林中開始起火，然後運鏡逐漸拉遠到無人機空拍的鏡頭
-顯示森林正在起火，地點就在加州
-
-第2幕
-顯示傳統現在的救火方式，是透過呼叫通知給遠在加州的消防局，在緊急調派人力、消防車往
-✅ Completed step: fallback-scenario (0ms)
+📋 Trying main branch parsing...
+✅ Main branch parsing successful
+✅ Core structure valid, checking optional fields...
+📝 Scenario: 這部廣告影片描繪了一場在加州山林深處爆發的毀滅性野火，以及AEGIS（Autonomous Emergency Guardian Integrated System）如何革新傳統滅火方式。故事始於一簇火苗迅速蔓延成燎原之勢，鏡頭從燃燒的森林近景拉遠，展現廣闊的火海和不斷擴大的威脅。傳統的消防應對方式顯得緩慢且困難重重，消防車在崎嶇山路上艱難前行，而火勢卻不斷加劇。隨後，畫面一轉，引入高科技的AEGIS系統。透過遍布山林的智能感測器，系統能夠即時偵測火情、精準分析溫度、風向與風速，並發出早期預警。緊接著，一支龐大的AEGIS無人機隊從基地急速升空，以無與倫比的速度飛向火場，其效率遠超地面部隊。第一批無人機精準投放滅火彈，有效壓制火勢；第二批無人機則攜帶大量滅火劑，徹底撲滅殘餘火源，防止復燃。影片最終以AEGIS系統的標語：「數秒內偵測，精準撲滅」作結，並展示其標誌，彰顯其在緊急應變領域的革命性突破。
+👥 Characters: [ 'AEGIS 無人機隊', 'AEGIS 感測器' ]
+🏞️ Settings: [ '加州山林', 'AEGIS 指揮中心' ]
+🎬 Scenes generated: 8
+✅ Completed step: response-parsing (10ms)
+📍 Starting step: character-image-generation
+Generating image for character 1: AEGIS 無人機隊
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Refreshing authentication...
+Generating image for character 2: AEGIS 感測器
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Refreshing authentication...
+Fetching new access token...
+Fetching new access token...
+Successfully obtained access token
+Successfully obtained access token
+✅ Generated character image for AEGIS 無人機隊: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Generated character image for AEGIS 感測器: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
+✅ Completed step: character-image-generation (10460ms)
+📍 Starting step: scene-image-generation
+🎨 Generating image for scene 1
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 2
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 3
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 4
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 5
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 6
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 7
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+🎨 Generating image for scene 8
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+✅ Completed step: scene-image-generation (8609ms)
 🔍 Debug summary for generate-scenes: {
-  totalTime: '31155ms',
-  stepsCompleted: 5,
-  errorsEncountered: 3,
-  successRate: '80%'
+  totalTime: '60711ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
 }
 
 📊 === DEBUG SUMMARY ===
 Operation: generate-scenes
-Total Time: 31155ms
+Total Time: 60711ms
 Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-❌ Errors encountered:
-  1. response-parsing: Parse error: There was an issue processing the AI response.
-  2. response-parsing: Response Processing Error: There was an issue processing the AI response. Please try again.
-  3. generate-scenes: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
 
 ⏱️ Step Performance:
   ✅ initialization: 1ms
-  ✅ health-check: 1891ms
-  ✅ gemini-text-generation: 29247ms
-  ❌ response-parsing: 8ms
-  ✅ fallback-scenario: 0ms
+  ✅ health-check: 1955ms
+  ✅ gemini-text-generation: 39676ms
+  ✅ response-parsing: 10ms
+  ✅ character-image-generation: 10460ms
+  ✅ scene-image-generation: 8609ms
 📊 === END SUMMARY ===
 
+🎉 Scene generation completed successfully!
 🔍 Debug summary for generate-scenes: {
-  totalTime: '31156ms',
-  stepsCompleted: 5,
-  errorsEncountered: 3,
-  successRate: '80%'
+  totalTime: '60711ms',
+  stepsCompleted: 6,
+  errorsEncountered: 0,
+  successRate: '100%'
 }
 
 📊 === DEBUG SUMMARY ===
 Operation: generate-scenes
-Total Time: 31156ms
+Total Time: 60711ms
 Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-❌ Errors encountered:
-  1. response-parsing: Parse error: There was an issue processing the AI response.
-  2. response-parsing: Response Processing Error: There was an issue processing the AI response. Please try again.
-  3. generate-scenes: Unexpected Error: Something went wrong while processing your content. Please try again or contact support if the issue persists.
 
 ⏱️ Step Performance:
   ✅ initialization: 1ms
-  ✅ health-check: 1891ms
-  ✅ gemini-text-generation: 29247ms
-  ❌ response-parsing: 8ms
-  ✅ fallback-scenario: 0ms
+  ✅ health-check: 1955ms
+  ✅ gemini-text-generation: 39676ms
+  ✅ response-parsing: 10ms
+  ✅ character-image-generation: 10460ms
+  ✅ scene-image-generation: 8609ms
 📊 === END SUMMARY ===
 
- POST / 200 in 31258ms
+ POST / 200 in 61177ms
+🎨 Regenerating image with enhanced error handling: {
+  promptLength: 546,
+  promptPreview: '2D Animation. A fleet of hundreds of a large fleet of sleek, modern, autonomous aerial vehicles, dar...'
+}
+Getting access token for project: fechen-aifactory
+Location: us-central1
+Using cached access token
+✅ Image generated successfully in 8023ms
+✅ Generated image base64: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
+ POST / 200 in 8099ms
+ ✓ Compiled in 663ms (2341 modules)
+ ✓ Compiled in 320ms (2341 modules)
 📊 Performance Summary:
    Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
+   Total Operations: 0
+   Average Response Time: 0.00ms
    Error Rate: 0.00%
+ ✓ Compiled in 548ms (2341 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 817ms (2330 modules)
+ GET /_next/static/css/app/layout.css?v=1754899648898 404 in 885ms
 📊 Performance Summary:
    Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
- ✓ Compiled in 499ms (2234 modules)
- ✓ Compiled in 347ms (2234 modules)
- ⨯ ./app/actions/generate-scenes.ts
-Error: 
-  [31mx[0m Expected a semicolon
-     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/app/actions/generate-scenes.ts[0m:161:1]
- [2m161[0m | 
- [2m162[0m | CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
- [2m163[0m | Do not include any markdown formatting, comments, or additional text outside the JSON object.
- [2m164[0m | Do not wrap your response in ```json``` code blocks.
-     : [31;1m                                ^^^^[0m
- [2m165[0m | Return ONLY the raw JSON object.
- [2m166[0m | 
- [2m167[0m | Format the response as a JSON object.
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/actions/generate-scenes.ts
-./app/page.tsx
- ⨯ ./app/actions/generate-scenes.ts
-Error: 
-  [31mx[0m Expected a semicolon
-     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/app/actions/generate-scenes.ts[0m:161:1]
- [2m161[0m | 
- [2m162[0m | CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
- [2m163[0m | Do not include any markdown formatting, comments, or additional text outside the JSON object.
- [2m164[0m | Do not wrap your response in ```json``` code blocks.
-     : [31;1m                                ^^^^[0m
- [2m165[0m | Return ONLY the raw JSON object.
- [2m166[0m | 
- [2m167[0m | Format the response as a JSON object.
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/actions/generate-scenes.ts
-./app/page.tsx
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
+   Total Operations: 2
+   Average Response Time: 2.50ms
    Error Rate: 0.00%
  ○ Compiling /_error ...
- ⨯ ./app/actions/generate-scenes.ts
-Error: 
-  [31mx[0m Expected a semicolon
-     ,-[[36;1;4m/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/app/actions/generate-scenes.ts[0m:161:1]
- [2m161[0m | 
- [2m162[0m | CRITICAL: Your response must be valid JSON that can be parsed by JSON.parse(). 
- [2m163[0m | Do not include any markdown formatting, comments, or additional text outside the JSON object.
- [2m164[0m | Do not wrap your response in ```json``` code blocks.
-     : [31;1m                                ^^^^[0m
- [2m165[0m | Return ONLY the raw JSON object.
- [2m166[0m | 
- [2m167[0m | Format the response as a JSON object.
-     `----
-
-Caused by:
-    Syntax Error
-
-Import trace for requested module:
-./app/actions/generate-scenes.ts
-./app/page.tsx
- GET / 500 in 1950ms
- GET / 500 in 16ms
- ✓ Compiled /_error in 1023ms (2474 modules)
+ ✓ Compiled /_error in 1032ms (2556 modules)
+ GET / 404 in 1214ms
+ ✓ Compiled /favicon.ico in 231ms (1630 modules)
+ GET /favicon.ico 200 in 286ms
 Component rendered
- ⚠ Fast Refresh had to perform a full reload due to a runtime error.
- GET / 200 in 253ms
- ✓ Compiled /_not-found in 472ms (2463 modules)
- ✓ Compiled /favicon.ico in 147ms (1547 modules)
- GET /favicon.ico 200 in 201ms
- GET /favicon.ico 200 in 11ms
+ GET / 200 in 154ms
+ GET /_next/static/css/app/layout.css?v=1754899896676 404 in 14ms
+ GET /favicon.ico 200 in 49ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 35ms
+ GET /_next/static/chunks/app/page.js 404 in 28ms
+ GET /_next/static/chunks/main-app.js?v=1754899896676 404 in 39ms
+ GET /favicon.ico 200 in 5ms
 Component rendered
- GET / 200 in 88ms
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-Initializing Gemini Service with config: {
-  projectId: 'fechen-aifactory',
-  location: 'us-central1',
-  model: 'gemini-2.5-flash',
-  timeout: 60000
-}
-Vertex AI client initialized successfully
-Vertex AI Configuration:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Veo Model: veo-001
-  Gemini Model: gemini-2.5-flash
-  GCS Videos Storage URI: Not set
-  YouTube API Key: Set
-🔍 Debug tracking started for: generate-scenes
-📍 Starting step: initialization
-🎬 Generating scenes with enhanced Gemini service
-🌍 Environment Information:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Gemini Model: gemini-2.5-flash
-  Veo Model: veo-001
-  Node Environment: development
-  GCS Storage URI: NOT SET
-  YouTube API Key: SET
-⚠️ Environment warnings: [ 'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail' ]
-📊 Configuration: {
-  projectId: 'fechen-aifactory',
-  location: 'us-central1',
-  geminiModel: 'gemini-2.5-flash',
-  pitchLength: 493,
-  numScenes: 8,
-  style: 'Live-Action',
-  language: '繁體中文'
-}
-✅ Completed step: initialization (0ms)
-📍 Starting step: health-check
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 925ms with: HEALTHY
-🏥 Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 925
-}
-✅ Completed step: health-check (925ms)
-📍 Starting step: gemini-text-generation
-🎯 Creating storyboard with Gemini...
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 5090,
-  temperature: 1,
-  maxTokens: 8192,
-  timeout: 60000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 36342ms: { textLength: 0, textPreview: '...' }
-Attempt 1 failed: {
-  error: 'No response generated from Gemini',
-  model: 'gemini-2.5-flash',
-  isTimeout: false
-}
-Retrying in 1000ms...
-Attempt 2/3 with model: gemini-2.5-flash
- GET /.well-known/appspecific/com.chrome.devtools.json 404 in 30ms
-Generated text successfully in 29246ms: {
-  textLength: 12892,
-  textPreview: '{\n' +
-    ' "scenario": "電影開場，鏡頭從一團正在冒煙的火星特寫拉開，緩慢擴大，揭示出熊熊燃燒的加州森林野火。火勢迅速蔓延，濃煙蔽日，展現出大自然的無情破壞力。\\n\\n傳統的應對方式隨之呈現：鏡...'
-}
-✅ Gemini response received: {
-  textLength: 12892,
-  textPreview: '{\n' +
-    ' "scenario": "電影開場，鏡頭從一團正在冒煙的火星特寫拉開，緩慢擴大，揭示出熊熊燃燒的加州森林野火。火勢迅速蔓延，濃煙蔽日，展現出大自然的無情破壞力。\\n\\n傳統的應對方式隨之呈現：鏡頭切換至一個繁忙的消防局指揮中心，值班人員接獲緊急火災通知，迅速在巨大地圖上標示火點。消防員緊急調派，數輛消防車鳴笛，緩慢地在蜿蜒的山路上艱難前行。無人機視角俯瞰，顯示出消防車與火場之間遙遠的距離，而...'
-}
-✅ Completed step: gemini-text-generation (66601ms)
-📍 Starting step: response-parsing
-🔄 Starting three-tier parsing strategy...
-📋 Trying strict parsing...
-Cleaning JSON response, original length: 12892
-Cleaned JSON length: 12860
-JSON structure check - braces balanced: true
-📋 Trying main branch parsing...
-✅ Main branch parsing successful
-✅ Core structure valid, checking optional fields...
-📝 Scenario: 電影開場，鏡頭從一團正在冒煙的火星特寫拉開，緩慢擴大，揭示出熊熊燃燒的加州森林野火。火勢迅速蔓延，濃煙蔽日，展現出大自然的無情破壞力。
-
-傳統的應對方式隨之呈現：鏡頭切換至一個繁忙的消防局指揮中心，值班人員接獲緊急火災通知，迅速在巨大地圖上標示火點。消防員緊急調派，數輛消防車鳴笛，緩慢地在蜿蜒的山路上艱難前行。無人機視角俯瞰，顯示出消防車與火場之間遙遠的距離，而火勢在此期間不斷升級，形成一片火海。
-
-在絕望感達到高點時，畫面突然轉暗，隨後浮現出「AEGIS Autonomous Emergency Guardian Integrated System」的白色字樣，預示著解決方案的出現。
-
-鏡頭轉向AEGIS的數據中心，精密的AI系統開始運作。數百個位於深山各處的感測器在地圖上亮起紅點，實時傳輸火場的溫度、風向、風速等數據。系統精準地分析火勢蔓延趨勢，並發出高優先級警告。
-
-一聲令下，AEGIS無人機隊從隱藏的發射點迅速升空。數百架流線型無人機以驚人的速度劃破天際，遠超在第二幕中緩慢行駛的消防車。鏡頭特寫一架無人機，然後迅速拉遠，展現整個無人機隊如同黑色箭頭般，直接衝向火勢最猛烈的深山腹地。
-
-第一批約50架無人機抵達野火邊緣，它們精準地以10平方公尺的間隔排列。這些無人機迅速投下特製滅火彈，引發一系列小型、精準的爆炸，有效地控制並撲滅了初期火源。
-
-緊接著，第二批無人機攜帶大量蓄水箱抵達。它們精準地對準餘燼和尚未完全撲滅的區域，傾瀉而下，將火勢徹底撲滅，確保不會死灰復燃。
-
-畫面再次轉暗，簡潔有力的標語「Detected in Seconds. Extinguished with Precision」浮現，強調了AEGIS系統的效率與精準。
-
-最後，在黑色背景上，白色的「AEGIS」標誌靜靜地呈現，留下深刻的印象。
-👥 Characters: [ '森林野火', '傳統消防隊', 'AEGIS系統', 'AEGIS無人機隊' ]
-🏞️ Settings: [ '加州森林', '消防局指揮中心', '山區蜿蜒公路', 'AEGIS數據中心' ]
-🎬 Scenes generated: 8
-✅ Completed step: response-parsing (7ms)
-📍 Starting step: character-image-generation
-Generating image for character 1: 森林野火
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Refreshing authentication...
-Generating image for character 2: 傳統消防隊
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Refreshing authentication...
-Generating image for character 3: AEGIS系統
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Refreshing authentication...
-Generating image for character 4: AEGIS無人機隊
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Refreshing authentication...
-Fetching new access token...
-Fetching new access token...
-Fetching new access token...
-Fetching new access token...
-Successfully obtained access token
-Successfully obtained access token
-Successfully obtained access token
-Successfully obtained access token
-✅ Generated character image for 傳統消防隊: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for AEGIS無人機隊: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for AEGIS系統: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for 森林野火: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Completed step: character-image-generation (11646ms)
-📍 Starting step: scene-image-generation
-🎨 Generating image for scene 1
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 2
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 3
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 4
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 5
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 6
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 7
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 8
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Completed step: scene-image-generation (8931ms)
-🔍 Debug summary for generate-scenes: {
-  totalTime: '88111ms',
-  stepsCompleted: 6,
-  errorsEncountered: 0,
-  successRate: '100%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 88111ms
-Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-⏱️ Step Performance:
-  ✅ initialization: 0ms
-  ✅ health-check: 925ms
-  ✅ gemini-text-generation: 66601ms
-  ✅ response-parsing: 7ms
-  ✅ character-image-generation: 11646ms
-  ✅ scene-image-generation: 8931ms
-📊 === END SUMMARY ===
-
-🎉 Scene generation completed successfully!
-🔍 Debug summary for generate-scenes: {
-  totalTime: '88111ms',
-  stepsCompleted: 6,
-  errorsEncountered: 0,
-  successRate: '100%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 88111ms
-Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-⏱️ Step Performance:
-  ✅ initialization: 0ms
-  ✅ health-check: 925ms
-  ✅ gemini-text-generation: 66601ms
-  ✅ response-parsing: 7ms
-  ✅ character-image-generation: 11646ms
-  ✅ scene-image-generation: 8931ms
-📊 === END SUMMARY ===
-
- POST / 200 in 88802ms
-Attempting transcript extraction for video: gg-dXisTWDI
-Checking transcript availability for video: gg-dXisTWDI
-Found 1 caption track(s) available
-Best caption track: zh-TW (standard)
-Attempting caption download (likely to fail due to OAuth requirement)
-Caption download requires OAuth 2.0 authentication (expected failure)
-Caption content download failed (OAuth required) - this is expected behavior
-No usable transcript content available for this video
-Transcript not available, extracting enhanced metadata...
-Extracting enhanced metadata for video: gg-dXisTWDI (attempt 1/3)
-Enhanced metadata extracted successfully
- POST / 200 in 487ms
-Processing reference content with enhanced Gemini service
-Source type: youtube
-Has transcript: false
-Description length: 1998
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 765ms with: HEALTHY
-Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 765
-}
-Using enhanced description content
-Content Complexity Analysis: {
-  contentType: 'youtube_long_form',
-  isShorts: false,
-  shortsStyle: undefined,
-  topicsComplexity: 'moderate',
-  tokenAllocation: 5019,
-  reasoning: 'Long-form YouTube video (19min) + +500 (moderate complexity) +19 (detailed description) = 5019 tokens',
-  useStructuredOutput: undefined
-}
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 4827,
-  temperature: 0.3,
-  maxTokens: 5019,
-  timeout: 90000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 21359ms: {
-  textLength: 1993,
-  textPreview: '{\n' +
-    '  "analysis": {\n' +
-    '    "keyTopics": [\n' +
-    '      "AI短影音製作",\n' +
-    '      "財富自由潛力",\n' +
-    '      "YouTube演算法策略",\n' +
-    '      "貓...'
-}
-🔧 Starting enhanced JSON parsing for AI response
-Raw AI response length: 1993
-First 200 chars: {
-  "analysis": {
-    "keyTopics": [
-      "AI短影音製作",
-      "財富自由潛力",
-      "YouTube演算法策略",
-      "貓咪AI內容",
-      "實作教學"
-    ],
-    "sentiment": "positive",
-    "coreMessage": "本影片透過實測，展示如何運用AI工具製作貓咪短
-✅ Enhanced JSON parsing successful!
-Repair attempts: 0
-Parse time: 1ms
-Content processing completed in 22129ms
- POST / 200 in 22146ms
+ GET / 200 in 41ms
+ GET /_next/static/css/app/layout.css?v=1754899898107 404 in 16ms
+ GET /_next/static/chunks/main-app.js?v=1754899898107 404 in 32ms
+ GET /_next/static/chunks/app/page.js 404 in 29ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 31ms
+ GET /favicon.ico 200 in 16ms
+ GET /favicon.ico 200 in 5ms
+Component rendered
+ GET / 200 in 38ms
+ GET /_next/static/css/app/layout.css?v=1754899899249 404 in 17ms
+ GET /_next/static/chunks/main-app.js?v=1754899899249 404 in 30ms
+ GET /_next/static/chunks/app/page.js 404 in 27ms
+ GET /_next/static/chunks/app-pages-internals.js 404 in 28ms
+ GET /favicon.ico 200 in 29ms
+ GET /favicon.ico 200 in 17ms
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, lstat '/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/.next/server/app/api'
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Resolving '../../../../.next/server/app/api/health/route' in /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server for build dependencies doesn't lead to expected result '/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/.next/server/app/api/health/route.js', but to 'Error: Can't resolve '../../../../.next/server/app/api/health/route' in '/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server'' instead. Resolving dependencies are ignored for this path.
+<w>  at resolve commonjs file ../../../../.next/server/app/api/health/route (expected /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/.next/server/app/api/health/route.js)
+<w>  at file dependencies /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/require.js
+<w>  at file /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/require.js
+<w>  at file dependencies /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/load-components.js
+<w>  at file /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/load-components.js
+<w>  at file dependencies /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/build/utils.js
+<w>  at file /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/build/utils.js
+<w>  at file dependencies /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at file /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
+<w>  at resolve commonjs /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/build/webpack/loaders/next-route-loader/index.js
 📊 Performance Summary:
    Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-🔍 Debug tracking started for: generate-scenes
-📍 Starting step: initialization
-🎬 Generating scenes with enhanced Gemini service
-🌍 Environment Information:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Gemini Model: gemini-2.5-flash
-  Veo Model: veo-001
-  Node Environment: development
-  GCS Storage URI: NOT SET
-  YouTube API Key: SET
-⚠️ Environment warnings: [ 'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail' ]
-📊 Configuration: {
-  projectId: 'fechen-aifactory',
-  location: 'us-central1',
-  geminiModel: 'gemini-2.5-flash',
-  pitchLength: 1352,
-  numScenes: 8,
-  style: 'Live-Action',
-  language: '繁體中文'
-}
-✅ Completed step: initialization (0ms)
-📍 Starting step: health-check
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 745ms with: HEALTHY
-🏥 Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 745
-}
-✅ Completed step: health-check (747ms)
-📍 Starting step: gemini-text-generation
-🎯 Creating storyboard with Gemini...
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 5949,
-  temperature: 1,
-  maxTokens: 8192,
-  timeout: 60000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 23310ms: {
-  textLength: 9545,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "這是一部關於個人成長與財富自由的微電影。故事主角阿明，一位對現狀感到倦怠的上班族，在深夜的出租屋裡，偶然看到YouTuber老高關於「AI短影音財富自由...'
-}
-✅ Gemini response received: {
-  textLength: 9545,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "這是一部關於個人成長與財富自由的微電影。故事主角阿明，一位對現狀感到倦怠的上班族，在深夜的出租屋裡，偶然看到YouTuber老高關於「AI短影音財富自由」的影片。他從最初的懷疑，到被影片中可愛的AI貓咪短片吸引，決定親身實測。電影將透過蒙太奇手法，展現阿明從摸索、掙扎到學習掌握AI工具（如Midjourney、DALL·E、Runway等）的過程。他...'
-}
-✅ Completed step: gemini-text-generation (23310ms)
-📍 Starting step: response-parsing
-🔄 Starting three-tier parsing strategy...
-📋 Trying strict parsing...
-Cleaning JSON response, original length: 9545
-Cleaned JSON length: 9499
-JSON structure check - braces balanced: true
-📋 Trying main branch parsing...
-✅ Main branch parsing successful
-✅ Core structure valid, checking optional fields...
-📝 Scenario: 這是一部關於個人成長與財富自由的微電影。故事主角阿明，一位對現狀感到倦怠的上班族，在深夜的出租屋裡，偶然看到YouTuber老高關於「AI短影音財富自由」的影片。他從最初的懷疑，到被影片中可愛的AI貓咪短片吸引，決定親身實測。電影將透過蒙太奇手法，展現阿明從摸索、掙扎到學習掌握AI工具（如Midjourney、DALL·E、Runway等）的過程。他經歷了初期頻道觀看數低迷的挫折，但憑藉對數據的分析和對「完播率與視覺hook」的鑽研，最終製作出一部爆紅的AI貓咪短片，觀看數飆升。阿明將這次成功系統化，建立起「貓咪工廠GPT」，規模化生產內容。電影結局，阿明擺脫了朝九晚五的束縛，在陽光灑落的咖啡廳或居家辦公空間，悠閒地享受著財富自由，身旁有隻真實的貓咪，象徵他從虛擬世界中實現的真實自由。他面對鏡頭，自信地分享自己的轉變與成功，證明AI短影音不僅是工具，更是通往無限可能的大門。
-👥 Characters: [ '阿明', 'AI貓咪', '真實貓咪' ]
-🏞️ Settings: [ '阿明狹小、略顯雜亂的出租屋', '阿明的書桌', '陽光灑落的咖啡廳', '居家辦公空間' ]
-🎬 Scenes generated: 8
-✅ Completed step: response-parsing (4ms)
-📍 Starting step: character-image-generation
-Generating image for character 1: 阿明
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-Generating image for character 2: AI貓咪
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-Generating image for character 3: 真實貓咪
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-✅ Generated character image for 阿明: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for AI貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for 真實貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Completed step: character-image-generation (11168ms)
-📍 Starting step: scene-image-generation
-🎨 Generating image for scene 1
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 2
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 3
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 4
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 5
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 6
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 7
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 8
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Completed step: scene-image-generation (7192ms)
-🔍 Debug summary for generate-scenes: {
-  totalTime: '42422ms',
-  stepsCompleted: 6,
-  errorsEncountered: 0,
-  successRate: '100%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 42422ms
-Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-⏱️ Step Performance:
-  ✅ initialization: 0ms
-  ✅ health-check: 747ms
-  ✅ gemini-text-generation: 23310ms
-  ✅ response-parsing: 4ms
-  ✅ character-image-generation: 11168ms
-  ✅ scene-image-generation: 7192ms
-📊 === END SUMMARY ===
-
-🎉 Scene generation completed successfully!
-🔍 Debug summary for generate-scenes: {
-  totalTime: '42423ms',
-  stepsCompleted: 6,
-  errorsEncountered: 0,
-  successRate: '100%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 42423ms
-Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-⏱️ Step Performance:
-  ✅ initialization: 0ms
-  ✅ health-check: 747ms
-  ✅ gemini-text-generation: 23310ms
-  ✅ response-parsing: 4ms
-  ✅ character-image-generation: 11168ms
-  ✅ scene-image-generation: 7192ms
-📊 === END SUMMARY ===
-
- POST / 200 in 42979ms
-🔍 Debug tracking started for: generate-scenes
-📍 Starting step: initialization
-🎬 Generating scenes with enhanced Gemini service
-🌍 Environment Information:
-  Project ID: fechen-aifactory
-  Location: us-central1
-  Gemini Model: gemini-2.5-flash
-  Veo Model: veo-001
-  Node Environment: development
-  GCS Storage URI: NOT SET
-  YouTube API Key: SET
-⚠️ Environment warnings: [ 'GCS_VIDEOS_STORAGE_URI is not set - video generation may fail' ]
-📊 Configuration: {
-  projectId: 'fechen-aifactory',
-  location: 'us-central1',
-  geminiModel: 'gemini-2.5-flash',
-  pitchLength: 1332,
-  numScenes: 8,
-  style: 'Live-Action',
-  language: '繁體中文'
-}
-✅ Completed step: initialization (1ms)
-📍 Starting step: health-check
-Testing model availability: gemini-2.5-flash
-Model gemini-2.5-flash responded in 1551ms with: HEALTHY
-🏥 Gemini Health Check: {
-  healthy: true,
-  model: 'gemini-2.5-flash',
-  region: 'us-central1',
-  responseTime: 1551
-}
-✅ Completed step: health-check (1551ms)
-📍 Starting step: gemini-text-generation
-🎯 Creating storyboard with Gemini...
-Generating text with Gemini: {
-  model: 'gemini-2.5-flash',
-  promptLength: 5929,
-  temperature: 1,
-  maxTokens: 8192,
-  timeout: 60000
-}
-Attempt 1/3 with model: gemini-2.5-flash
-Generated text successfully in 29305ms: {
-  textLength: 9110,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "阿明，一位對朝九晚五感到厭倦的藍髮上班族，在疲憊的深夜裡，偶然在螢幕上看到老高關於「AI短影音財富自由」的影片。從最初的懷疑到被影片中AI貓咪的魅力所吸...'
-}
-✅ Gemini response received: {
-  textLength: 9110,
-  textPreview: '```json\n' +
-    '{\n' +
-    ' "scenario": "阿明，一位對朝九晚五感到厭倦的藍髮上班族，在疲憊的深夜裡，偶然在螢幕上看到老高關於「AI短影音財富自由」的影片。從最初的懷疑到被影片中AI貓咪的魅力所吸引，他決定親身實測。故事追溯了他從摸索AI工具的掙扎、面對頻道初期觀看數低谷的挫折，到最終透過堅持和策略調整，製作出一支爆紅的AI貓咪短片，從而實現了財富自由的歷程。影片結尾，阿明在陽光灑落的居家辦公...'
-}
-✅ Completed step: gemini-text-generation (29312ms)
-📍 Starting step: response-parsing
-🔄 Starting three-tier parsing strategy...
-📋 Trying strict parsing...
-Cleaning JSON response, original length: 9110
-Cleaned JSON length: 9065
-JSON structure check - braces balanced: true
-📋 Trying main branch parsing...
-✅ Main branch parsing successful
-✅ Core structure valid, checking optional fields...
-📝 Scenario: 阿明，一位對朝九晚五感到厭倦的藍髮上班族，在疲憊的深夜裡，偶然在螢幕上看到老高關於「AI短影音財富自由」的影片。從最初的懷疑到被影片中AI貓咪的魅力所吸引，他決定親身實測。故事追溯了他從摸索AI工具的掙扎、面對頻道初期觀看數低谷的挫折，到最終透過堅持和策略調整，製作出一支爆紅的AI貓咪短片，從而實現了財富自由的歷程。影片結尾，阿明在陽光灑落的居家辦公空間中，享受著自由的滋味，身旁還有隻真實的貓咪，象徵著他從虛擬世界中獲得的真實豐盛。這不僅是他個人的突破，更是對AI短影音無限可能性的有力證明。
-👥 Characters: [ '阿明', '老高', '虛擬貓咪', '真實貓咪' ]
-🏞️ Settings: [ '阿明的出租屋', '阿明的書桌', '陽光灑落的居家辦公空間' ]
-🎬 Scenes generated: 8
-✅ Completed step: response-parsing (4ms)
-📍 Starting step: character-image-generation
-Generating image for character 1: 阿明
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-Generating image for character 2: 老高
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-Generating image for character 3: 虛擬貓咪
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-Generating image for character 4: 真實貓咪
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-✅ Generated character image for 阿明: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for 老高: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for 虛擬貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Generated character image for 真實貓咪: iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAAAg3...
-✅ Completed step: character-image-generation (10892ms)
-📍 Starting step: scene-image-generation
-🎨 Generating image for scene 1
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 2
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 3
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 4
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 5
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 6
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 7
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-🎨 Generating image for scene 8
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Using cached access token
-✅ Generated scene 2 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 1 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 4 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 6 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 3 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 5 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 8 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Generated scene 7 image: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
-✅ Completed step: scene-image-generation (7714ms)
-🔍 Debug summary for generate-scenes: {
-  totalTime: '49475ms',
-  stepsCompleted: 6,
-  errorsEncountered: 0,
-  successRate: '100%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 49475ms
-Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-⏱️ Step Performance:
-  ✅ initialization: 1ms
-  ✅ health-check: 1551ms
-  ✅ gemini-text-generation: 29312ms
-  ✅ response-parsing: 4ms
-  ✅ character-image-generation: 10892ms
-  ✅ scene-image-generation: 7714ms
-📊 === END SUMMARY ===
-
-🎉 Scene generation completed successfully!
-🔍 Debug summary for generate-scenes: {
-  totalTime: '49476ms',
-  stepsCompleted: 6,
-  errorsEncountered: 0,
-  successRate: '100%'
-}
-
-📊 === DEBUG SUMMARY ===
-Operation: generate-scenes
-Total Time: 49476ms
-Environment: fechen-aifactory/us-central1/gemini-2.5-flash
-
-⏱️ Step Performance:
-  ✅ initialization: 1ms
-  ✅ health-check: 1551ms
-  ✅ gemini-text-generation: 29312ms
-  ✅ response-parsing: 4ms
-  ✅ character-image-generation: 10892ms
-  ✅ scene-image-generation: 7714ms
-📊 === END SUMMARY ===
-
- POST / 200 in 50005ms
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
+   Total Operations: 0
+   Average Response Time: 0.00ms
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
    Total Operations: 2
-   Average Response Time: 11290.00ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 4
-   Average Response Time: 11585.50ms
-   Error Rate: 0.00%
-📊 Performance Summary:
-   Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
+   Average Response Time: 2.50ms
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
@@ -1838,7 +357,7 @@ Environment: fechen-aifactory/us-central1/gemini-2.5-flash
 📊 Performance Summary:
    Overall Health: healthy
    Total Operations: 2
-   Average Response Time: 11290.00ms
+   Average Response Time: 2.50ms
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
@@ -1848,7 +367,7 @@ Environment: fechen-aifactory/us-central1/gemini-2.5-flash
 📊 Performance Summary:
    Overall Health: healthy
    Total Operations: 2
-   Average Response Time: 11290.00ms
+   Average Response Time: 2.50ms
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
@@ -1858,7 +377,7 @@ Environment: fechen-aifactory/us-central1/gemini-2.5-flash
 📊 Performance Summary:
    Overall Health: healthy
    Total Operations: 2
-   Average Response Time: 11290.00ms
+   Average Response Time: 2.50ms
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
@@ -1867,8 +386,553 @@ Environment: fechen-aifactory/us-central1/gemini-2.5-flash
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
-   Total Operations: 2
-   Average Response Time: 11290.00ms
+   Total Operations: 1
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 1
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 1
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 1
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 1
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 1
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
    Error Rate: 0.00%
 📊 Performance Summary:
    Overall Health: healthy
@@ -2205,17 +1269,6 @@ Environment: fechen-aifactory/us-central1/gemini-2.5-flash
    Total Operations: 0
    Average Response Time: 0.00ms
    Error Rate: 0.00%
-🎨 Regenerating image with enhanced error handling: {
-  promptLength: 453,
-  promptPreview: 'Live-Action style. A thirty-something male office worker with blue hair, energetically working at hi...'
-}
-Getting access token for project: fechen-aifactory
-Location: us-central1
-Fetching new access token...
-Successfully obtained access token
-✅ Image generated successfully in 7386ms
-✅ Generated image base64: iVBORw0KGgoAAAANSUhEUgAABYAAAAMACAIAAAASU1SbAAAAg3...
- POST / 200 in 7489ms
 📊 Performance Summary:
    Overall Health: healthy
    Total Operations: 0

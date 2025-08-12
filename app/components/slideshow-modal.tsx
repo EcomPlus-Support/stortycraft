@@ -3,18 +3,21 @@
 import { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import { ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { Scene } from "../types"
+import { Scene, type AspectRatio } from "../types"
+import { AspectRatioContainer } from './aspect-ratio-container'
 
 interface SlideshowModalProps {
   scenes: Scene[];
+  aspectRatio?: AspectRatio;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function SlideshowModal({ scenes, isOpen, onClose }: SlideshowModalProps) {
+export function SlideshowModal({ scenes, aspectRatio, isOpen, onClose }: SlideshowModalProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [direction, setDirection] = useState(0)
 
@@ -57,11 +60,19 @@ export function SlideshowModal({ scenes, isOpen, onClose }: SlideshowModalProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[900px]">
         <DialogHeader>
-          <DialogTitle>Scene {currentIndex + 1}</DialogTitle>
+          <div className="flex items-center justify-between">
+            <DialogTitle>Scene {currentIndex + 1}</DialogTitle>
+            {aspectRatio && (
+              <Badge variant="secondary" className="gap-1">
+                <Maximize2 className="h-3 w-3" />
+                {aspectRatio.label}
+              </Badge>
+            )}
+          </div>
         </DialogHeader>
-        <div className="relative w-full pb-[56.25%] overflow-hidden">
+        <AspectRatioContainer aspectRatio={aspectRatio} className="relative overflow-hidden">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={currentIndex}
@@ -80,7 +91,7 @@ export function SlideshowModal({ scenes, isOpen, onClose }: SlideshowModalProps)
                 src={currentScene.imageBase64 ? `data:image/png;base64,${currentScene.imageBase64}` : "/placeholder.svg"}
                 alt={`Scene ${currentIndex + 1}`}
                 fill
-                className="w-full h-full object-cover object-center rounded-md absolute inset-0"
+                className="w-full h-full object-cover object-center rounded-md"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.src = "/placeholder.svg";
@@ -88,10 +99,12 @@ export function SlideshowModal({ scenes, isOpen, onClose }: SlideshowModalProps)
               />
             </motion.div>
           </AnimatePresence>
+          
+          {/* Navigation buttons */}
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm"
             onClick={goToPrevious}
           >
             <ChevronLeft className="h-4 w-4" />
@@ -100,13 +113,20 @@ export function SlideshowModal({ scenes, isOpen, onClose }: SlideshowModalProps)
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm"
             onClick={goToNext}
           >
             <ChevronRight className="h-4 w-4" />
             <span className="sr-only">Next scene</span>
           </Button>
-        </div>
+          
+          {/* Scene counter */}
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10">
+            <Badge variant="secondary" className="bg-background/80 backdrop-blur-sm">
+              {currentIndex + 1} / {scenes.length}
+            </Badge>
+          </div>
+        </AspectRatioContainer>
         <div className="mt-4 space-y-2">
           <h3 className="font-semibold">Description:</h3>
           <p>{currentScene.description}</p>

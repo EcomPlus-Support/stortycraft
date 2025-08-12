@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { StyleSelector, type Style } from "./style-selector"
-import { Loader2, Upload } from 'lucide-react'
+import { AspectRatioSelector } from "./aspect-ratio-selector"
+import { Loader2, Upload, Maximize2 } from 'lucide-react'
 import Image from 'next/image'
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
@@ -16,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { type Language } from '../types'
+import { type Language, type AspectRatio } from '../types'
 import { type UserFriendlyError } from '@/lib/error-utils'
 import { ErrorDisplay } from '@/components/ui/error-display'
 import { SUPPORTED_LANGUAGES } from '../constants/languages'
@@ -32,6 +33,8 @@ interface CreateTabProps {
   setStyle: (style: string) => void
   language: Language
   setLanguage: (language: Language) => void
+  aspectRatio: AspectRatio
+  setAspectRatio: (ratio: AspectRatio) => void
   logoOverlay: string | null
   setLogoOverlay: (logo: string | null) => void
   isLoading: boolean
@@ -53,8 +56,10 @@ export function CreateTab({
   setStyle,
   language,
   setLanguage,
+  aspectRatio,
+  setAspectRatio,
   logoOverlay,
-  setLogoOverlay,
+  setLogoOverlay: _setLogoOverlay,
   isLoading,
   errorMessage,
   onGenerate,
@@ -143,6 +148,20 @@ export function CreateTab({
         </div>
         <div className="space-y-2">
           <StyleSelector styles={styles} onSelect={setStyle} />
+        </div>
+        
+        {/* Aspect Ratio Selection */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Maximize2 className="h-4 w-4 text-muted-foreground" />
+            <label className="text-sm font-medium">Aspect Ratio</label>
+          </div>
+          <AspectRatioSelector
+            selectedRatio={aspectRatio}
+            onSelect={setAspectRatio}
+            disabled={isLoading}
+            className="max-w-2xl"
+          />
         </div>
         <div className="flex items-center space-x-2">
           <label htmlFor="style" className="text-sm font-medium">

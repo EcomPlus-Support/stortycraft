@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BookOpen, Film, LayoutGrid, PenLine, Link } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { generateScenes } from './actions/generate-scenes'
 import { generateScenesStructured } from './actions/generate-scenes-structured'
 import { editVideo } from './actions/generate-video'
@@ -15,10 +15,12 @@ import { ScenarioTab } from "./components/scenario-tab"
 import { StoryboardTab } from './components/storyboard-tab'
 import { type Style } from "./components/style-selector"
 import { VideoTab } from './components/video-tab'
-import { Scenario, Scene, type Language } from './types'
+import { Scenario, Scene, type Language, type AspectRatio } from './types'
 import Image from 'next/image'
 import { translateError, type UserFriendlyError } from '@/lib/error-utils'
-import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from './constants/languages'
+import { DEFAULT_LANGUAGE } from './constants/languages'
+import { DEFAULT_ASPECT_RATIO } from './constants/aspectRatios'
+import { AspectRatioChangeDialog } from './components/aspect-ratio-change-dialog'
 
 const styles: Style[] = [
   { name: "Live-Action", image: "/styles/cinematic.jpg" },
@@ -34,8 +36,9 @@ export default function Home() {
   const [pitch, setPitch] = useState('')
   const [style, setStyle] = useState('Live-Action')
   const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE)
+  const [aspectRatio, setAspectRatio] = useState<AspectRatio>(DEFAULT_ASPECT_RATIO)
   const [logoOverlay, setLogoOverlay] = useState<string | null>(null)
-  const [isUploading, setIsUploading] = useState(false);
+  const [_isUploading, setIsUploading] = useState(false);
   const [numScenes, setNumScenes] = useState(8)
   const [isLoading, setIsLoading] = useState(false)
   const [withVoiceOver, setWithVoiceOver] = useState(false)
@@ -47,6 +50,10 @@ export default function Home() {
   const [videoUri, setVideoUri] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<string>("reference")
   const [useStructuredOutput, setUseStructuredOutput] = useState(false)
+  // Aspect ratio change dialog state
+  const [pendingAspectRatio, setPendingAspectRatio] = useState<AspectRatio | null>(null)
+  const [showAspectRatioDialog, setShowAspectRatioDialog] = useState(false)
+  const [aspectRatioChangeLoading, setAspectRatioChangeLoading] = useState(false)
 
   const FALLBACK_URL = "https://videos.pexels.com/video-files/4276282/4276282-hd_1920_1080_25fps.mp4"
 
@@ -82,6 +89,8 @@ export default function Home() {
       if (logoOverlay) {
         scenario.logoOverlay = logoOverlay
       }
+      // Add aspect ratio to scenario
+      scenario.aspectRatio = aspectRatio
       setScenes(scenario.scenes)
       setActiveTab("scenario") // Switch to scenario tab after successful generation
     } catch (error) {
@@ -323,6 +332,40 @@ export default function Home() {
     });
   };
 
+  // Handle aspect ratio changes with confirmation
+  const handleAspectRatioChange = (newRatio: AspectRatio) => {
+    const hasExistingContent = scenes.length > 0 || scenario
+    
+    if (hasExistingContent && newRatio.id !== aspectRatio.id) {
+      setPendingAspectRatio(newRatio)
+      setShowAspectRatioDialog(true)
+    } else {
+      setAspectRatio(newRatio)
+    }
+  }
+
+  const handleConfirmAspectRatioChange = async () => {
+    if (!pendingAspectRatio) return
+    
+    setAspectRatioChangeLoading(true)
+    try {
+      setAspectRatio(pendingAspectRatio)
+      
+      // Update scenario if it exists
+      if (scenario) {
+        setScenario({ ...scenario, aspectRatio: pendingAspectRatio })
+      }
+      
+      console.log('Aspect ratio changed to:', pendingAspectRatio.label)
+    } catch (error) {
+      console.error('Error changing aspect ratio:', error)
+      setErrorMessage(translateError(error))
+    } finally {
+      setAspectRatioChangeLoading(false)
+      setPendingAspectRatio(null)
+    }
+  }
+
   console.log("Component rendered");
 
   return (
@@ -386,6 +429,8 @@ export default function Home() {
             setStyle={setStyle}
             language={language}
             setLanguage={setLanguage}
+            aspectRatio={aspectRatio}
+            setAspectRatio={handleAspectRatioChange}
             logoOverlay={logoOverlay}
             setLogoOverlay={setLogoOverlay}
             isLoading={isLoading}
@@ -409,6 +454,7 @@ export default function Home() {
         <TabsContent value="storyboard">
           <StoryboardTab
             scenes={scenes}
+            aspectRatio={aspectRatio}
             isLoading={isLoading}
             isVideoLoading={isVideoLoading}
             generatingScenes={generatingScenes}
@@ -429,6 +475,7 @@ export default function Home() {
         <TabsContent value="video">
           <VideoTab
             videoUri={videoUri}
+            aspectRatio={aspectRatio}
             isVideoLoading={isVideoLoading}
             withVoiceOver={withVoiceOver}
             setWithVoiceOver={setWithVoiceOver}
@@ -438,6 +485,20 @@ export default function Home() {
           />
         </TabsContent>
       </Tabs>
+      
+      {/* Aspect Ratio Change Confirmation Dialog */}
+      <AspectRatioChangeDialog
+        isOpen={showAspectRatioDialog}
+        onClose={() => {
+          setShowAspectRatioDialog(false)
+          setPendingAspectRatio(null)
+        }}
+        onConfirm={handleConfirmAspectRatioChange}
+        currentRatio={aspectRatio}
+        newRatio={pendingAspectRatio || aspectRatio}
+        hasExistingContent={scenes.length > 0 || !!scenario}
+        isLoading={aspectRatioChangeLoading}
+      />
     </main>
   )
 }

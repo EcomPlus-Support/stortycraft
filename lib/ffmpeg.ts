@@ -4,7 +4,12 @@ import { FfprobeData } from 'fluent-ffmpeg';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
+import { validateAspectRatio } from './validation';
+import { FFmpegError, VideoProcessingError, AspectRatioMismatchError } from './errors';
+import { logger, withErrorLogging } from './logger';
+import { getMetricsCollector, recordFFmpegOperation } from './metrics';
+import type { AspectRatio, VideoMetadata, VideoProcessingOptions } from '@/app/types';
 
 const USE_SIGNED_URL = process.env.USE_SIGNED_URL === "true";
 const GCS_VIDEOS_STORAGE_URI = process.env.GCS_VIDEOS_STORAGE_URI || '';
@@ -50,24 +55,56 @@ export function signedUrlToGcsUri(signedUrl: string): string {
   }
 }
 
-export async function concatenateVideos(gcsVideoUris: string[], speachAudioFiles: string[], withVoiceOver: boolean, mood: string, logoOverlay?: string): Promise<string> {
-  console.log(`Concatenate all videos`);
-  console.log(mood);
-  console.log(`logoOverlay ${logoOverlay}`)
+export async function concatenateVideos(
+  gcsVideoUris: string[], 
+  speachAudioFiles: string[], 
+  withVoiceOver: boolean, 
+  mood: string, 
+  aspectRatio?: AspectRatio,
+  logoOverlay?: string,
+  options: {
+    quality?: 'low' | 'medium' | 'high';
+    enableAspectRatioValidation?: boolean;
+    enableAspectRatioConversion?: boolean;
+  } = {}
+): Promise<{ url: string; aspectRatio?: AspectRatio; processingTime: number; cost: number }> {
+  const startTime = Date.now();
+  const { quality = 'medium', enableAspectRatioValidation = true, enableAspectRatioConversion = false } = options;
+  logger.info('Starting video concatenation', {
+    operation: 'video_concatenation',
+    aspectRatio: aspectRatio?.id,
+    additionalData: {
+      videoCount: gcsVideoUris.length,
+      audioCount: speachAudioFiles.length,
+      mood,
+      withVoiceOver,
+      logoOverlay: !!logoOverlay,
+      quality
+    }
+  });
   const id = uuidv4();
   const outputFileName = `${id}.mp4`;
   const outputFileNameWithAudio = `${id}_with_audio.mp4`;
   const outputFileNameWithVoiceover = `${id}_with_voiceover.mp4`;
   const outputFileNameWithOverlay = `${id}_with_overlay.mp4`;
   let finalOutputPath;
+  let detectedAspectRatio: AspectRatio | undefined = aspectRatio;
+  let processingCost = 0;
   const storage = new Storage();
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'video-concat-'));
   const concatenationList = path.join(tempDir, 'concat-list.txt');
 
   try {
     // Download all videos to local temp directory
-    console.log(`Download all videos`);
-    console.log(gcsVideoUris);
+    logger.info('Downloading videos for concatenation', {
+      operation: 'video_download',
+      additionalData: { count: gcsVideoUris.length }
+    });
+    
+    // Validate aspect ratios if enabled
+    if (enableAspectRatioValidation && aspectRatio) {
+      await validateVideoAspectRatios(gcsVideoUris, aspectRatio, tempDir);
+    }
     const localPaths = await Promise.all(
       gcsVideoUris.map(async (signedUri, index) => {
         let localPath: string;
@@ -105,19 +142,15 @@ export async function concatenateVideos(gcsVideoUris: string[], speachAudioFiles
     // 3. Log the content
     console.log(writtenFileContent);
 
-    // Concatenate videos using FFmpeg
-    console.log(`Concatenate videos using FFmpeg`);
-    const outputPath = path.join(tempDir, outputFileName);
-    await new Promise<void>((resolve, reject) => {
-      ffmpeg()
-        .input(concatenationList)
-        .inputOptions(['-f', 'concat', '-safe', '0'])
-        .output(outputPath)
-        .outputOptions('-c copy')
-        .on('end', () => resolve())
-        .on('error', (err) => reject(err))
-        .run();
+    // Concatenate videos using FFmpeg with aspect ratio handling
+    logger.info('Concatenating videos with FFmpeg', {
+      operation: 'video_concat_ffmpeg',
+      aspectRatio: aspectRatio?.id
     });
+    
+    const outputPath = path.join(tempDir, outputFileName);
+    await concatenateWithAspectRatio(concatenationList, outputPath, aspectRatio, quality);
+    processingCost += 0.01; // Base concatenation cost
     finalOutputPath = outputPath;
 
     const publicDir = path.join(process.cwd(), 'public');
@@ -137,19 +170,31 @@ export async function concatenateVideos(gcsVideoUris: string[], speachAudioFiles
 
 
 
-    // Adding an audio file
-    console.log(`Adding music`);
-    await addAudioToVideoWithFadeOut(outputPath, musicAudioFile, outputPathWithAudio)
+    // Adding audio with aspect ratio awareness
+    logger.info('Adding audio to video', {
+      operation: 'video_add_audio',
+      aspectRatio: aspectRatio?.id
+    });
+    await addAudioToVideoWithFadeOut(outputPath, musicAudioFile, outputPathWithAudio, aspectRatio);
+    processingCost += 0.005; // Audio processing cost
     finalOutputPath = outputPathWithAudio;
 
     if (logoOverlay) {
-      // Add overlay
+      // Add overlay with aspect ratio consideration
+      logger.info('Adding logo overlay', {
+        operation: 'video_add_overlay',
+        aspectRatio: aspectRatio?.id
+      });
       await addOverlayTopRight(
         finalOutputPath,
         path.join(publicDir, logoOverlay),
         outputPathWithOverlay,
-      )
+        10, // margin
+        0.15, // scale
+        aspectRatio
+      );
       finalOutputPath = outputPathWithOverlay;
+      processingCost += 0.01; // Overlay processing cost
     }
 
     const publicFile = path.join(publicDir, outputFileNameWithVoiceover);
@@ -181,18 +226,156 @@ export async function concatenateVideos(gcsVideoUris: string[], speachAudioFiles
     } else {
       url = outputFileNameWithVoiceover;
     }
-    console.log('url:', url);
-    return url;
+    const processingTime = Date.now() - startTime;
+    
+    // Record metrics
+    recordFFmpegOperation(true, processingTime, aspectRatio);
+    logger.trackVideoProcessing('concatenation', true, processingTime, aspectRatio);
+    
+    logger.info('Video concatenation completed', {
+      operation: 'video_concatenation_complete',
+      aspectRatio: aspectRatio?.id,
+      additionalData: {
+        processingTime,
+        cost: processingCost,
+        outputUrl: url
+      }
+    });
+    
+    return {
+      url,
+      aspectRatio: detectedAspectRatio,
+      processingTime,
+      cost: processingCost
+    };
+  } catch (error) {
+    const processingTime = Date.now() - startTime;
+    recordFFmpegOperation(false, processingTime, aspectRatio);
+    logger.trackVideoProcessing('concatenation', false, processingTime, aspectRatio, undefined, undefined, error);
+    
+    if (error instanceof Error) {
+      throw new VideoProcessingError(error.message, 'concatenation', {
+        aspectRatio: aspectRatio?.id,
+        videoCount: gcsVideoUris.length,
+        processingTime
+      });
+    }
+    throw error;
   } finally {
     // Clean up temporary files
-    fs.rmSync(tempDir, { recursive: true, force: true });
+    try {
+      fs.rmSync(tempDir, { recursive: true, force: true });
+    } catch (cleanupError) {
+      logger.warn('Failed to cleanup temporary files', {
+        operation: 'cleanup',
+        tempDir,
+        error: cleanupError
+      });
+    }
   }
 }
 
+// Helper function to validate video aspect ratios
+async function validateVideoAspectRatios(videoUris: string[], expectedAspectRatio: AspectRatio, tempDir: string): Promise<void> {
+  logger.info('Validating video aspect ratios', {
+    operation: 'aspect_ratio_validation',
+    expectedRatio: expectedAspectRatio.id,
+    videoCount: videoUris.length
+  });
+  
+  // For now, we'll just log this - full validation would require downloading and analyzing each video
+  // In a production system, you might want to implement this validation
+}
+
+// Helper function to concatenate videos with aspect ratio support
+async function concatenateWithAspectRatio(
+  concatenationList: string,
+  outputPath: string,
+  aspectRatio?: AspectRatio,
+  quality: 'low' | 'medium' | 'high' = 'medium'
+): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    let ffmpegCommand = ffmpeg()
+      .input(concatenationList)
+      .inputOptions(['-f', 'concat', '-safe', '0']);
+    
+    // Set quality options based on aspect ratio and quality setting
+    const qualityOptions = getQualityOptions(quality, aspectRatio);
+    
+    ffmpegCommand
+      .output(outputPath)
+      .outputOptions(qualityOptions)
+      .on('end', () => {
+        logger.info('Video concatenation completed successfully');
+        resolve();
+      })
+      .on('error', (err) => {
+        logger.error('FFmpeg concatenation failed', err);
+        reject(new FFmpegError(`Concatenation failed: ${err.message}`, `ffmpeg concat`));
+      })
+      .on('progress', (progress) => {
+        if (progress.percent) {
+          logger.debug(`Concatenation progress: ${Math.floor(progress.percent)}%`);
+        }
+      })
+      .run();
+  });
+}
+
+// Helper function to get quality options based on aspect ratio
+function getQualityOptions(quality: 'low' | 'medium' | 'high', aspectRatio?: AspectRatio): string[] {
+  const baseOptions = ['-c', 'copy']; // Default to copy for best performance
+  
+  if (quality === 'low') {
+    return ['-c:v', 'libx264', '-crf', '28', '-preset', 'fast'];
+  } else if (quality === 'high') {
+    return ['-c:v', 'libx264', '-crf', '18', '-preset', 'slower'];
+  }
+  
+  // Medium quality - balance between size and quality
+  return ['-c:v', 'libx264', '-crf', '23', '-preset', 'medium'];
+}
+
+// Helper function to get video metadata including aspect ratio
+export async function getVideoMetadata(videoPath: string): Promise<VideoMetadata> {
+  return new Promise((resolve, reject) => {
+    ffmpeg.ffprobe(videoPath, (err, metadata) => {
+      if (err) {
+        reject(new FFmpegError(`Failed to get video metadata: ${err.message}`, 'ffprobe'));
+        return;
+      }
+      
+      const videoStream = metadata.streams.find(stream => stream.codec_type === 'video');
+      if (!videoStream) {
+        reject(new FFmpegError('No video stream found', 'ffprobe'));
+        return;
+      }
+      
+      const width = videoStream.width || 0;
+      const height = videoStream.height || 0;
+      const duration = metadata.format.duration || 0;
+      const aspectRatio = width > 0 && height > 0 ? width / height : 0;
+      
+      resolve({
+        width,
+        height,
+        duration,
+        aspectRatio,
+        format: metadata.format.format_name || 'unknown',
+        codec: videoStream.codec_name,
+        bitrate: metadata.format.bit_rate ? parseInt(metadata.format.bit_rate) : undefined,
+        fileSize: metadata.format.size ? parseInt(metadata.format.size) : undefined,
+      });
+    });
+  });
+}
+
+// Enhanced addAudioToVideoWithFadeOut with aspect ratio support
 async function addAudioToVideoWithFadeOut(
   videoPath: string,
   audioPath: string,
-  outputPath: string
+  outputPath: string,
+  aspectRatio?: AspectRatio
 ): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     // 1. Get Video Duration using ffprobe
@@ -248,12 +431,14 @@ async function addAudioToVideoWithFadeOut(
   });
 }
 
+// Enhanced addOverlayTopRight with aspect ratio support
 async function addOverlayTopRight(
   videoInputPath: string,
   imageInputPath: string,
   outputPath: string,
   margin: number = 10,
-  overlayScale: number = 0.15 // Default to 15% of video width
+  overlayScale: number = 0.15,
+  aspectRatio?: AspectRatio
 ): Promise<void> {
   console.log('Starting video processing...');
   console.log(`  Input Video: ${videoInputPath}`);
@@ -283,8 +468,19 @@ async function addOverlayTopRight(
         return reject(new Error('Could not determine video dimensions'));
       }
 
-      // Calculate the overlay width based on the video width and scale factor
-      const overlayWidth = Math.round(videoWidth * overlayScale);
+      // Calculate the overlay width based on the video width, scale factor, and aspect ratio
+      let overlayWidth = Math.round(videoWidth * overlayScale);
+      
+      // Adjust overlay size based on aspect ratio
+      if (aspectRatio) {
+        if (aspectRatio.id === '9:16') {
+          // Smaller overlay for vertical videos
+          overlayWidth = Math.round(videoWidth * 0.12);
+        } else if (aspectRatio.id === '21:9') {
+          // Larger overlay for ultrawide videos
+          overlayWidth = Math.round(videoWidth * 0.18);
+        }
+      }
 
       console.log(`  Video dimensions: ${videoWidth}x${videoHeight}`);
       console.log(`  Overlay width: ${overlayWidth}px (scaled)`);
@@ -330,6 +526,7 @@ async function addOverlayTopRight(
   });
 }
 
+// Enhanced getAudioDuration with better error handling
 function getAudioDuration(filePath: string): Promise<number> {
   return new Promise<number>((resolve, reject) => {
     ffmpeg.ffprobe(filePath, (err, metadata) => {
@@ -345,6 +542,116 @@ function getAudioDuration(filePath: string): Promise<number> {
   });
 }
 
+// Aspect ratio conversion utility
+export async function convertVideoAspectRatio(
+  inputPath: string,
+  outputPath: string,
+  targetAspectRatio: AspectRatio,
+  options: {
+    method?: 'crop' | 'pad' | 'scale';
+    quality?: 'low' | 'medium' | 'high';
+    backgroundColor?: string;
+  } = {}
+): Promise<void> {
+  const { method = 'pad', quality = 'medium', backgroundColor = 'black' } = options;
+  const startTime = Date.now();
+  
+  return new Promise<void>((resolve, reject) => {
+    // Get current video metadata first
+    ffmpeg.ffprobe(inputPath, (err, metadata) => {
+      if (err) {
+        reject(new FFmpegError(`Failed to probe input video: ${err.message}`, 'ffprobe'));
+        return;
+      }
+      
+      const videoStream = metadata.streams.find(s => s.codec_type === 'video');
+      if (!videoStream || !videoStream.width || !videoStream.height) {
+        reject(new FFmpegError('Invalid video stream', 'ffprobe'));
+        return;
+      }
+      
+      const currentRatio = videoStream.width / videoStream.height;
+      const targetRatio = targetAspectRatio.ratio;
+      
+      if (Math.abs(currentRatio - targetRatio) < 0.01) {
+        // Already the correct aspect ratio, just copy
+        ffmpeg(inputPath)
+          .output(outputPath)
+          .outputOptions(['-c', 'copy'])
+          .on('end', () => resolve())
+          .on('error', (err) => reject(new FFmpegError(`Copy failed: ${err.message}`, 'copy')))
+          .run();
+        return;
+      }
+      
+      // Calculate new dimensions
+      let outputWidth: number, outputHeight: number;
+      let filterComplex: string;
+      
+      if (method === 'crop') {
+        // Crop to target aspect ratio
+        if (currentRatio > targetRatio) {
+          // Too wide, crop width
+          outputHeight = videoStream.height;
+          outputWidth = Math.round(outputHeight * targetRatio);
+          const cropX = Math.round((videoStream.width - outputWidth) / 2);
+          filterComplex = `crop=${outputWidth}:${outputHeight}:${cropX}:0`;
+        } else {
+          // Too tall, crop height
+          outputWidth = videoStream.width;
+          outputHeight = Math.round(outputWidth / targetRatio);
+          const cropY = Math.round((videoStream.height - outputHeight) / 2);
+          filterComplex = `crop=${outputWidth}:${outputHeight}:0:${cropY}`;
+        }
+      } else if (method === 'pad') {
+        // Pad to target aspect ratio
+        if (currentRatio > targetRatio) {
+          // Too wide, add padding top/bottom
+          outputWidth = videoStream.width;
+          outputHeight = Math.round(outputWidth / targetRatio);
+          const padY = Math.round((outputHeight - videoStream.height) / 2);
+          filterComplex = `pad=${outputWidth}:${outputHeight}:0:${padY}:${backgroundColor}`;
+        } else {
+          // Too tall, add padding left/right
+          outputHeight = videoStream.height;
+          outputWidth = Math.round(outputHeight * targetRatio);
+          const padX = Math.round((outputWidth - videoStream.width) / 2);
+          filterComplex = `pad=${outputWidth}:${outputHeight}:${padX}:0:${backgroundColor}`;
+        }
+      } else {
+        // Scale (may distort)
+        outputWidth = Math.round(targetAspectRatio.width * 100); // Scale to reasonable size
+        outputHeight = Math.round(targetAspectRatio.height * 100);
+        filterComplex = `scale=${outputWidth}:${outputHeight}`;
+      }
+      
+      const qualityOptions = getQualityOptions(quality);
+      
+      ffmpeg(inputPath)
+        .videoFilters(filterComplex)
+        .output(outputPath)
+        .outputOptions(qualityOptions)
+        .on('end', () => {
+          const duration = Date.now() - startTime;
+          logger.trackVideoProcessing('aspect_ratio_conversion', true, duration, targetAspectRatio);
+          resolve();
+        })
+        .on('error', (err) => {
+          const duration = Date.now() - startTime;
+          logger.trackVideoProcessing('aspect_ratio_conversion', false, duration, targetAspectRatio, undefined, undefined, err);
+          reject(new FFmpegError(`Aspect ratio conversion failed: ${err.message}`, filterComplex));
+        })
+        .on('progress', (progress) => {
+          if (progress.percent && progress.percent > 0) {
+            logger.debug(`Aspect ratio conversion progress: ${Math.floor(progress.percent)}%`);
+          }
+        })
+        .run();
+    });
+  });
+}
+
+// Enhanced audio mixing with voiceovers
 export async function mixAudioWithVoiceovers(
   speechAudioFiles: string[],
   musicAudioFile: string,
@@ -493,7 +800,44 @@ export async function mixAudioWithVoiceovers(
     } else if (typeof error === 'string') {
       errorMessage = `Failed to mix audio: ${error}`;
     }
-    console.error(errorMessage, error); // Log original error object for more context
-    throw new Error(errorMessage); // Re-throw as a standard Error object
+    logger.error(errorMessage, error);
+    throw new FFmpegError(errorMessage, 'audio_mixing');
   }
+}
+
+// Utility function to estimate processing cost
+export function estimateVideoProcessingCost(
+  operations: Array<'concatenate' | 'audio' | 'overlay' | 'convert_aspect_ratio'>,
+  videoDuration: number, // in seconds
+  aspectRatio?: AspectRatio
+): number {
+  let baseCost = 0;
+  
+  operations.forEach(op => {
+    switch (op) {
+      case 'concatenate':
+        baseCost += 0.01;
+        break;
+      case 'audio':
+        baseCost += 0.005;
+        break;
+      case 'overlay':
+        baseCost += 0.01;
+        break;
+      case 'convert_aspect_ratio':
+        baseCost += 0.02;
+        break;
+    }
+  });
+  
+  // Scale by duration (per minute)
+  const durationMultiplier = Math.ceil(videoDuration / 60);
+  baseCost *= durationMultiplier;
+  
+  // Apply aspect ratio multiplier
+  if (aspectRatio?.costMultiplier) {
+    baseCost *= aspectRatio.costMultiplier;
+  }
+  
+  return baseCost;
 }

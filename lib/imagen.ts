@@ -2,6 +2,12 @@ import { log } from 'console'
 import { GoogleAuth } from 'google-auth-library'
 import { getVertexAIConfig, IMAGEN_MODELS } from './config'
 import { getAuthManager, AuthenticationError } from './auth'
+import { validateImagenAspectRatio, validateAspectRatio } from './validation'
+import { ImagenError, createAspectRatioError, withRetry } from './errors'
+import { getCacheManager, cacheImage, getCachedImage } from './cache'
+import { logger, withErrorLogging } from './logger'
+import { getMetricsCollector, withMetrics, recordImageGeneration } from './metrics'
+import type { AspectRatio } from '@/app/types'
 
 
 const config = getVertexAIConfig();

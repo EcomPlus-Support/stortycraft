@@ -3,7 +3,8 @@
 import { StructuredOutputService, type StructuredPitch } from '@/lib/structured-output-service'
 import { GeminiDirectService } from '@/lib/gemini-direct'
 import { generateImageRest } from '@/lib/imagen'
-import { Scenario } from '../types'
+import { Scenario, Language } from '../types'
+import { SUPPORTED_LANGUAGES } from '../constants/languages'
 import { getVertexAIConfig } from '@/lib/config'
 import { logger } from '@/lib/logger'
 
@@ -18,10 +19,10 @@ export async function generateScenesStructured(
   try {
     console.log('🎬 Generating scenes from structured pitch')
     console.log('Environment Information:')
-    const { projectId, location, veoModel } = getVertexAIConfig()
+    const { projectId, location, model } = getVertexAIConfig()
     console.log(`  Project ID: ${projectId}`)
     console.log(`  Location: ${location}`)
-    console.log(`  Veo Model: ${veoModel}`)
+    console.log(`  Veo Model: ${model}`)
     
     // If no structured pitch provided, generate it
     if (!structuredPitch) {
@@ -73,34 +74,32 @@ export async function generateScenesStructured(
 
         return {
           imagePrompt: scenePrompt,
-          voiceOver: voiceOverText,
-          imageUrl: imageUrl,
-          imageError: imageError,
-          duration: scene.duration
+          videoPrompt: scenePrompt, // Same as image prompt for now
+          description: scene.keyAction,
+          voiceover: voiceOverText,
+          charactersPresent: [], // Default empty characters
+          imageBase64: imageUrl ? imageUrl.replace('data:image/png;base64,', '') : undefined
         }
       })
     )
 
+    // Find the language object
+    const language = SUPPORTED_LANGUAGES.find(l => l.name === languageName) || SUPPORTED_LANGUAGES[0]
+    
     // Create final scenario
     const scenario: Scenario = {
-      title: structuredPitch.title,
-      description: structuredPitch.finalPitch,
-      style,
-      language: languageName,
-      scenes,
-      createdAt: new Date().toISOString(),
-      metadata: {
-        genre: structuredPitch.genre,
-        targetAudience: structuredPitch.targetAudience,
-        coreMessage: structuredPitch.coreMessage,
-        totalDuration: structuredPitch.estimatedDuration,
-        characters: structuredPitch.characters.map(c => ({
-          name: c.name,
-          age: c.age,
-          gender: c.gender,
-          voice: c.voice
-        }))
-      }
+      scenario: structuredPitch.finalPitch,
+      genre: structuredPitch.genre,
+      mood: 'cinematic', // Default mood
+      music: 'background', // Default music
+      language,
+      characters: structuredPitch.characters.map(c => ({
+        name: c.name,
+        description: `${c.age} year old ${c.gender} character with ${c.voice} voice`
+      })),
+      settings: [], // Default empty settings
+      logoOverlay: logoOverlay || undefined,
+      scenes
     }
 
     return scenario

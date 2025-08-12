@@ -3,30 +3,37 @@
 import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Pencil, RefreshCw, Video, Upload, Loader2 } from 'lucide-react'
+import { Badge } from "@/components/ui/badge"
+import { Pencil, RefreshCw, Video, Upload, Loader2, Maximize2 } from 'lucide-react'
 import { EditSceneModal } from './edit-scene-modal'
+import { AspectRatioContainer } from './aspect-ratio-container'
 import Image from 'next/image'
 import { VideoPlayer } from "./video-player"
-import { Scene } from '../types'
+import { Scene, type AspectRatio } from '../types'
+import { cn } from '@/lib/utils'
 
 interface SceneDataProps {
   scene: Scene;
   sceneNumber: number;
+  aspectRatio?: AspectRatio;
   onUpdate: (updatedScene: SceneDataProps['scene']) => void;
   onRegenerateImage: () => void;
   onGenerateVideo: () => void;
   onUploadImage: (file: File) => void;
   isGenerating: boolean;
+  showAspectRatioControls?: boolean;
 }
 
 export function SceneData({
   scene,
   sceneNumber,
+  aspectRatio,
   onUpdate,
   onRegenerateImage,
   onGenerateVideo,
   onUploadImage,
   isGenerating,
+  showAspectRatioControls: _showAspectRatioControls = false,
 }: SceneDataProps) {
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -67,21 +74,39 @@ export function SceneData({
   return (
     <Card className="overflow-hidden">
       <div className="flex flex-col">
-        <div className="relative w-full aspect-video overflow-hidden group">
+        <AspectRatioContainer 
+          aspectRatio={aspectRatio}
+          className="relative group"
+        >
           {isGenerating && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
               <Loader2 className="h-8 w-8 text-white animate-spin" />
             </div>
           )}
+          
+          {/* Aspect ratio badge */}
+          {aspectRatio && (
+            <div className="absolute top-2 left-2 z-10">
+              <Badge variant="secondary" className="bg-black/70 text-white border-0">
+                <Maximize2 className="h-3 w-3 mr-1" />
+                {aspectRatio.id}
+              </Badge>
+            </div>
+          )}
+          
           {videoUrl ? (
             <div className="absolute inset-0">
-              <VideoPlayer src={videoUrl} />
+              <VideoPlayer 
+                src={videoUrl} 
+                aspectRatio={aspectRatio}
+                className="h-full w-full"
+              />
             </div>
           ) : scene.imageBase64 ? (
             <Image
               src={`data:image/png;base64,${scene.imageBase64}`}
               alt={`Scene ${sceneNumber}`}
-              className="absolute inset-0 w-full h-full object-cover object-center rounded-t-lg"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               onError={(e) => {
@@ -94,7 +119,7 @@ export function SceneData({
             <Image
               src='/placeholder.svg'
               alt={`Scene ${sceneNumber}`}
-              className="absolute inset-0 w-full h-full object-cover object-center rounded-t-lg"
+              className="absolute inset-0 w-full h-full object-cover object-center"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               onError={(e) => {
@@ -104,7 +129,9 @@ export function SceneData({
               }}
             />
           )}
-          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          
+          {/* Control buttons */}
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
             <Button
               variant="secondary"
               size="icon"
@@ -116,7 +143,11 @@ export function SceneData({
               <span className="sr-only">Generate video for scene</span>
             </Button>
           </div>
-          <div className="absolute top-2 left-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          
+          <div className={cn(
+            "absolute top-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity z-10",
+            aspectRatio ? "left-2 mt-8" : "left-2" // Adjust position if aspect ratio badge is present
+          )}>
             <Button
               variant="secondary"
               size="icon"
@@ -139,7 +170,7 @@ export function SceneData({
             </Button>
             <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
           </div>
-        </div>
+        </AspectRatioContainer>
         <CardContent className="p-4">
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-lg font-semibold text-primary">Scene {sceneNumber}</h3>

@@ -9,6 +9,14 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		aspectRatio: {
+  			'4/3': '4 / 3',
+  			'3/4': '3 / 4',
+  			'16/9': '16 / 9',
+  			'9/16': '9 / 16',
+  			'21/9': '21 / 9',
+  			'1/1': '1 / 1',
+  		},
   		fontFamily: {
   			sans: ['var(--font-dm-sans)'],
   		},
