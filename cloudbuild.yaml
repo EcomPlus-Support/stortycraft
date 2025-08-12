@@ -60,8 +60,6 @@ steps:
         GCS_VIDEOS_STORAGE_URI=gs://${_BUCKET_NAME}/videos/
       - '--set-secrets'
       - 'YOUTUBE_API_KEY=youtube-api-key:latest'
-      - '--service-account'
-      - '${_SERVICE_ACCOUNT}'
 
 images:
   - 'gcr.io/$PROJECT_ID/storycraft:latest'
