@@ -10,6 +10,17 @@ import { getVertexAIConfig } from '@/lib/config';
 
 export async function GET(request: NextRequest) {
   try {
+    // Skip external calls during build time
+    if (process.env.BUILD_TIME === 'true' || process.env.DISABLE_EXTERNAL_CALLS === 'true') {
+      return NextResponse.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        version: '1.0.0',
+        environment: process.env.NODE_ENV || 'development',
+        buildTime: true
+      });
+    }
+
     const { searchParams } = new URL(request.url);
     const detailed = searchParams.get('detailed') === 'true';
 

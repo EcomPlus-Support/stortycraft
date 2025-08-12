@@ -1,0 +1,63 @@
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/storycraft:latest', '.']
+
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/storycraft:latest']
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'storycraft'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/storycraft:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--memory'
+      - '2Gi'
+      - '--cpu'
+      - '2'
+      - '--timeout'
+      - '300'
+      - '--concurrency'
+      - '100'
+      - '--max-instances'
+      - '10'
+      - '--min-instances'
+      - '0'
+      - '--port'
+      - '3000'
+      - '--set-env-vars'
+      - |
+        PROJECT_ID=$PROJECT_ID,
+        LOCATION=us-central1,
+        MODEL=veo-001,
+        USE_SIGNED_URL=true,
+        USE_COSMO=false,
+        GOOGLE_CLOUD_PROJECT=$PROJECT_ID,
+        GCLOUD_PROJECT=$PROJECT_ID,
+        GEMINI_MODEL=gemini-2.5-flash,
+        NODE_ENV=production,
+        NEXT_TELEMETRY_DISABLED=1,
+        GCS_VIDEOS_STORAGE_URI=gs://${_BUCKET_NAME}/videos/
+      - '--set-secrets'
+      - 'YOUTUBE_API_KEY=youtube-api-key:latest'
+      - '--service-account'
+      - '${_SERVICE_ACCOUNT}'
+
+images:
+  - 'gcr.io/$PROJECT_ID/storycraft:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: '1200s'  # 20 minutes

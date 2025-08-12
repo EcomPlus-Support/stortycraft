@@ -23,6 +23,8 @@ COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV SKIP_ENV_VALIDATION=1
+ENV BUILD_TIME=true
+ENV DISABLE_EXTERNAL_CALLS=true
 
 # Build the application with proper error handling
 RUN npm run build

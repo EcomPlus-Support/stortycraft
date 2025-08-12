@@ -12,21 +12,24 @@ export interface VertexAIConfig {
 }
 
 export function getVertexAIConfig(): VertexAIConfig {
-  const projectId = process.env.PROJECT_ID || 'fechen-aifatory';
+  const projectId = process.env.PROJECT_ID || 'fechen-aifactory';
   const location = process.env.LOCATION || 'us-central1';
   const model = process.env.MODEL || 'veo-001';
   const geminiModel = process.env.GEMINI_MODEL || 'gemini-pro';
   const gcsVideosStorageUri = process.env.GCS_VIDEOS_STORAGE_URI;
   const youtubeApiKey = process.env.YOUTUBE_API_KEY;
 
-  // Log configuration for debugging
-  console.log('Vertex AI Configuration:');
-  console.log('  Project ID:', projectId);
-  console.log('  Location:', location);
-  console.log('  Veo Model:', model);
-  console.log('  Gemini Model:', geminiModel);
-  console.log('  GCS Videos Storage URI:', gcsVideosStorageUri || 'Not set');
-  console.log('  YouTube API Key:', youtubeApiKey ? 'Set' : 'Not set');
+  // Skip logging during build time to prevent external calls
+  if (process.env.BUILD_TIME !== 'true' && process.env.DISABLE_EXTERNAL_CALLS !== 'true') {
+    // Log configuration for debugging
+    console.log('Vertex AI Configuration:');
+    console.log('  Project ID:', projectId);
+    console.log('  Location:', location);
+    console.log('  Veo Model:', model);
+    console.log('  Gemini Model:', geminiModel);
+    console.log('  GCS Videos Storage URI:', gcsVideosStorageUri || 'Not set');
+    console.log('  YouTube API Key:', youtubeApiKey ? 'Set' : 'Not set');
+  }
 
   return {
     projectId,

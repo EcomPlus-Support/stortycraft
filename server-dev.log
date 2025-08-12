@@ -1819,3 +1819,119 @@ Component rendered
    Total Operations: 0
    Average Response Time: 0.00ms
    Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+📊 Performance Summary:
+   Overall Health: healthy
+   Total Operations: 0
+   Average Response Time: 0.00ms
+   Error Rate: 0.00%
+ ⚠ Found a change in next.config.mjs. Restarting the server to apply the changes...
+node:internal/modules/cjs/loader:1215
+  throw err;
+  ^
+
+Error: Cannot find module '/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1212:15)
+    at Module._load (node:internal/modules/cjs/loader:1043:27)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:164:12)
+    at node:internal/main/run_main_module:28:49 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v20.19.2
+[?25h
