@@ -57,8 +57,6 @@ steps:
         NEXT_TELEMETRY_DISABLED=1,
         HOSTNAME=0.0.0.0,
         GCS_VIDEOS_STORAGE_URI=gs://${_BUCKET_NAME}/videos/
-      - '--set-secrets'
-      - 'YOUTUBE_API_KEY=youtube-api-key:latest'
 
 images:
   - 'gcr.io/$PROJECT_ID/storycraft:latest'
