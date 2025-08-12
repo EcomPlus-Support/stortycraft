@@ -25,6 +25,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV SKIP_ENV_VALIDATION=1
 ENV BUILD_TIME=true
 ENV DISABLE_EXTERNAL_CALLS=true
+ENV NEXT_BUILD=1
+ENV BUILD_PHASE=build
 
 # Build the application with proper error handling
 RUN npm run build

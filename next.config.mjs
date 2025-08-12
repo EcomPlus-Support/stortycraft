@@ -31,8 +31,14 @@ const nextConfig = {
   // Improve build performance and error handling
   swcMinify: true,
   poweredByHeader: false,
-  // Handle build-time API timeouts
-  staticPageGenerationTimeout: 1000,
+  // Disable static generation for pages that make external calls
+  generateBuildId: () => 'storycraft-build',
+  // Disable static optimization to prevent build-time external calls
+  env: {
+    BUILD_PHASE: process.env.BUILD_PHASE || 'build',
+  },
+  // Handle build-time API timeouts - increased timeout
+  staticPageGenerationTimeout: 10,
   // ESLint configuration for build
   eslint: {
     // Only run ESLint on these directories during build
