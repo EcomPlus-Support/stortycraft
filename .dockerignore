@@ -1,21 +1,86 @@
-# add git-ignore syntax here of things you don't want copied into docker image
-
-.git
-.results
-scripts
-*Dockerfile*
-node_modules
-.env
-npm-debug.log
-docker-compose*
-.dockerignore
+# Version control
 .git
 .gitignore
+
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files (keep .env.docker for build)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.docker
+
+# Next.js build output
+.next
+.swc
+
+# Production build
+build
+dist
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+server-dev.log
+server.log
+
+# Documentation
 README.md
 LICENSE
-.vscode
-.next
-*.swp
-# ignore any ipynb and py files
+*.md
+
+# Test files
+__tests__
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+jest.config.js
+jest.setup.js
+
+# Docker files
+*Dockerfile*
+docker-compose*
+.dockerignore
+
+# Scripts
+scripts
+# Keep start.sh for production
+!start.sh
+
+# Jupyter notebooks
 **/*.ipynb
 **/*.ipynb_checkpoints
+
+# Temporary files
+.results
+.server.pid
+*.tmp
+*.temp
+
+# Screenshots and media
+screenshot
+
+# TypeScript build info
+tsconfig.tsbuildinfo
