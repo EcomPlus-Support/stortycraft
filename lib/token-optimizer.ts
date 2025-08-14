@@ -147,13 +147,13 @@ function calculateShortsTokens(complexity: ContentComplexity): Omit<TokenAllocat
         break
         
       case ShortsStyle.ENTERTAINMENT:
-        baseTokens = Math.round(TOKEN_CONFIG.BASE_TOKENS * 1.1) // 2200
+        baseTokens = Math.round(TOKEN_CONFIG.BASE_TOKENS * 1.2) // 2400
         reasoning = 'Entertainment content balances fun and engagement'
         temperature = TOKEN_CONFIG.CREATIVE_TEMPERATURE
         break
         
       default:
-        baseTokens = Math.round(TOKEN_CONFIG.BASE_TOKENS * 1.1) // 2200
+        baseTokens = Math.round(TOKEN_CONFIG.BASE_TOKENS * 1.2) // 2400
         reasoning = 'Default Shorts allocation'
     }
     

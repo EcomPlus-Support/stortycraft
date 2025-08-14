@@ -16,7 +16,8 @@ import {
   CheckCircle, 
   Copy,
   RefreshCw,
-  Globe
+  Globe,
+  TrendingUp
 } from 'lucide-react'
 import Image from 'next/image'
 import { extractYouTubeMetadata, processReferenceContent, type ReferenceSource, type ReferenceContent } from '../actions/process-reference'
@@ -24,6 +25,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { InfoIcon } from 'lucide-react'
 import { translateError, type UserFriendlyError } from '@/lib/error-utils'
 import { ErrorDisplay } from '@/components/ui/error-display'
+import { useShortsDetection } from '@/app/hooks/useShortsDetection'
+import { ShortsIndicator } from '@/app/components/shorts-indicator'
+import { ShortsResultDisplay } from '@/app/components/shorts-result-display'
+import { ContentTypeOverride } from '@/app/components/content-type-override'
+import { TrendAnalysis } from '@/app/components/trend-analysis'
 import {
   Select,
   SelectContent,
@@ -60,6 +66,16 @@ export function ReferenceTab({
   const [error, setError] = useState<UserFriendlyError | null>(null)
   const [selectedPitchLanguage, setSelectedPitchLanguage] = useState(SUPPORTED_LANGUAGES[0]) // Default to Traditional Chinese
   // const audioInputRef = useRef<HTMLInputElement>(null) // For future audio upload feature
+  
+  // Shorts detection and manual override
+  const shortsDetection = useShortsDetection(youtubeUrl)
+  const [contentTypeOverride, setContentTypeOverride] = useState<'shorts' | 'video' | 'auto'>('auto')
+  const [showAdvancedFeatures, setShowAdvancedFeatures] = useState(false)
+  
+  // Determine final content type (considering manual override)
+  const finalContentType = contentTypeOverride === 'auto' 
+    ? (shortsDetection.isShorts ? 'shorts' : 'video')
+    : contentTypeOverride
 
   const handleYouTubeProcess = async () => {
     if (!youtubeUrl.trim()) return
@@ -231,15 +247,25 @@ export function ReferenceTab({
                   YouTube Video
                 </CardTitle>
                 <CardDescription>
-                  Enter a YouTube URL to extract content and generate a video pitch
+                  Enter YouTube video or Shorts URL to extract content and generate a video pitch
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Input
-                  placeholder="https://www.youtube.com/watch?v=..."
+                  placeholder="https://www.youtube.com/watch?v=... or https://youtube.com/shorts/..."
                   value={youtubeUrl}
                   onChange={(e) => setYoutubeUrl(e.target.value)}
                   disabled={isProcessing}
+                />
+                
+                {/* Shorts Detection Indicator */}
+                <ShortsIndicator detection={shortsDetection} />
+                
+                {/* Content Type Override */}
+                <ContentTypeOverride
+                  detection={shortsDetection}
+                  onOverride={setContentTypeOverride}
+                  currentOverride={contentTypeOverride}
                 />
                 <Button 
                   onClick={handleYouTubeProcess}
@@ -252,7 +278,7 @@ export function ReferenceTab({
                       Processing...
                     </>
                   ) : (
-                    'Process YouTube Video'
+                    finalContentType === 'shorts' ? 'Process YouTube Shorts' : 'Process YouTube Video'
                   )}
                 </Button>
               </CardContent>
@@ -329,6 +355,11 @@ export function ReferenceTab({
               <div className="flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 <span className="text-sm font-medium">{processingStep}</span>
+                {finalContentType === 'shorts' && (
+                  <Badge variant="outline" className="border-red-500 text-red-700 ml-2">
+                    Shorts Mode
+                  </Badge>
+                )}
               </div>
               <Progress value={progress} className="w-full" />
             </div>
@@ -388,9 +419,10 @@ export function ReferenceTab({
                     <div className="flex gap-2 mt-2">
                       <Badge variant="secondary">{currentSource.type}</Badge>
                       {currentSource.duration && (
-                        <Badge variant="outline">
+                        <Badge variant="outline" className={finalContentType === 'shorts' ? "border-red-500 text-red-700" : ""}>
                           {Math.floor(currentSource.duration / 60)}:
                           {(currentSource.duration % 60).toString().padStart(2, '0')}
+                          {finalContentType === 'shorts' && " Shorts"}
                         </Badge>
                       )}
                       {generatedContent.contentQuality === 'partial' && (
@@ -409,10 +441,37 @@ export function ReferenceTab({
               </div>
             )}
 
+            {/* Shorts-Specific Analysis */}
+            {finalContentType === 'shorts' && (
+              <ShortsResultDisplay content={generatedContent} />
+            )}
+            
+            {/* Advanced Features Toggle */}
+            {finalContentType === 'shorts' && (
+              <div className="flex justify-center">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowAdvancedFeatures(!showAdvancedFeatures)}
+                  className="text-purple-600 hover:text-purple-700"
+                >
+                  <TrendingUp className="w-4 h-4 mr-1" />
+                  {showAdvancedFeatures ? 'Hide' : 'Show'} Trend Analysis
+                </Button>
+              </div>
+            )}
+            
+            {/* Trend Analysis */}
+            {finalContentType === 'shorts' && showAdvancedFeatures && (
+              <TrendAnalysis keyTopics={generatedContent.extractedContent.keyTopics} />
+            )}
+
             {/* Generated Pitch */}
             <div className="bg-white rounded-lg p-4 border">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="font-medium">Generated Pitch</h4>
+                <h4 className="font-medium">
+                  {finalContentType === 'shorts' ? "Shorts-Optimized Pitch" : "Generated Pitch"}
+                </h4>
                 <Button
                   variant="ghost"
                   size="sm"
