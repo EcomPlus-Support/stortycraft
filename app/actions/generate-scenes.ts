@@ -7,7 +7,7 @@ import { parseWithFallback, translateError, cleanJsonResponse, validateScenesDat
 import { generateTextWithGemini, GeminiServiceError, checkGeminiHealth } from '@/lib/gemini-service';
 import { createDebugTracker, logEnvironmentInfo, validateEnvironment } from '@/lib/debug-utils';
 
-import { Scene, Scenario, Language } from "../types"
+import { Scene, Scenario, Language, AspectRatio } from "../types"
 
 const config = getVertexAIConfig();
 
@@ -48,7 +48,7 @@ function createFallbackScenario(pitch: string, numScenes: number, style: string,
   }
 }
 
-export async function generateScenes(pitch: string, numScenes: number, style: string, language: Language) {
+export async function generateScenes(pitch: string, numScenes: number, style: string, language: Language, aspectRatio?: AspectRatio | string) {
   const debugTracker = createDebugTracker('generate-scenes');
   
   try {
@@ -344,13 +344,13 @@ Remember, your goal is to create a compelling and visually interesting story tha
 
           if (presentCharacters.length > 0) {
              console.log(`Using character customization for characters: ${presentCharacters.map(c => c.name).join(', ')}`);
-             resultJson = await generateImageCustomizationRest(scene.imagePrompt, presentCharacters);
+             resultJson = await generateImageCustomizationRest(scene.imagePrompt, presentCharacters, aspectRatio || '16:9');
           } else {
              console.warn(`Scene ${index + 1} listed characters [${scene.charactersPresent.join(', ')}] but no matching data found in charactersWithImages. Falling back to standard generation.`);
-             resultJson = await generateImageRest(scene.imagePrompt);
+             resultJson = await generateImageRest(scene.imagePrompt, aspectRatio || '16:9');
           }
         } else {
-          resultJson = await generateImageRest(scene.imagePrompt);
+          resultJson = await generateImageRest(scene.imagePrompt, aspectRatio || '16:9');
         }
         if (resultJson.predictions[0].raiFilteredReason) {
             debugTracker.addError('scene-image-generation', `Scene ${index + 1}: ${resultJson.predictions[0].raiFilteredReason}`);

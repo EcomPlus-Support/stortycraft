@@ -2,16 +2,20 @@
 
 import { generateImageRest } from '@/lib/imagen'
 import { translateError } from '@/lib/error-utils'
+import type { AspectRatio } from '@/app/types'
 
-export async function regenerateImage(prompt: string) {
+export async function regenerateImage(prompt: string, aspectRatio?: AspectRatio | string) {
   try {
     console.log('🎨 Regenerating image with enhanced error handling:', {
       promptLength: prompt.length,
-      promptPreview: prompt.substring(0, 100) + '...'
+      promptPreview: prompt.substring(0, 100) + '...',
+      aspectRatio: aspectRatio || '16:9'
     });
 
     const startTime = Date.now();
-    const resultJson = await generateImageRest(prompt, '16:9');
+    // Use the provided aspect ratio or default to 16:9
+    const aspectRatioToUse = aspectRatio || '16:9';
+    const resultJson = await generateImageRest(prompt, aspectRatioToUse);
     const generationTime = Date.now() - startTime;
     
     console.log(`✅ Image generated successfully in ${generationTime}ms`);

@@ -47,7 +47,35 @@ interface GenerateImageResponse {
   }>;
 }
 
-export async function generateImageRest(prompt: string, aspectRatio?: string): Promise<GenerateImageResponse> {
+// Helper function to extract aspect ratio string from either string or AspectRatio object
+function extractAspectRatio(aspectRatio?: string | AspectRatio): string {
+  if (!aspectRatio) {
+    console.log('🎨 No aspect ratio provided, using default: 16:9');
+    return '16:9';
+  }
+  
+  if (typeof aspectRatio === 'string') {
+    console.log('🎨 Using string aspect ratio:', aspectRatio);
+    return aspectRatio;
+  }
+  
+  // If it's an AspectRatio object, prefer imagenFormat, then id
+  if (aspectRatio.imagenFormat) {
+    console.log('🎨 Using AspectRatio.imagenFormat:', aspectRatio.imagenFormat);
+    return aspectRatio.imagenFormat;
+  }
+  
+  if (aspectRatio.id) {
+    console.log('🎨 Using AspectRatio.id:', aspectRatio.id);
+    return aspectRatio.id;
+  }
+  
+  // Fallback to default
+  console.warn('🎨 AspectRatio object missing imagenFormat and id, using default 16:9. Object:', aspectRatio);
+  return '16:9';
+}
+
+export async function generateImageRest(prompt: string, aspectRatio?: string | AspectRatio): Promise<GenerateImageResponse> {
   const token = await getAccessToken();
   const maxRetries = 5; // Maximum number of retries
   const initialDelay = 1000; // Initial delay in milliseconds (1 second)
@@ -72,7 +100,7 @@ export async function generateImageRest(prompt: string, aspectRatio?: string): P
               // storageUri: "gs://svc-demo-vertex-us/",
               safetySetting: 'block_only_high',
               sampleCount: 1,
-              aspectRatio: aspectRatio ? aspectRatio : "16:9",
+              aspectRatio: extractAspectRatio(aspectRatio),
               includeRaiReason: true,
             },
           }),
@@ -100,7 +128,7 @@ export async function generateImageRest(prompt: string, aspectRatio?: string): P
   throw new Error("Function should have returned or thrown an error before this line.");
 }
 
-export async function generateImageCustomizationRest(prompt: string, characters: Array<{ name: string, description: string, imageBase64?: string }>, aspectRatio?: string): Promise<GenerateImageResponse> {
+export async function generateImageCustomizationRest(prompt: string, characters: Array<{ name: string, description: string, imageBase64?: string }>, aspectRatio?: string | AspectRatio): Promise<GenerateImageResponse> {
   const token = await getAccessToken();
   const maxRetries = 1;
   const initialDelay = 1000;
@@ -132,7 +160,7 @@ export async function generateImageCustomizationRest(prompt: string, characters:
       // storageUri: "gs://svc-demo-vertex-us/",
       safetySetting: 'block_only_high',
       sampleCount: 1,
-      aspectRatio: aspectRatio ? aspectRatio : "16:9",
+      aspectRatio: extractAspectRatio(aspectRatio),
       includeRaiReason: true,
     },
   })

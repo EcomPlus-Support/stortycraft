@@ -79,8 +79,8 @@ export default function Home() {
     try {
       // Choose generation method based on settings
       const scenario = useStructuredOutput && language.code === 'zh-TW'
-        ? await generateScenesStructured(pitch, numScenes, style, language.name, logoOverlay)
-        : await generateScenes(pitch, numScenes, style, language)
+        ? await generateScenesStructured(pitch, numScenes, style, language.name, logoOverlay, undefined, aspectRatio)
+        : await generateScenes(pitch, numScenes, style, language, aspectRatio)
       
       console.log('Scene generation completed:', {
         useStructuredOutput,
@@ -113,7 +113,7 @@ export default function Home() {
       const regeneratedScenes = await Promise.all(
         scenes.map(async (scene) => {
           try {
-            const { imageBase64 } = await regenerateImage(scene.imagePrompt)
+            const { imageBase64 } = await regenerateImage(scene.imagePrompt, aspectRatio)
             return { ...scene, imageBase64, videoUri: undefined }
           } catch (error) {
             console.error(`Error regenerating image:`, error)
@@ -136,7 +136,7 @@ export default function Home() {
     try {
       // Regenerate a single image
       const scene = scenes[index]
-      const { imageBase64 } = await regenerateImage(scene.imagePrompt)
+      const { imageBase64 } = await regenerateImage(scene.imagePrompt, aspectRatio)
       const updatedScenes = [...scenes]
       updatedScenes[index] = { ...scene, imageBase64, videoUri: undefined }
       console.log(updatedScenes)

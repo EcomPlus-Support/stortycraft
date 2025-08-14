@@ -3,7 +3,7 @@
 import { StructuredOutputService, type StructuredPitch } from '@/lib/structured-output-service'
 import { GeminiDirectService } from '@/lib/gemini-direct'
 import { generateImageRest } from '@/lib/imagen'
-import { Scenario, Language } from '../types'
+import { Scenario, Language, AspectRatio } from '../types'
 import { SUPPORTED_LANGUAGES } from '../constants/languages'
 import { getVertexAIConfig } from '@/lib/config'
 import { logger } from '@/lib/logger'
@@ -14,7 +14,8 @@ export async function generateScenesStructured(
   style: string,
   languageName: string,
   logoOverlay: string | null = null,
-  structuredPitch?: StructuredPitch
+  structuredPitch?: StructuredPitch,
+  aspectRatio?: AspectRatio | string
 ): Promise<Scenario> {
   try {
     console.log('🎬 Generating scenes from structured pitch')
@@ -61,7 +62,7 @@ export async function generateScenesStructured(
         let imageError: string | undefined
         
         try {
-          const resultJson = await generateImageRest(scenePrompt)
+          const resultJson = await generateImageRest(scenePrompt, aspectRatio || '16:9')
           if (resultJson.predictions?.[0]?.bytesBase64Encoded) {
             imageUrl = `data:image/png;base64,${resultJson.predictions[0].bytesBase64Encoded}`
           } else {
