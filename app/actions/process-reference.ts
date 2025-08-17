@@ -7,7 +7,11 @@ import { performanceMonitor } from '@/lib/performance-monitor'
 import { safeJsonParse, translateError, cleanJsonResponse, validateReferenceContent } from '@/lib/error-utils'
 import { logger } from '@/lib/logger'
 import { analyzeContentComplexity, detectContentType, type ReferenceSource as AnalyzerReferenceSource } from '@/lib/content-analyzer'
+import { VideoAnalysis } from '@/lib/gemini-video-analyzer'
 import { calculateOptimalTokens, generateOptimizedPrompt } from '@/lib/token-optimizer'
+import { contentComplexityAnalyzer, ContentComplexityMetrics } from '@/lib/content-complexity-analyzer'
+import { adaptiveContentProcessor } from '@/lib/adaptive-content-processor'
+import { tokenAllocationManager } from '@/lib/token-allocation-manager'
 import { parseAiJsonResponse, type ReferenceContentSchema } from '@/lib/json-parser-simplified'
 import { StructuredOutputService, type StructuredPitch } from '@/lib/structured-output-service'
 import { GeminiDirectService } from '@/lib/gemini-direct'
@@ -33,6 +37,25 @@ function getLanguageDisplayName(language?: string): string {
   return languageMap[language || ''] || 'English'
 }
 
+// Processing stage definitions
+export enum ProcessingStage {
+  YOUTUBE_METADATA = 'YouTube元數據提取',
+  VIDEO_ANALYSIS = '視頻內容分析', 
+  CONTENT_PROCESSING = '內容處理',
+  STRUCTURED_GENERATION = '結構化生成',
+  GEMINI_TEXT_GENERATION = 'Gemini文字生成',
+  JSON_PARSING = 'JSON解析',
+  CHARACTERS_GENERATION = '角色生成',
+  SCENES_GENERATION = '場景生成',
+  FINAL_PITCH_COMPILATION = '最終pitch編譯'
+}
+
+export interface ProcessingError {
+  stage: ProcessingStage
+  message: string
+  originalContent?: string
+}
+
 export interface ReferenceSource {
   id: string
   type: 'youtube' | 'audio_upload' | 'text_input'
@@ -44,6 +67,14 @@ export interface ReferenceSource {
   transcript?: string
   processingStatus: 'pending' | 'processing' | 'completed' | 'error'
   errorMessage?: string
+  // Processing error details
+  processingError?: ProcessingError
+  // Video analysis fields to preserve character and scene data
+  videoAnalysis?: VideoAnalysis
+  hasVideoAnalysis?: boolean
+  videoAnalysisQuality?: 'high' | 'medium' | 'low' | 'failed'
+  // Content complexity metrics
+  complexityMetrics?: ContentComplexityMetrics
 }
 
 export interface ReferenceContent {
@@ -62,6 +93,8 @@ export interface ReferenceContent {
   warning?: string
   createdAt: Date
   updatedAt: Date
+  // Processing error details
+  processingError?: ProcessingError
   // New structured output fields
   structuredPitch?: StructuredPitch
   isStructuredOutput?: boolean
@@ -99,14 +132,32 @@ export async function extractYouTubeMetadata(url: string): Promise<Partial<Refer
       thumbnail: result.thumbnail,
       // 🎥 使用視頻分析的腳本（如果有的話）
       transcript: result.transcript || result.description,
-      processingStatus: 'completed'
+      processingStatus: 'completed',
+      // 🎯 保留視頻分析數據以用於角色描述
+      videoAnalysis: result.videoAnalysis,
+      hasVideoAnalysis: result.hasVideoAnalysis,
+      videoAnalysisQuality: result.videoAnalysisQuality
+    }
+    
+    // 🧠 分析內容複雜度
+    if (referenceSource.videoAnalysis || referenceSource.transcript) {
+      console.log('🔍 Analyzing content complexity...')
+      referenceSource.complexityMetrics = contentComplexityAnalyzer.analyzeComplexity(
+        referenceSource.videoAnalysis,
+        referenceSource as ReferenceSource
+      )
+      console.log(`📊 Content complexity: ${referenceSource.complexityMetrics.level} (score: ${referenceSource.complexityMetrics.totalScore})`)
     }
     
     console.log('🎯 Converted to ReferenceSource format:', {
       title: referenceSource.title?.substring(0, 50) + '...',
       hasDescription: !!referenceSource.description,
       hasTranscript: !!referenceSource.transcript,
-      duration: referenceSource.duration
+      duration: referenceSource.duration,
+      hasVideoAnalysis: !!referenceSource.hasVideoAnalysis,
+      videoAnalysisQuality: referenceSource.videoAnalysisQuality,
+      charactersFound: referenceSource.videoAnalysis?.characters?.length || 0,
+      scenesFound: referenceSource.videoAnalysis?.sceneBreakdown?.length || 0
     })
     
     return referenceSource
@@ -155,6 +206,10 @@ export async function processReferenceContent(
     console.log('Source type:', source.type)
     console.log('Has transcript:', !!source.transcript)
     console.log('Description length:', source.description?.length || 0)
+    console.log('Has video analysis:', !!source.hasVideoAnalysis)
+    console.log('Video analysis quality:', source.videoAnalysisQuality)
+    console.log('Characters in analysis:', source.videoAnalysis?.characters?.length || 0)
+    console.log('Scenes in analysis:', source.videoAnalysis?.sceneBreakdown?.length || 0)
     
     // First, check Gemini service health
     const healthStatus = await checkGeminiHealth()
@@ -177,30 +232,36 @@ export async function processReferenceContent(
     let warning: string | undefined
     let content = ''
 
-    if (source.transcript && source.transcript.trim().length > 0) {
-      // Full quality - we have actual transcript content
-      content = source.transcript
-      contentQuality = 'full'
-      console.log('Using full transcript content')
-    } else if (source.description && source.description.length > 200) {
-      // Partial quality - good description with potential enhanced metadata
-      content = `Title: ${source.title || 'Untitled'}\n\nDescription and Context: ${source.description}`
-      contentQuality = 'partial'
-      warning = 'No transcript available. Generated from video title, description, and available metadata.'
-      console.log('Using enhanced description content')
-    } else if (source.description && source.description.length > 50) {
-      // Basic quality - minimal but usable description
-      content = `Title: ${source.title || 'Untitled'}\n\nDescription: ${source.description}`
-      contentQuality = 'metadata-only'
-      warning = 'Limited content available. Generated from basic video metadata only. Consider using a video with captions or detailed description.'
-      console.log('Using basic metadata content')
+    // 🧠 Use adaptive content processing based on complexity
+    let processedContent;
+    let complexityMetrics: ContentComplexityMetrics | undefined;
+    
+    if (source.complexityMetrics) {
+      console.log('🔄 Using existing complexity metrics')
+      complexityMetrics = source.complexityMetrics
     } else {
-      // Very limited content
-      content = `Title: ${source.title || 'Untitled'}\n\nDescription: ${source.description || 'No description available'}`
-      contentQuality = 'metadata-only'
-      warning = 'Very limited information available. Generated from minimal metadata only. For better results, try a different video.'
-      console.log('Using minimal metadata content')
+      console.log('🔍 Analyzing content complexity for processing...')
+      complexityMetrics = contentComplexityAnalyzer.analyzeComplexity(source.videoAnalysis, source)
     }
+    
+    console.log('📊 Processing with complexity-based strategy:', {
+      level: complexityMetrics.level,
+      score: complexityMetrics.totalScore,
+      tokenBudget: complexityMetrics.recommendedTokenBudget,
+      useStructuredOutput: complexityMetrics.shouldUseStructuredOutput
+    })
+    
+    // 使用適應性內容處理
+    processedContent = adaptiveContentProcessor.processContent(source, complexityMetrics)
+    
+    content = processedContent.content
+    contentQuality = processedContent.contentQuality
+    warning = processedContent.warning
+    
+    console.log(`🎯 Adaptive processing completed: ${processedContent.processingStrategy}`)
+    console.log(`   - Content length: ${content.length}`)
+    console.log(`   - Token estimate: ${processedContent.tokenEstimate}`)
+    console.log(`   - Simplification applied: ${processedContent.simplificationApplied}`)
     
     // Validate content length to avoid excessive processing time
     if (content.length > 50000) {
@@ -216,88 +277,97 @@ export async function processReferenceContent(
       warning = undefined
     }
     
-    // Analyze content complexity for adaptive token management
-    const sourceForAnalysis: AnalyzerReferenceSource = {
-      id: source.id,
-      type: source.type,
-      url: source.url,
-      title: source.title,
-      description: source.description,
-      duration: source.duration,
-      thumbnail: source.thumbnail,
-      transcript: source.transcript,
-      processingStatus: source.processingStatus,
-      errorMessage: source.errorMessage
-    }
+    // 🎯 Use new token allocation system based on complexity
+    // 重要: 優先尊重用戶的 useStructuredOutput 選擇
+    const shouldUseStructuredOutput = useStructuredOutput !== undefined ? useStructuredOutput : complexityMetrics.shouldUseStructuredOutput
+    const tokenAllocation = shouldUseStructuredOutput
+      ? tokenAllocationManager.allocateForStructuredOutput(complexityMetrics, targetLanguage)
+      : tokenAllocationManager.allocateForStandardOutput(complexityMetrics, targetLanguage)
     
-    const complexity = analyzeContentComplexity(sourceForAnalysis)
-    const tokenAllocation = calculateOptimalTokens(complexity)
-    
-    console.log('Content Complexity Analysis:', {
-      contentType: complexity.contentType,
-      isShorts: complexity.isShorts,
-      shortsStyle: complexity.shortsStyle,
-      topicsComplexity: complexity.topicsComplexity,
+    console.log('Token Allocation Analysis:', {
+      level: complexityMetrics.level,
+      totalScore: complexityMetrics.totalScore,
       tokenAllocation: tokenAllocation.maxTokens,
+      temperature: tokenAllocation.temperature,
+      timeout: tokenAllocation.timeout,
       reasoning: tokenAllocation.reasoning,
-      useStructuredOutput: useStructuredOutput
+      useStructuredOutput: shouldUseStructuredOutput
     })
     
     // Check if we should use structured output (Traditional Chinese)
-    if (useStructuredOutput && (targetLanguage === '繁體中文' || targetLanguage === 'Traditional Chinese' || targetLanguage === 'zh-TW')) {
-      console.log('🏗️ Using structured output system for Traditional Chinese generation')
+    // 不再檢查 complexityMetrics.shouldUseStructuredOutput - 直接使用 shouldUseStructuredOutput
+    if (shouldUseStructuredOutput && (targetLanguage === '繁體中文' || targetLanguage === 'Traditional Chinese' || targetLanguage === 'zh-TW')) {
+      console.log('🏗️ Using enhanced structured output system for Traditional Chinese generation')
       
-      try {
-        // Create instance of GeminiDirectService
-        const geminiDirect = new GeminiDirectService()
-        const structuredService = new StructuredOutputService(geminiDirect)
+      let structuredAttempts = 0;
+      const maxStructuredAttempts = 3;
+      
+      while (structuredAttempts < maxStructuredAttempts) {
+        structuredAttempts++;
+        console.log(`🔄 Structured output attempt ${structuredAttempts}/${maxStructuredAttempts}`);
         
-        const structuredPitch = await structuredService.generateStructuredPitch(
-          content,
-          contentQuality
-        )
-        
-        if (structuredPitch) {
-          console.log('✅ Structured output generation successful!')
+        try {
+          // Create instance of GeminiDirectService
+          const geminiDirect = new GeminiDirectService()
+          const structuredService = new StructuredOutputService(geminiDirect)
           
-          const referenceContent: ReferenceContent = {
-            id: generateId(),
-            source: {
-              ...source,
-              processingStatus: 'completed'
-            },
-            extractedContent: {
-              title: source.title || 'Untitled',
-              description: source.description || '',
-              transcript: source.transcript || '',
-              keyTopics: structuredPitch.tags || structuredPitch.characters.map(c => c.name),
-              sentiment: 'positive',
-              duration: source.duration || 0
-            },
-            generatedPitch: structuredPitch.finalPitch,
-            contentQuality,
-            warning,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            // Structured output specific fields
-            structuredPitch: structuredPitch,
-            isStructuredOutput: true
+          const structuredPitch = await structuredService.generateStructuredPitch(
+            content,
+            contentQuality
+          )
+          
+          if (structuredPitch && structuredPitch.finalPitch && structuredPitch.finalPitch.length > 50) {
+            console.log('✅ Structured output generation successful!')
+            
+            const referenceContent: ReferenceContent = {
+              id: generateId(),
+              source: {
+                ...source,
+                processingStatus: 'completed'
+              },
+              extractedContent: {
+                title: source.title || 'Untitled',
+                description: source.description || '',
+                transcript: source.transcript || '',
+                keyTopics: structuredPitch.tags || structuredPitch.characters.map(c => c.name),
+                sentiment: 'positive',
+                duration: source.duration || 0
+              },
+              generatedPitch: structuredPitch.finalPitch,
+              contentQuality,
+              warning: warning ? warning + ' [Enhanced structured output]' : '[Enhanced structured output]',
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              // Structured output specific fields
+              structuredPitch: structuredPitch,
+              isStructuredOutput: true
+            }
+            
+            // Cache the processed result
+            setCachedContent(cacheKey, referenceContent)
+            
+            const processingTime = Date.now() - startTime
+            console.log(`Structured content processing completed in ${processingTime}ms`)
+            
+            return referenceContent
+          } else {
+            console.log(`⚠️ Structured output attempt ${structuredAttempts} returned incomplete result`)
+            if (structuredAttempts === maxStructuredAttempts) {
+              console.log('🔄 All structured attempts failed, falling back to standard generation')
+              break;
+            }
+            // Wait before retry
+            await new Promise(resolve => setTimeout(resolve, 500));
           }
-          
-          // Cache the processed result
-          setCachedContent(cacheKey, referenceContent)
-          
-          const processingTime = Date.now() - startTime
-          console.log(`Structured content processing completed in ${processingTime}ms`)
-          
-          return referenceContent
-        } else {
-          console.log('⚠️ Structured output failed, falling back to standard generation')
-          // Continue with standard generation below
+        } catch (structuredError) {
+          console.log(`❌ Structured output attempt ${structuredAttempts} error:`, structuredError)
+          if (structuredAttempts === maxStructuredAttempts) {
+            console.log('🔄 All structured attempts failed, falling back to standard generation')
+            break;
+          }
+          // Wait before retry
+          await new Promise(resolve => setTimeout(resolve, 1000));
         }
-      } catch (structuredError) {
-        console.log('⚠️ Structured output error, falling back to standard generation:', structuredError)
-        // Continue with standard generation below
       }
     }
     
@@ -307,15 +377,15 @@ export async function processReferenceContent(
       ? 'You have access to the title, description, and enhanced metadata. Work with what is available to create the best possible pitch.'
       : 'You have limited information (basic metadata only). Be creative but stay grounded in the available information and focus on what can be inferred from the title and description.';
 
-    const basePrompt = `Create a video pitch based on this content. Respond ONLY with valid JSON, no markdown or extra text.
+    const basePrompt = `Create a video pitch based on this content. CRITICAL: Return ONLY pure JSON without any markdown formatting, code blocks, or backticks.
 
 Title: ${source.title || 'Untitled'}
 Content: ${content}
-Type: ${complexity.isShorts ? 'YouTube Shorts (viral, 15-60s)' : 'Standard Video'}
+Type: ${(source.duration || 0) <= 60 ? 'YouTube Shorts (viral, 15-60s)' : 'Standard Video'}
 
 Create a detailed story pitch for ${getLanguageDisplayName(targetLanguage)} audience. Even with limited info, be creative and elaborate.
 
-JSON format:
+Return EXACTLY this JSON structure (no \`\`\`json, no backticks, PURE JSON ONLY):
 {
   "analysis": {
     "keyTopics": ["topic1", "topic2", "topic3"],
@@ -327,20 +397,61 @@ JSON format:
   "rationale": "Why this pitch works"
 }`
 
-    // Generate optimized prompt based on content complexity
-    const optimizedPrompt = generateOptimizedPrompt(complexity, basePrompt, targetStyle, targetLanguage)
+    // Generate base prompt for standard processing
+    const optimizedPrompt = basePrompt // Use the base prompt directly
 
-    // Use the adaptive token allocation
-    const text = await generateTextWithGemini(optimizedPrompt, {
-      temperature: tokenAllocation.temperature,
-      maxTokens: tokenAllocation.maxTokens,
-      timeout: tokenAllocation.timeout
-    })
+    // Use the adaptive token allocation with retry logic
+    let text: string | undefined;
+    let attempts = 0;
+    const maxAttempts = 3;
+    let currentTokenAllocation = tokenAllocation;
+    
+    while (attempts < maxAttempts && !text) {
+      attempts++;
+      console.log(`🔄 Gemini generation attempt ${attempts}/${maxAttempts}`);
+      console.log(`   - Tokens: ${currentTokenAllocation.maxTokens}`);
+      console.log(`   - Temperature: ${currentTokenAllocation.temperature}`);
+      
+      try {
+        const response = await generateTextWithGemini(optimizedPrompt, {
+          temperature: currentTokenAllocation.temperature,
+          maxTokens: currentTokenAllocation.maxTokens,
+          timeout: currentTokenAllocation.timeout
+        });
+        
+        if (response && response.trim().length > 0) {
+          text = response;
+          console.log(`✅ Gemini generation successful on attempt ${attempts}`);
+        } else {
+          console.log(`⚠️ Attempt ${attempts}: Empty response from Gemini`);
+        }
+      } catch (geminiError) {
+        console.log(`❌ Attempt ${attempts} failed:`, geminiError);
+        
+        // Check if it's a token limit issue
+        const errorMessage = geminiError instanceof Error ? geminiError.message : String(geminiError);
+        const isTokenIssue = errorMessage.includes('MAX_TOKENS') || errorMessage.includes('token limit');
+        
+        if (isTokenIssue && attempts < maxAttempts) {
+          // Adjust token allocation for next attempt
+          currentTokenAllocation = tokenAllocationManager.adjustAllocation(currentTokenAllocation, {
+            wasTokenLimitHit: true,
+            finishReason: 'MAX_TOKENS',
+            isStructuredOutput: false
+          });
+          console.log(`🔧 Adjusted tokens to ${currentTokenAllocation.maxTokens} for next attempt`);
+        }
+        
+        if (attempts === maxAttempts) {
+          console.log('❌ All Gemini attempts failed, using enhanced fallback');
+        }
+      }
+    }
 
     if (!text || text.trim().length === 0) {
-      console.log('❌ Gemini returned empty response, using enhanced fallback')
-      // Create enhanced fallback directly
-      const fallbackPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexity)
+      console.log('❌ All Gemini generation attempts failed, using enhanced fallback')
+      const fallbackPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexityMetrics)
+      
       return {
         id: generateId(),
         source: {
@@ -357,7 +468,12 @@ JSON format:
         },
         generatedPitch: fallbackPitch,
         contentQuality,
-        warning: 'Generated using enhanced fallback due to Gemini service unavailability.',
+        warning: `Generated using enhanced fallback after ${attempts} failed attempts. Gemini service may be experiencing issues.`,
+        processingError: {
+          stage: ProcessingStage.GEMINI_TEXT_GENERATION,
+          message: `${attempts}次嘗試後生成失敗`,
+          originalContent: content
+        },
         createdAt: new Date(),
         updatedAt: new Date()
       }
@@ -379,28 +495,47 @@ JSON format:
       console.log('Parse time:', parseResult.parseTime + 'ms')
       result = parseResult.data
     } else {
-      // If all enhanced parsing strategies fail, create fallback
-      console.log('❌ All enhanced parsing strategies failed')
+      // Check if Gemini actually returned content
+      console.log('⚠️ JSON parsing failed, checking raw response...')
       console.log('Parse errors:', parseResult.repairAttempts)
-      console.log('Creating intelligent fallback response...')
       
-      const fallbackPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexity)
-      result = {
-        generatedPitch: fallbackPitch,
-        analysis: {
-          keyTopics: extractKeywordsFromContent(content),
-          sentiment: 'positive',
-          coreMessage: `Content analysis for: ${source.title}`,
-          targetAudience: 'Social media users, entertainment seekers'
-        },
-        rationale: 'Generated using enhanced fallback due to JSON parsing failure'
+      // Try one more time with a simpler extraction
+      const simplePitchMatch = text.match(/"generatedPitch"\s*:\s*"([\s\S]+?)"/)
+      if (simplePitchMatch && simplePitchMatch[1] && simplePitchMatch[1].length > 100) {
+        console.log('✅ Found pitch content using simple extraction')
+        result = {
+          generatedPitch: simplePitchMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"'),
+          analysis: {
+            keyTopics: extractKeywordsFromContent(content),
+            sentiment: 'positive',
+            coreMessage: `Content analysis for: ${source.title}`,
+            targetAudience: 'Social media users, entertainment seekers'
+          },
+          rationale: 'Extracted using simple pattern matching after JSON parse failure'
+        }
+      } else {
+        // Only use fallback if we truly have no content
+        console.log('❌ No valid pitch content found, using fallback')
+        console.log('Creating intelligent fallback response...')
+        
+        const fallbackPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexityMetrics)
+        result = {
+          generatedPitch: fallbackPitch,
+          analysis: {
+            keyTopics: extractKeywordsFromContent(content),
+            sentiment: 'positive',
+            coreMessage: `Content analysis for: ${source.title}`,
+            targetAudience: 'Social media users, entertainment seekers'
+          },
+          rationale: 'Generated using enhanced fallback due to JSON parsing failure'
+        }
       }
     }
     
     // Additional validation for completeness
     if (!result.generatedPitch || result.generatedPitch.length < 50) {
       console.log('⚠️ Generated pitch too short, enhancing...')
-      result.generatedPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexity)
+      result.generatedPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexityMetrics)
       result.rationale = (result.rationale || '') + ' [Enhanced due to short pitch]'
     }
 
@@ -457,7 +592,7 @@ JSON format:
       // If it's a model availability issue, create fallback content
       if (error.code === 'NO_MODELS_AVAILABLE' || error.code === 'MODEL_UNAVAILABLE') {
         console.log('Creating fallback content due to model unavailability')
-        const fallbackPitch = createFallbackPitch(source, targetStyle, targetLanguage)
+        const fallbackPitch = createEnhancedFallbackPitch(source, targetStyle, targetLanguage, complexityMetrics)
         return {
           id: generateId(),
           source: {
@@ -474,7 +609,12 @@ JSON format:
           },
           generatedPitch: fallbackPitch,
           contentQuality: 'metadata-only' as const,
-          warning: 'Generated using fallback method due to Gemini service unavailability.',
+          warning: 'Generated using enhanced fallback due to Gemini service unavailability. The content is based on available metadata.',
+          processingError: {
+            stage: ProcessingStage.GEMINI_TEXT_GENERATION,
+            message: '模型不可用',
+            originalContent: source.transcript || source.description || ''
+          },
           createdAt: new Date(),
           updatedAt: new Date()
         }
@@ -626,12 +766,130 @@ function generateContentHash(source: ReferenceSource, style?: string, language?:
 /**
  * Create an enhanced fallback pitch with rich content for Shorts
  */
-function createEnhancedFallbackPitch(source: ReferenceSource, targetStyle?: string, targetLanguage?: string, complexity?: any): string {
+function createEnhancedFallbackPitch(source: ReferenceSource, targetStyle?: string, targetLanguage?: string, complexity?: ContentComplexityMetrics): string {
   const title = source.title || 'Untitled Content'
-  const isShorts = complexity?.isShorts
+  const isShorts = (source.duration || 0) <= 60
   const displayLanguage = getLanguageDisplayName(targetLanguage)
   
-  // Enhanced Shorts-specific pitch templates
+  // Check if we have video analysis data
+  const hasVideoAnalysis = source.hasVideoAnalysis && source.videoAnalysis
+  const videoAnalysis = source.videoAnalysis
+  
+  console.log('🎬 Creating enhanced fallback with video analysis:', {
+    hasVideoAnalysis,
+    charactersCount: videoAnalysis?.characters?.length || 0,
+    scenesCount: videoAnalysis?.sceneBreakdown?.length || 0,
+    title
+  })
+  
+  // If we have video analysis, use it to create a content-specific pitch
+  if (hasVideoAnalysis && videoAnalysis && displayLanguage === 'Traditional Chinese') {
+    const characters = videoAnalysis.characters || []
+    const scenes = videoAnalysis.sceneBreakdown || []
+    const transcript = videoAnalysis.generatedTranscript || ''
+    
+    // Determine content type from title and transcript
+    const isProductAnalysis = title.includes('產品') || title.includes('亞馬遜') || title.includes('利潤') || transcript.includes('產品')
+    const isLifePhilosophy = title.includes('人生') || title.includes('時間') || transcript.includes('人生') || transcript.includes('時間')
+    const isComedy = title.includes('😂') || title.includes('太扯') || title.includes('爆笑')
+    
+    if (isProductAnalysis) {
+      return `【電商揭密】${title.substring(0, 30)}...
+
+🎬 故事概念：
+一位資深電商分析師透過實際數據分析，揭露網路熱銷產品背後的利潤秘密。
+
+角色設定：
+- 主角：${characters[0]?.description || '專業電商分析師'}
+- 特質：善於數據分析，能將複雜資訊簡化說明
+- 目標：幫助創業者了解真實的電商生態
+
+場景架構：${scenes.length > 0 ? `
+${scenes.slice(0, 3).map((scene, i) => `${i + 1}. ${scene.description}`).join('\n')}` : `
+1. 開場：展示熱銷產品列表
+2. 分析：詳細拆解成本與售價
+3. 結論：給出實用建議`}
+
+核心洞察：
+透過真實數據讓觀眾了解電商產業的運作模式，幫助有志創業者做出明智決策。
+
+視覺呈現：
+- 數據圖表動畫展示
+- 產品成本分解說明
+- 清晰的結論和建議`
+    }
+    
+    if (isLifePhilosophy) {
+      return `【人生思考】${title.substring(0, 30)}...
+
+🎬 故事概念：
+透過獨特的視角重新審視時間與人生的關係，帶給觀眾深刻的反思。
+
+角色設定：
+- 敘述者：${characters[0]?.description || '深思的觀察者'}
+- 特質：善於哲學思辨，能將抽象概念具象化
+- 使命：引導觀眾思考生命的本質
+
+內容結構：${scenes.length > 0 ? `
+${scenes.slice(0, 3).map((scene, i) => `${i + 1}. ${scene.description}`).join('\n')}` : `
+1. 引入：提出發人深省的問題
+2. 展開：用視覺化方式呈現概念
+3. 昇華：給出思考的方向`}
+
+核心價值：
+讓觀眾重新思考時間的珍貴，以及如何更有意義地度過每一天。
+
+情感共鳴：
+透過簡單但深刻的比喻，觸動觀眾內心對生命意義的思考。`
+    }
+    
+    if (isComedy) {
+      return `【爆笑發現】${title.substring(0, 30)}...
+
+🎬 故事概念：
+主角意外發現生活中令人捧腹的巧合或現象，與觀眾分享這個有趣的發現。
+
+角色設定：
+- 發現者：${characters[0]?.description || '幽默的觀察家'}
+- 特質：善於發現生活趣事，表達生動有趣
+- 魅力：能將平凡事物變得引人發笑
+
+場景展開：${scenes.length > 0 ? `
+${scenes.slice(0, 3).map((scene, i) => `${i + 1}. ${scene.description}`).join('\n')}` : `
+1. 設置：日常場景中的意外發現
+2. 對比：展示令人驚訝的相似性
+3. 反應：主角和觀眾的爆笑時刻`}
+
+娛樂效果：
+透過出人意料的對比和巧合，創造讓人忍不住分享的歡樂時刻。
+
+病毒潛力：
+適合引發討論和模仿，容易在社群媒體上廣泛傳播。`
+    }
+    
+    // General video analysis based fallback
+    return `【精彩內容】${title.substring(0, 30)}...
+
+🎬 基於影片分析：
+本影片包含${characters.length}個角色和${scenes.length}個場景，展現了豐富的內容層次。
+
+主要角色：${characters.length > 0 ? `
+- ${characters[0].description}` : '\n- 內容中的關鍵人物'}
+
+場景概覽：${scenes.length > 0 ? `
+${scenes.slice(0, 3).map((scene, i) => `${i + 1}. ${scene.description}`).join('\n')}` : `
+1. 開場場景
+2. 主要內容展開
+3. 結尾場景`}
+
+內容特色：
+透過${source.duration}秒的緊湊節奏，傳達核心訊息給目標觀眾。
+
+觀看價值：
+結合視覺呈現和內容深度，為觀眾帶來既有趣又有價值的觀看體驗。`
+  }
+  
+  // Enhanced Shorts-specific pitch templates (original logic)
   if (isShorts && (title.includes('😂') || title.includes('太扯'))) {
     if (displayLanguage === 'Traditional Chinese') {
       return `【驚喜發現】「${title}」- 一個讓人忍不住爆笑的意外發現
@@ -669,6 +927,90 @@ function createEnhancedFallbackPitch(source: ReferenceSource, targetStyle?: stri
 }
 
 /**
+ * Create a structured fallback pitch when all AI generation fails
+ */
+function createStructuredFallbackPitch(source: ReferenceSource, content: string, complexity?: ContentComplexityMetrics): string {
+  const title = source.title || '未命名內容'
+  const isShorts = (source.duration || 0) <= 60
+  const hasDescription = source.description && source.description.length > 20
+  
+  // Check if we have video analysis data to create more specific content
+  const hasVideoAnalysis = source.hasVideoAnalysis && source.videoAnalysis
+  const videoAnalysis = source.videoAnalysis
+  
+  console.log('🎥 Creating structured fallback with video analysis:', {
+    hasVideoAnalysis,
+    charactersCount: videoAnalysis?.characters?.length || 0,
+    scenesCount: videoAnalysis?.sceneBreakdown?.length || 0,
+    title
+  })
+  
+  // Use video analysis data if available
+  let coreStory = '在現代社會的背景下，一位主角面對着人生的重要轉折。'
+  let characterInfo = '28歲專業人士，內心堅定卻面對不確定性'
+  let personality = '理性中帶有情感的繰細'
+  let motivation = '尋找在變化中的平衡與方向'
+  
+  if (hasVideoAnalysis && videoAnalysis) {
+    const characters = videoAnalysis.characters || []
+    const transcript = videoAnalysis.generatedTranscript || ''
+    
+    // Determine content type from title and transcript
+    const isProductContent = title.includes('產品') || title.includes('亞馬遜') || transcript.includes('產品')
+    const isLifeContent = title.includes('人生') || title.includes('時間') || transcript.includes('人生')
+    
+    if (isProductContent) {
+      coreStory = '透過專業分析師的視角，深入探討商業世界的運作模式和策略。'
+      characterInfo = '資深電商分析師，擅長數據分析和市場洞察'
+      personality = '邏輯清晰且善於用數據說故事'
+      motivation = '揭露商業真相，幫助創業者做出明智決策'
+    } else if (isLifeContent) {
+      coreStory = '通過深刻的思考和獨特的視角，重新審視時間與人生的關係。'
+      characterInfo = '哲學思考者，善於將抽象概念具象化'
+      personality = '理性思辨且富有同理心'
+      motivation = '引導觀眾思考生命的本質和意義'
+    } else if (characters.length > 0) {
+      const mainChar = characters[0]
+      characterInfo = mainChar.description || '影片中的關鍵人物'
+      coreStory = '基於真實影片內容，展現主角的成長與發現之旅。'
+    }
+  }
+  
+  // Create a more structured Traditional Chinese pitch
+  const structuredPitch = `【故事大綱】${title}
+
+🎥 故事核心：
+${coreStory}${hasDescription ? '透過 ' + source.description?.substring(0, 100) + '的情節設定，' : ''}故事展現了獨特的視角和深度內容。
+
+角色設定：
+- 主角：${characterInfo}
+- 性格：${personality}
+- 動機：${motivation}
+
+場景架構：${isShorts ? `
+1. 開場（0-10秒）：快速建立情境和主角形象
+2. 轉折（10-40秒）：展示核心衝突和挑戰
+3. 結尾（40-60秒）：情感高潮和啟發性結尾` : `
+1. 前導：背景設定和角色介紹
+2. 發展：故事衝突和情節進展
+3. 高潮：最大挑戰和情感衝擊
+4. 結尾：解決方案和深層意義`}
+
+視覺風格：
+- 現代簡約風格，強調人物情感表達
+- 温暖色調搭配，營造親密安全的觀影體驗
+- ${isShorts ? '快節奏剪接，緊抓觀眾注意力' : '穩定鏡頭語言，給予觀眾時間思考'}
+
+核心訊息：
+這是一個關於勇氣、成長和自我探索的故事。在人生的十字路口，每個人都需要找到屬於自己的答案。
+
+目標觀眾：
+25-35歲中青年群體，關注個人成長和職場發展的觀眾。`;
+
+  return structuredPitch;
+}
+
+/**
  * Create a fallback pitch when AI processing fails
  */
 function createFallbackPitch(source: ReferenceSource, targetStyle?: string, targetLanguage?: string): string {
@@ -703,6 +1045,80 @@ function createFallbackPitch(source: ReferenceSource, targetStyle?: string, targ
   
   const pitchGenerator = pitchTemplates[displayLanguage] || pitchTemplates['English']
   return pitchGenerator(title, shortDesc, styleText)
+}
+
+/**
+ * Extract simple pitch using pattern matching
+ */
+function extractWithSimplePattern(text: string): ReferenceContentSchema | null {
+  const simplePitchMatch = text.match(/"generatedPitch"\s*:\s*"([\s\S]+?)"/)  
+  if (simplePitchMatch && simplePitchMatch[1] && simplePitchMatch[1].length > 100) {
+    return {
+      generatedPitch: simplePitchMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"'),
+      analysis: {
+        keyTopics: ['pattern-extracted'],
+        sentiment: 'positive',
+        coreMessage: 'Extracted using pattern matching',
+        targetAudience: 'General audience'
+      },
+      rationale: 'Extracted using simple pattern matching'
+    }
+  }
+  return null
+}
+
+/**
+ * Extract with more aggressive regex patterns
+ */
+function extractWithRegexFallback(text: string): ReferenceContentSchema | null {
+  // Try to extract any substantial text content that looks like a pitch
+  const patterns = [
+    /"generatedPitch"\s*:\s*"([^"]{200,})"/,
+    /pitch["']\s*:\s*["']([^"']{200,})["']/i,
+    /故事["']\s*:\s*["']([^"']{200,})["']/,
+    /「([^」]{200,})」/
+  ]
+  
+  for (const pattern of patterns) {
+    const match = text.match(pattern)
+    if (match && match[1]) {
+      return {
+        generatedPitch: match[1].replace(/\\n/g, '\n').replace(/\\"/g, '"'),
+        analysis: {
+          keyTopics: ['regex-extracted'],
+          sentiment: 'positive',
+          coreMessage: 'Content extracted using regex fallback',
+          targetAudience: 'General audience'
+        },
+        rationale: 'Extracted using regex fallback patterns'
+      }
+    }
+  }
+  
+  return null
+}
+
+/**
+ * Create intelligent fallback based on available data
+ */
+function createIntelligentFallback(
+  source: ReferenceSource, 
+  content: string, 
+  targetLanguage?: string,
+  complexityMetrics?: ContentComplexityMetrics
+): ReferenceContentSchema {
+  const enhancedPitch = createEnhancedFallbackPitch(source, undefined, targetLanguage, complexityMetrics)
+  
+  return {
+    generatedPitch: enhancedPitch,
+    analysis: {
+      keyTopics: extractKeywordsFromContent(content),
+      sentiment: 'positive',
+      coreMessage: `Intelligent analysis for: ${source.title}`,
+      targetAudience: targetLanguage === '繁體中文' ? '繁體中文觀眾' : 'General audience'
+    },
+    rationale: 'Generated using intelligent fallback with enhanced content analysis'
+  }
 }
 
 /**

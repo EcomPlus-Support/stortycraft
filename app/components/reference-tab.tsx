@@ -20,7 +20,42 @@ import {
   TrendingUp
 } from 'lucide-react'
 import Image from 'next/image'
-import { extractYouTubeMetadata, processReferenceContent, type ReferenceSource, type ReferenceContent } from '../actions/process-reference'
+// Define types locally since they're not exported from process-reference
+export interface ReferenceSource {
+  id: string
+  type: 'youtube' | 'audio_upload' | 'text_input'
+  url?: string
+  title?: string
+  description?: string
+  duration?: number
+  thumbnail?: string
+  transcript?: string
+  processingStatus: 'pending' | 'processing' | 'completed' | 'error'
+  errorMessage?: string
+  videoAnalysis?: any
+  hasVideoAnalysis?: boolean
+  videoAnalysisQuality?: 'high' | 'medium' | 'low' | 'failed'
+}
+
+export interface ReferenceContent {
+  id: string
+  source: ReferenceSource
+  extractedContent: {
+    title: string
+    description: string
+    transcript: string
+    keyTopics: string[]
+    sentiment: string
+    duration: number
+  }
+  generatedPitch: string
+  contentQuality: 'full' | 'partial' | 'metadata-only'
+  warning?: string
+  createdAt: Date
+  updatedAt: Date
+  structuredPitch?: any
+  isStructuredOutput?: boolean
+}
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { InfoIcon } from 'lucide-react'
 import { translateError, type UserFriendlyError } from '@/lib/error-utils'
@@ -80,49 +115,116 @@ export function ReferenceTab({
   const handleYouTubeProcess = async () => {
     if (!youtubeUrl.trim()) return
 
+    const requestId = `youtube_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`
+    console.log(`🚀 [${requestId}] Starting YouTube processing:`, youtubeUrl)
+
     setIsProcessing(true)
     setError(null)
     setProgress(0)
     setProcessingStep('Extracting video metadata...')
 
     try {
-      // Step 1: Extract metadata
-      const metadata = await extractYouTubeMetadata(youtubeUrl)
       setProgress(25)
-
-      if (metadata.processingStatus === 'error') {
-        throw new Error(metadata.errorMessage || 'Failed to extract metadata')
-      }
-
-      const source: ReferenceSource = {
-        id: generateId(),
-        type: 'youtube',
+      setProcessingStep('Processing YouTube content...')
+      
+      console.log(`📡 [${requestId}] Sending request to API with:`, {
         url: youtubeUrl,
-        ...metadata,
-        processingStatus: 'processing'
+        targetLanguage: selectedPitchLanguage.name,
+        contentType: finalContentType,
+        useStructuredOutput: true
+      })
+      
+      // Use API route instead of direct Server Action imports
+      const response = await fetch('/api/process-youtube', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: youtubeUrl,
+          targetLanguage: selectedPitchLanguage.name,
+          useStructuredOutput: true
+        })
+      })
+
+      console.log(`📨 [${requestId}] API response status:`, response.status, response.statusText)
+
+      const result = await response.json()
+      console.log(`📋 [${requestId}] API response data:`, {
+        success: result.success,
+        hasData: !!result.data,
+        hasError: !!result.error,
+        errorDetails: result.details,
+        requestId: result.requestId
+      })
+      
+      if (!response.ok) {
+        console.error(`❌ [${requestId}] API request failed:`, {
+          status: response.status,
+          error: result.error,
+          details: result.details,
+          requestId: result.requestId
+        })
+        throw new Error(result.error || result.details || 'Failed to process YouTube content')
       }
 
-      setCurrentSource(source)
-      setProgress(50)
-      setProcessingStep('Analyzing content with AI...')
-
-      // Step 2: Process with AI
-      const content = await processReferenceContent(source, style, selectedPitchLanguage.name)
+      setProgress(75)
+      setProcessingStep('Finalizing...')
+      
+      const content = result.data
+      
+      if (!content) {
+        console.error(`❌ [${requestId}] No content data received from API`)
+        throw new Error('No content data received from API')
+      }
+      
+      console.log(`✅ [${requestId}] Content processed successfully:`, {
+        hasSource: !!content.source,
+        sourceTitle: content.source?.title,
+        pitchLength: content.generatedPitch?.length || 0,
+        isStructured: content.isStructuredOutput,
+        contentQuality: content.contentQuality
+      })
+      
       setProgress(100)
       setProcessingStep('Complete!')
 
       setGeneratedContent(content)
       
+      // Create source object for display
+      const source: ReferenceSource = {
+        id: generateId(),
+        type: 'youtube',
+        url: youtubeUrl,
+        title: content.source?.title || 'YouTube Video',
+        description: content.source?.description || '',
+        transcript: content.source?.transcript || '',
+        duration: content.source?.duration,
+        thumbnail: content.source?.thumbnail,
+        processingStatus: 'completed',
+        videoAnalysis: content.source?.videoAnalysis,
+        hasVideoAnalysis: content.source?.hasVideoAnalysis,
+        videoAnalysisQuality: content.source?.videoAnalysisQuality
+      }
+      setCurrentSource(source)
+      
       // Auto-populate the pitch
-      if (onPitchGenerated) {
+      if (onPitchGenerated && content.generatedPitch) {
+        console.log(`🎯 [${requestId}] Auto-populating pitch (${content.generatedPitch.length} chars)`)
         onPitchGenerated(content.generatedPitch)
       }
 
     } catch (err) {
-      console.error('Error processing YouTube content:', err)
+      console.error(`💥 [${requestId}] Error processing YouTube content:`, {
+        error: err instanceof Error ? err.message : err,
+        stack: err instanceof Error ? err.stack : undefined,
+        url: youtubeUrl,
+        timestamp: new Date().toISOString()
+      })
       setError(translateError(err))
     } finally {
       setIsProcessing(false)
+      console.log(`🏁 [${requestId}] YouTube processing completed`)
     }
   }
 
@@ -147,7 +249,26 @@ export function ReferenceTab({
       setCurrentSource(source)
       setProgress(50)
 
-      const content = await processReferenceContent(source, style, selectedPitchLanguage.name)
+      // Process text content using API route
+      const response = await fetch('/api/process-text', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: textContent,
+          targetLanguage: selectedPitchLanguage.name,
+          style
+        })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || errorData.details || 'Failed to process text content')
+      }
+
+      const result = await response.json()
+      const content = result.data
       setProgress(100)
       setProcessingStep('Complete!')
 

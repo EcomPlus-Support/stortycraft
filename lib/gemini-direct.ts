@@ -63,11 +63,28 @@ export async function generateTextDirect(prompt: string, temperature: number = 1
     
     console.log('Gemini response structure:', JSON.stringify(result, null, 2));
     
-    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
-      return result.candidates[0].content.parts[0].text;
+    // 檢查是否有有效的文字回應
+    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+    
+    if (text && text.trim().length > 0) {
+      return text;
+    }
+    
+    // 處理空回應或 MAX_TOKENS 情況
+    const finishReason = result.candidates?.[0]?.finishReason;
+    console.error('Gemini response issue:', {
+      hasText: !!text,
+      textLength: text?.length || 0,
+      finishReason,
+      structure: result
+    });
+    
+    if (finishReason === 'MAX_TOKENS') {
+      throw new Error('Gemini hit token limit (MAX_TOKENS) - response truncated');
+    } else if (!text) {
+      throw new Error('No text content in Gemini response');
     } else {
-      console.error('Unexpected Gemini response structure:', result);
-      throw new Error('No text generated from Gemini');
+      throw new Error('Empty text generated from Gemini');
     }
   } catch (error) {
     console.error('Error calling Gemini directly:', error);

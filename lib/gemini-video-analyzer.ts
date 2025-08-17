@@ -180,23 +180,54 @@ export class GeminiVideoAnalyzer {
 
   private async performVideoAnalysis(gcsUri: string, videoId: string): Promise<VideoAnalysis> {
     try {
-      const prompt = this.createAnalysisPrompt()
+      // 分階段提示策略
+      const prompts = [
+        this.createAnalysisPrompt(),           // 極簡版本
+        this.createMinimalAnalysisPrompt()     // 超級精簡版本（備用）
+      ]
       
       logger.info(`🎬 Starting real Gemini 2.5 Flash video analysis for: ${videoId}`)
       logger.info(`📹 Video GCS URI: ${gcsUri}`)
       
-      // 🎯 使用真正的 Gemini 2.5 Flash 多模態視頻分析
-      const response = await this.callGeminiVideoAPI(gcsUri, prompt, videoId)
+      let lastError: any = null
+      
+      // 嘗試不同複雜度的提示
+      for (let i = 0; i < prompts.length; i++) {
+        try {
+          const prompt = prompts[i]
+          logger.info(`🎯 Attempting analysis with prompt strategy ${i + 1}/${prompts.length}`)
+          
+          // 使用真正的 Gemini 2.5 Flash 多模態視頻分析
+          const response = await this.callGeminiVideoAPI(gcsUri, prompt, videoId)
 
-      logger.info(`✅ Real video analysis completed`, {
-        videoId,
-        responseLength: response.length,
-        preview: response.substring(0, 200)
-      })
+          logger.info(`✅ Real video analysis completed`, {
+            videoId,
+            responseLength: response.length,
+            preview: response.substring(0, 200),
+            promptStrategy: i + 1
+          })
 
-      // 解析 Gemini 的回應
-      return this.parseAnalysisResponse(response, videoId)
+          // 解析 Gemini 的回應
+          return this.parseAnalysisResponse(response, videoId)
+          
+        } catch (error) {
+          lastError = error
+          logger.warn(`⚠️ Prompt strategy ${i + 1} failed, trying next...`, { error })
+          
+          // 如果是截斷錯誤，繼續嘗試更簡單的提示
+          if (error instanceof Error && error.message.includes('truncat')) {
+            continue
+          }
+          
+          // 其他錯誤直接拋出
+          throw error
+        }
+      }
 
+      // 所有策略都失敗
+      logger.error('❌ All prompt strategies failed', { gcsUri, videoId, lastError })
+      throw new Error(`Real video analysis failed after all strategies: ${lastError}`)
+      
     } catch (error) {
       logger.error('❌ Gemini 2.5 Flash video analysis failed', { gcsUri, videoId, error })
       throw new Error(`Real video analysis failed: ${error}`)
@@ -234,9 +265,9 @@ export class GeminiVideoAnalyzer {
         }],
         generationConfig: {
           temperature: 0.3,
-          maxOutputTokens: 8192,  // Gemini 2.5 Flash 的實際輸出限制
-          topP: 0.8,
-          topK: 40
+          maxOutputTokens: 8192,  // 保持充足的輸出空間
+          topP: 0.7,
+          topK: 20
         },
         safetySettings: [
           {
@@ -299,6 +330,16 @@ export class GeminiVideoAnalyzer {
       if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
         const generatedText = result.candidates[0].content.parts[0].text
         logger.info(`📄 Generated analysis text length: ${generatedText.length}`)
+        
+        // 預防性檢查：如果回應接近截斷限制，發出警告
+        if (generatedText.length > 9000) {
+          logger.warn(`⚠️ Response approaching truncation limit`, {
+            videoId,
+            responseLength: generatedText.length,
+            truncationRisk: 'HIGH'
+          })
+        }
+        
         return generatedText
       } else {
         logger.error(`❌ Unexpected response structure from Gemini`, {
@@ -318,86 +359,36 @@ export class GeminiVideoAnalyzer {
   }
 
   private createAnalysisPrompt(): string {
-    return `
-分析此YouTube Shorts視頻，用JSON格式簡潔回答：
-
+    return `分析視頻，用JSON回答（極簡版本）：
 {
-  "generatedTranscript": "視頻的完整對話、旁白和關鍵視覺動作（限500字）",
-  "sceneBreakdown": [
-    {
-      "startTime": 0,
-      "endTime": 10,
-      "description": "場景的核心內容",
-      "setting": "場景環境",
-      "actions": ["主要動作"],
-      "visualDetails": "關鍵視覺細節"
-    }
-  ],
-  "characters": [
-    {
-      "name": "角色名或描述",
-      "description": "外觀和特徵",
-      "role": "角色定位",
-      "appearances": [{"startTime": 0, "endTime": 30}],
-      "characteristics": "顯著特點"
-    }
-  ],
-  "dialogues": [
-    {
-      "startTime": 0,
-      "endTime": 5,
-      "speaker": "說話者",
-      "text": "對話內容",
-      "emotion": "情緒",
-      "language": "語言"
-    }
-  ],
-  "visualElements": [
-    {
-      "type": "類型",
-      "name": "名稱",
-      "description": "描述",
-      "timeRanges": [{"startTime": 0, "endTime": 10}],
-      "importance": "high"
-    }
-  ],
-  "storyStructure": {
-    "hook": "開頭亮點",
-    "development": "發展過程",
-    "climax": "高潮時刻",
-    "resolution": "結尾處理"
-  },
-  "audioAnalysis": {
-    "hasDialogue": true,
-    "backgroundMusic": "音樂類型",
-    "soundEffects": ["音效"],
-    "voiceCharacteristics": "聲音特點"
-  },
-  "mood": "整體氛圍",
+  "generatedTranscript": "主要對話/動作50字內",
+  "sceneBreakdown": [{"startTime":0,"endTime":30,"description":"場景","setting":"地點","actions":["動作"],"visualDetails":"細節"}],
+  "characters": [{"name":"主角","description":"描述10字","role":"角色","appearances":[{"startTime":0,"endTime":30}],"characteristics":"特徵"}],
+  "storyStructure": {"hook":"開頭5字","development":"發展5字","climax":"高潮5字","resolution":"結尾5字"},
+  "audioAnalysis": {"hasDialogue":true,"backgroundMusic":"音樂","soundEffects":["音效"],"voiceCharacteristics":"聲音"},
+  "mood": "氛圍",
   "themes": ["主題"],
-  "cameraWork": "拍攝手法",
-  "keyMoments": [
-    {
-      "timestamp": 5,
-      "description": "關鍵描述",
-      "importance": "high",
-      "type": "visual",
-      "reason": "重要原因"
-    }
-  ],
-  "contentSummary": "50字內核心總結",
+  "cameraWork": "拍攝",
+  "contentSummary": "總結15字",
   "confidence": 0.9
 }
-
-重要：保持簡潔，避免冗長描述。總輸出控制在5000字內。
-`
+規則：最多2場景2角色，每字段限10字`
+  }
+  
+  /**
+   * 超級精簡版本提示（當第一個版本仍然太長時使用）
+   */
+  private createMinimalAnalysisPrompt(): string {
+    return `極簡JSON分析：
+{"generatedTranscript":"內容20字","sceneBreakdown":[{"startTime":0,"endTime":30,"description":"場景"}],"characters":[],"storyStructure":{"hook":"開","development":"展","climax":"轉","resolution":"合"},"audioAnalysis":{"hasDialogue":true},"mood":"氛圍","themes":["主題"],"cameraWork":"拍攝","contentSummary":"總結10字","confidence":0.8}`
   }
 
   private parseAnalysisResponse(responseText: string, videoId: string): VideoAnalysis {
     try {
       // 檢測可能的JSON截斷
-      if (responseText.length > 9000 && !responseText.trim().endsWith('}')) {
-        logger.warn(`⚠️ Possible JSON truncation detected`, {
+      const isTruncated = responseText.length > 9000 && !responseText.trim().endsWith('}')
+      if (isTruncated) {
+        logger.warn(`⚠️ JSON truncation detected, attempting recovery`, {
           videoId,
           responseLength: responseText.length,
           lastChars: responseText.slice(-100)
@@ -416,10 +407,15 @@ export class GeminiVideoAnalyzer {
       
       // 找到JSON開始和結束位置
       const jsonStart = cleanedResponse.indexOf('{')
-      const jsonEnd = cleanedResponse.lastIndexOf('}')
+      let jsonEnd = cleanedResponse.lastIndexOf('}')
       
       if (jsonStart !== -1 && jsonEnd !== -1 && jsonEnd > jsonStart) {
         cleanedResponse = cleanedResponse.substring(jsonStart, jsonEnd + 1)
+      }
+      
+      // 如果檢測到截斷，嘗試智能修復
+      if (isTruncated && !cleanedResponse.endsWith('}')) {
+        cleanedResponse = this.repairTruncatedJson(cleanedResponse, videoId)
       }
       
       logger.info(`🧹 Cleaned JSON for parsing`, {
@@ -489,9 +485,152 @@ export class GeminiVideoAnalyzer {
           error.message.match(/position (\d+)/)?.[1] : 'unknown'
       })
 
+      // 嘗試從部分內容中提取有用信息
+      const partialAnalysis = this.extractPartialAnalysis(responseText, videoId)
+      if (partialAnalysis) {
+        logger.info(`✅ Recovered partial analysis for ${videoId}`)
+        return partialAnalysis
+      }
+
       // 創建降級回應
       return this.createFallbackAnalysis(responseText, videoId)
     }
+  }
+
+  /**
+   * 智能修復截斷的JSON
+   */
+  private repairTruncatedJson(json: string, videoId: string): string {
+    logger.info(`🔧 Attempting to repair truncated JSON for ${videoId}`)
+    
+    let repaired = json
+    
+    // 計算需要的閉合括號
+    const openBraces = (json.match(/\{/g) || []).length
+    const closeBraces = (json.match(/\}/g) || []).length
+    const openBrackets = (json.match(/\[/g) || []).length
+    const closeBrackets = (json.match(/\]/g) || []).length
+    
+    // 如果JSON在字符串中間截斷，嘗試閉合當前字符串
+    if (json.includes('"') && !json.endsWith('"') && !json.endsWith('}')) {
+      const lastQuote = json.lastIndexOf('"')
+      const afterLastQuote = json.substring(lastQuote + 1)
+      // 如果最後一個引號後有內容但沒有閉合，添加引號
+      if (afterLastQuote.length > 0 && !afterLastQuote.includes('"')) {
+        repaired += '"'
+      }
+    }
+    
+    // 閉合數組
+    for (let i = 0; i < openBrackets - closeBrackets; i++) {
+      repaired += ']'
+    }
+    
+    // 閉合對象
+    for (let i = 0; i < openBraces - closeBraces; i++) {
+      repaired += '}'
+    }
+    
+    logger.info(`🔧 JSON repair completed`, {
+      videoId,
+      originalLength: json.length,
+      repairedLength: repaired.length,
+      addedChars: repaired.length - json.length
+    })
+    
+    return repaired
+  }
+  
+  /**
+   * 從部分響應中提取可用的分析數據
+   */
+  private extractPartialAnalysis(responseText: string, videoId: string): VideoAnalysis | null {
+    try {
+      logger.info(`🔍 Attempting to extract partial analysis for ${videoId}`)
+      
+      // 提取生成的轉錄文本
+      const transcriptMatch = responseText.match(/"generatedTranscript"\s*:\s*"([\s\S]*?)"/)
+      const transcript = transcriptMatch ? transcriptMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : ''
+      
+      // 提取場景信息
+      const scenesMatch = responseText.match(/"sceneBreakdown"\s*:\s*\[([\s\S]*?)\]/)
+      let scenes: any[] = []
+      if (scenesMatch) {
+        try {
+          scenes = JSON.parse(`[${scenesMatch[1]}]`)
+        } catch {
+          // 忽略場景解析錯誤
+        }
+      }
+      
+      // 提取角色信息
+      const charactersMatch = responseText.match(/"characters"\s*:\s*\[([\s\S]*?)\]/)
+      let characters: any[] = []
+      if (charactersMatch) {
+        try {
+          characters = JSON.parse(`[${charactersMatch[1]}]`)
+        } catch {
+          // 忽略角色解析錯誤
+        }
+      }
+      
+      if (transcript && transcript.length > 50) {
+        logger.info(`✅ Successfully extracted partial analysis`, {
+          videoId,
+          transcriptLength: transcript.length,
+          scenesCount: scenes.length,
+          charactersCount: characters.length
+        })
+        
+        return {
+          generatedTranscript: transcript,
+          sceneBreakdown: scenes.length > 0 ? scenes : this.createDefaultScenes(),
+          characters: characters.length > 0 ? characters : [],
+          dialogues: [],
+          visualElements: [],
+          storyStructure: {
+            hook: '影片開頭部分',
+            development: '主要內容展開',
+            climax: '關鍵時刻',
+            resolution: '結尾處理'
+          },
+          audioAnalysis: {
+            hasDialogue: transcript.includes('對話') || transcript.includes('說'),
+            backgroundMusic: '背景音樂分析',
+            soundEffects: [],
+            voiceCharacteristics: '語音特徵分析'
+          },
+          mood: '從部分內容推斷的氛圍',
+          themes: ['部分分析主題'],
+          cameraWork: '攝影手法分析',
+          keyMoments: [],
+          contentSummary: transcript.length > 100 ? transcript.substring(0, 100) + '...' : transcript,
+          confidence: 0.6 // 中等信心度，因為是部分分析
+        }
+      }
+      
+      return null
+      
+    } catch (error) {
+      logger.warn(`Failed to extract partial analysis for ${videoId}`, { error })
+      return null
+    }
+  }
+  
+  /**
+   * 創建默認場景結構
+   */
+  private createDefaultScenes(): any[] {
+    return [
+      {
+        startTime: 0,
+        endTime: 20,
+        description: '影片開始場景',
+        setting: '初始環境',
+        actions: ['開場動作'],
+        visualDetails: '視覺細節'
+      }
+    ]
   }
 
   private createFallbackAnalysis(rawResponse: string, videoId: string): VideoAnalysis {

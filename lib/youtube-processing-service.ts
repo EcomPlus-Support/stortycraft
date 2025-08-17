@@ -4,6 +4,7 @@ import { processingMonitor } from '@/lib/processing-monitor'
 import { intelligentCache, IntelligentCache } from '@/lib/intelligent-cache'
 import { youtubeDownloader, VideoDownloadResult } from '@/lib/video-downloader'
 import { geminiVideoAnalyzer, VideoAnalysis } from '@/lib/gemini-video-analyzer'
+import { ProcessingStage, ProcessingError } from '../app/actions/process-reference'
 
 export interface ProcessingResult {
   id: string
@@ -19,6 +20,8 @@ export interface ProcessingResult {
   metadata?: Record<string, any>
   warning?: string
   error?: string
+  // Processing error details
+  processingError?: ProcessingError
   shortsAnalysis?: ShortsAnalysis
   viralPotential?: ViralPotential
   optimizationHints?: string[]
@@ -111,7 +114,7 @@ export class YouTubeProcessingService {
       const videoId = this.extractVideoId(url)
       
       if (!videoId) {
-        const error = this.createErrorResult(url, 'Unable to extract video ID from URL')
+        const error = this.createErrorResult(url, 'Unable to extract video ID from URL', ProcessingStage.YOUTUBE_METADATA)
         processingMonitor.recordProcessingComplete(eventId, 'error', startTime, false)
         return error
       }
@@ -322,6 +325,14 @@ export class YouTubeProcessingService {
     } catch (error) {
       logger.warn(`⚠️ Video analysis failed for ${videoId}, using fallback`, { error })
       videoAnalysisQuality = 'failed'
+      
+      // 如果是 JSON 截斷錯誤，嘗試從錯誤訊息提取有用資訊
+      if (error instanceof Error && error.message.includes('JSON') && error.message.includes('truncat')) {
+        logger.info(`🔧 Attempting to recover from JSON truncation error`)
+        // 設置一個標記，表示這是由於截斷導致的失敗
+        videoAnalysisQuality = 'failed'
+        // 可以在這裡添加更多的恢復邏輯
+      }
     }
     
     // 根據視頻分析結果調整信心度
@@ -577,7 +588,7 @@ export class YouTubeProcessingService {
     return hints
   }
 
-  private createErrorResult(url: string, errorMessage: string): ProcessingResult {
+  private createErrorResult(url: string, errorMessage: string, stage: ProcessingStage = ProcessingStage.YOUTUBE_METADATA): ProcessingResult {
     return {
       id: this.generateId(),
       videoId: null,
@@ -587,7 +598,12 @@ export class YouTubeProcessingService {
       confidence: 0,
       processingStrategy: 'error',
       error: errorMessage,
-      warning: 'Unable to process the provided URL'
+      warning: 'Unable to process the provided URL',
+      processingError: {
+        stage,
+        message: errorMessage,
+        originalContent: url
+      }
     }
   }
 

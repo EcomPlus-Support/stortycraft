@@ -201,8 +201,31 @@ export class GeminiService {
           });
 
           if (!result.text || result.text.trim().length === 0) {
+            console.log('⚠️ Empty response from Gemini, applying recovery strategies');
+            
+            // 嘗試回復策略 1: 調整參數重試
+            if (attempt < this.config.maxRetries - 1) {
+              console.log(`Recovery strategy: Adjusting parameters for retry (attempt ${attempt + 1})`);
+              
+              // 如果是第一次失敗，增加 temperature
+              if (attempt === 0 && options.temperature && options.temperature < 0.8) {
+                options.temperature = Math.min(options.temperature + 0.2, 0.9);
+                console.log(`Increasing temperature to ${options.temperature}`);
+              }
+              
+              // 如果是第二次失敗，增加 maxTokens
+              if (attempt === 1 && options.maxTokens) {
+                options.maxTokens = Math.round(options.maxTokens * 1.5);
+                console.log(`Increasing max tokens to ${options.maxTokens}`);
+              }
+              
+              // 等待一段時間後重試
+              await this.delay(2000 * (attempt + 1));
+              continue;
+            }
+            
             throw new GeminiServiceError(
-              'No response generated from Gemini',
+              'No response generated from Gemini after multiple attempts',
               'EMPTY_RESPONSE',
               true
             );

@@ -39,18 +39,18 @@ export interface JsonParseResult {
 export class SecureJsonParser {
   // Pre-compiled regex patterns for performance and security
   private static readonly SAFE_PATTERNS = {
-    MARKDOWN_REMOVAL: /```(?:json)?|```/g,
+    MARKDOWN_REMOVAL: /```(?:json)?\s*|\s*```/g,
     TRAILING_COMMAS: /,(\s*[}\]])/g,
     WHITESPACE_NORMALIZE: /\s+/g,
     NEWLINE_TO_SPACE: /\n/g,
     EXTRACT_JSON_OBJECT: /\{[\s\S]*\}/,
-    // Safe extraction patterns (limited backtracking)
-    EXTRACT_PITCH: /"generatedPitch"\s*:\s*"([^"]*)"/,
-    EXTRACT_TOPICS: /"keyTopics"\s*:\s*\[(.*?)\]/,
+    // Enhanced extraction patterns that support multi-line content
+    EXTRACT_PITCH: /"generatedPitch"\s*:\s*"([\s\S]*?)"/,
+    EXTRACT_TOPICS: /"keyTopics"\s*:\s*\[([\s\S]*?)\]/,
     EXTRACT_SENTIMENT: /"sentiment"\s*:\s*"([^"]*)"/,
-    EXTRACT_CORE_MESSAGE: /"coreMessage"\s*:\s*"([^"]*)"/,
-    EXTRACT_TARGET_AUDIENCE: /"targetAudience"\s*:\s*"([^"]*)"/,
-    EXTRACT_RATIONALE: /"rationale"\s*:\s*"([^"]*)"/
+    EXTRACT_CORE_MESSAGE: /"coreMessage"\s*:\s*"([\s\S]*?)"/,
+    EXTRACT_TARGET_AUDIENCE: /"targetAudience"\s*:\s*"([\s\S]*?)"/,
+    EXTRACT_RATIONALE: /"rationale"\s*:\s*"([\s\S]*?)"/
   }
 
   /**
@@ -161,6 +161,7 @@ export class SecureJsonParser {
    * Basic JSON cleaning with safe operations
    */
   private basicCleanJson(text: string): string {
+    // First remove markdown code blocks more aggressively
     let cleaned = text
       .replace(SecureJsonParser.SAFE_PATTERNS.MARKDOWN_REMOVAL, '')
       .trim()
@@ -171,11 +172,22 @@ export class SecureJsonParser {
       cleaned = jsonMatch[0]
     }
 
-    // Safe cleaning operations
+    // Don't normalize newlines inside JSON strings - preserve them
+    // First, let's extract all string values and replace newlines with \n
+    cleaned = cleaned.replace(/"([\s\S]*?)"/g, (match, content) => {
+      // Replace actual newlines with escaped newlines within JSON strings
+      const escaped = content
+        .replace(/\\/g, '\\\\')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r')
+        .replace(/\t/g, '\\t')
+        .replace(/"/g, '\\"')
+      return `"${escaped}"`
+    })
+
+    // Now safe to clean the rest
     cleaned = cleaned
       .replace(SecureJsonParser.SAFE_PATTERNS.TRAILING_COMMAS, '$1')
-      .replace(SecureJsonParser.SAFE_PATTERNS.NEWLINE_TO_SPACE, ' ')
-      .replace(SecureJsonParser.SAFE_PATTERNS.WHITESPACE_NORMALIZE, ' ')
       .trim()
 
     // Balance braces safely
@@ -204,6 +216,16 @@ export class SecureJsonParser {
       if (!pitchMatch || !pitchMatch[1] || pitchMatch[1].length < PARSING_CONFIG.MIN_PITCH_LENGTH) {
         return null
       }
+      
+      // Unescape the extracted pitch content
+      const unescapePitch = (pitch: string): string => {
+        return pitch
+          .replace(/\\n/g, '\n')
+          .replace(/\\r/g, '\r')
+          .replace(/\\t/g, '\t')
+          .replace(/\\"/g, '"')
+          .replace(/\\\\/g, '\\')
+      }
 
       // Parse topics safely
       const keyTopics: string[] = []
@@ -224,11 +246,11 @@ export class SecureJsonParser {
         analysis: {
           keyTopics,
           sentiment: sentimentMatch?.[1] || 'neutral',
-          coreMessage: messageMatch?.[1] || 'Content analysis from AI response',
-          targetAudience: audienceMatch?.[1] || 'General audience'
+          coreMessage: unescapePitch(messageMatch?.[1] || 'Content analysis from AI response'),
+          targetAudience: unescapePitch(audienceMatch?.[1] || 'General audience')
         },
-        generatedPitch: pitchMatch[1].slice(0, PARSING_CONFIG.MAX_PITCH_LENGTH), // Limit length
-        rationale: rationaleMatch?.[1] || 'Extracted from AI response'
+        generatedPitch: unescapePitch(pitchMatch[1]).slice(0, PARSING_CONFIG.MAX_PITCH_LENGTH), // Limit length
+        rationale: rationaleMatch?.[1] ? unescapePitch(rationaleMatch[1]) : 'Extracted from AI response'
       }
     } catch (error) {
       return null
