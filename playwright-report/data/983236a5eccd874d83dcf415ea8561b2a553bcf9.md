@@ -1,0 +1,62 @@
+# Page snapshot
+
+```yaml
+- main:
+  - img "Storycraft"
+  - heading "StoryCraft" [level=1]
+  - tablist:
+    - tab "Reference" [selected]:
+      - img
+      - text: Reference
+    - tab "Create":
+      - img
+      - text: Create
+    - tab "Scenario":
+      - img
+      - text: Scenario
+    - tab "Storyboard":
+      - img
+      - text: Storyboard
+    - tab "Video":
+      - img
+      - text: Video
+  - tabpanel "Reference":
+    - heading "Reference Content" [level=2]
+    - paragraph: Transform existing content into compelling video pitches using AI
+    - img
+    - text: "Pitch 語言選擇 (Pitch Language):"
+    - combobox "Pitch 語言選擇 (Pitch Language):": 繁體中文
+    - tablist:
+      - tab "YouTube" [selected]:
+        - img
+        - text: YouTube
+      - tab "Text":
+        - img
+        - text: Text
+      - tab "Audio":
+        - img
+        - text: Audio
+    - tabpanel "YouTube":
+      - img
+      - text: YouTube Video Enter YouTube video or Shorts URL to extract content and generate a video pitch
+      - textbox "https://www.youtube.com/watch?v=... or https://youtube.com/shorts/...": https://youtube.com/shorts/AVPVDt6lXYw
+      - img
+      - text: YouTube Shorts • Viral ~45s
+      - alert:
+        - img
+        - heading "YouTube Shorts Detected! 🎬" [level=5]
+        - text: Optimizing for short-form content. We'll focus on quick hooks, viral elements, and mobile-first storytelling to create an engaging pitch.
+      - img
+      - text: Content Type
+      - button "Override"
+      - button "Process YouTube Shorts"
+    - alert:
+      - img
+      - heading "Connection Issue" [level=5]
+      - paragraph: There was a problem connecting to our services.
+      - paragraph: Check your internet connection and try again.
+      - button "Try Again":
+        - img
+        - text: Try Again
+- alert
+```

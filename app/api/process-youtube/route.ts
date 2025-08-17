@@ -10,6 +10,13 @@ export async function POST(request: NextRequest) {
   
   try {
     logger.info(`🚀 [${requestId}] Starting YouTube processing request`)
+    logger.info(`🌍 [${requestId}] Environment check:`, {
+      nodeEnv: process.env.NODE_ENV,
+      projectId: process.env.PROJECT_ID,
+      geminiModel: process.env.GEMINI_MODEL,
+      hasYoutubeKey: !!process.env.YOUTUBE_API_KEY,
+      tempDir: process.env.NODE_ENV === 'production' ? '/tmp' : 'local'
+    })
     
     const { url, targetLanguage = '繁體中文', useStructuredOutput: initialStructuredOutput = true } = await request.json()
     let useStructuredOutput = initialStructuredOutput
@@ -245,17 +252,49 @@ ${isShorts ? `
     })
 
   } catch (error) {
-    logger.error(`💥 [${requestId}] Critical API error:`, {
-      error: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      timestamp: new Date().toISOString()
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorStack = error instanceof Error ? error.stack : undefined
+    
+    // Enhanced error categorization
+    let errorCategory = 'unknown'
+    let userFriendlyMessage = 'An unexpected error occurred while processing the YouTube content.'
+    
+    if (errorMessage.includes('EACCES') || errorMessage.includes('permission denied')) {
+      errorCategory = 'file_permission'
+      userFriendlyMessage = 'File system permission error in production environment.'
+    } else if (errorMessage.includes('YouTube API key')) {
+      errorCategory = 'youtube_api'
+      userFriendlyMessage = 'YouTube API configuration issue.'
+    } else if (errorMessage.includes('Vertex AI') || errorMessage.includes('Gemini')) {
+      errorCategory = 'gemini_api'
+      userFriendlyMessage = 'AI service unavailable. Please try again.'
+    } else if (errorMessage.includes('timeout')) {
+      errorCategory = 'timeout'
+      userFriendlyMessage = 'Request timeout. Please try again with a shorter video.'
+    } else if (errorMessage.includes('Failed to download') || errorMessage.includes('yt-dlp')) {
+      errorCategory = 'video_download'
+      userFriendlyMessage = 'Unable to download video content. Please check the URL.'
+    }
+    
+    logger.error(`💥 [${requestId}] Critical API error [${errorCategory}]:`, {
+      error: errorMessage,
+      stack: errorStack,
+      category: errorCategory,
+      timestamp: new Date().toISOString(),
+      environment: {
+        nodeEnv: process.env.NODE_ENV,
+        projectId: process.env.PROJECT_ID,
+        hasYoutubeKey: !!process.env.YOUTUBE_API_KEY
+      }
     })
     
     return NextResponse.json(
       { 
         error: 'Failed to process YouTube content',
-        details: error instanceof Error ? error.message : 'Unknown error',
-        requestId
+        details: userFriendlyMessage,
+        category: errorCategory,
+        requestId,
+        timestamp: new Date().toISOString()
       },
       { status: 500 }
     )

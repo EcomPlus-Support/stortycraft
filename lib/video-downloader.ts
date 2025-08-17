@@ -72,10 +72,14 @@ export class YouTubeShortsDownloader {
   ]
 
   constructor() {
-    // 創建臨時目錄
-    this.tempDir = join(process.cwd(), 'temp', 'shorts')
+    // 使用系統臨時目錄，在 Cloud Run 中這是唯一可寫的位置
+    this.tempDir = process.env.NODE_ENV === 'production' 
+      ? join('/tmp', 'storycraft-shorts')
+      : join(process.cwd(), 'temp', 'shorts')
+    
     if (!existsSync(this.tempDir)) {
       mkdirSync(this.tempDir, { recursive: true })
+      logger.info(`📁 Created temp directory: ${this.tempDir}`)
     }
   }
 
