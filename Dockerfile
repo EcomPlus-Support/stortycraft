@@ -3,7 +3,7 @@ FROM node:20-alpine AS builder
 
 # Install system dependencies
 RUN apk add --no-cache libc6-compat ffmpeg python3 py3-pip
-RUN pip3 install --no-cache-dir yt-dlp
+RUN pip3 install --no-cache-dir --break-system-packages yt-dlp
 
 WORKDIR /app
 
@@ -40,7 +40,7 @@ FROM node:20-alpine AS runner
 
 # Install system dependencies
 RUN apk add --no-cache libc6-compat ffmpeg python3 py3-pip
-RUN pip3 install --no-cache-dir yt-dlp
+RUN pip3 install --no-cache-dir --break-system-packages yt-dlp
 
 WORKDIR /app
 
