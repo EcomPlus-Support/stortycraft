@@ -15,6 +15,7 @@ export default function LandingLayout({
       <link 
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
         rel="stylesheet" 
+        crossOrigin="anonymous"
       />
       <style dangerouslySetInnerHTML={{
         __html: `
@@ -35,15 +36,6 @@ export default function LandingLayout({
             background: linear-gradient(90deg, var(--bs-primary), var(--bs-secondary));
           }
           
-          @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-          }
-          
-          .feature-card {
-            transition: all 0.3s ease;
-          }
-          
           .btn {
             transition: all 0.3s ease;
           }
@@ -54,7 +46,7 @@ export default function LandingLayout({
           
           .navbar {
             backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.95) !important;
+            background-color: rgba(255, 255, 255, 0.95);
           }
           
           .card {
@@ -62,11 +54,11 @@ export default function LandingLayout({
           }
           
           .text-primary {
-            color: var(--bs-primary) !important;
+            color: var(--bs-primary);
           }
           
           .bg-primary {
-            background-color: var(--bs-primary) !important;
+            background-color: var(--bs-primary);
           }
           
           .btn-primary {
@@ -83,130 +75,54 @@ export default function LandingLayout({
             scroll-behavior: smooth;
           }
           
+          .modal-content {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+          }
+          
+          .form-control:focus {
+            border-color: var(--bs-primary);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+          }
+          
+          .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 0.75rem;
+          }
+          
+          .dropdown-item {
+            transition: all 0.2s ease;
+          }
+          
+          .dropdown-item:hover {
+            background-color: var(--bs-primary);
+            color: white;
+          }
+          
+          section[id] {
+            scroll-margin-top: 80px;
+          }
+          
           .landing-page {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           }
           
-          /* Mobile Responsiveness Enhancements */
           @media (max-width: 768px) {
             .display-3 {
-              font-size: 2.5rem !important;
-              line-height: 1.2;
-            }
-            
-            .display-5 {
-              font-size: 2rem !important;
-            }
-            
-            .fs-4 {
-              font-size: 1.1rem !important;
-            }
-            
-            .fs-5 {
-              font-size: 1rem !important;
+              font-size: 2.5rem;
             }
             
             .btn-lg {
-              padding: 0.75rem 2rem !important;
-              font-size: 1rem !important;
-            }
-            
-            .card-body {
-              padding: 1.5rem !important;
-            }
-            
-            .py-5 {
-              padding-top: 3rem !important;
-              padding-bottom: 3rem !important;
-            }
-            
-            .my-5 {
-              margin-top: 2rem !important;
-              margin-bottom: 2rem !important;
-            }
-            
-            /* Hero section mobile adjustments */
-            .min-vh-100 {
-              min-height: auto !important;
-              padding-top: 2rem !important;
-              padding-bottom: 2rem !important;
-            }
-            
-            /* Example cards mobile optimization */
-            .example-card {
-              margin-bottom: 2rem;
-            }
-            
-            /* Video container mobile */
-            .ratio-16x9 {
-              margin-bottom: 2rem !important;
-            }
-            
-            /* Floating elements adjustment */
-            .position-absolute {
-              position: relative !important;
-              transform: none !important;
-              margin: 0.5rem 0 !important;
+              padding: 0.75rem 2rem;
             }
           }
           
           @media (max-width: 576px) {
-            .container {
-              padding-left: 1rem;
-              padding-right: 1rem;
-            }
-            
             .display-3 {
-              font-size: 2rem !important;
+              font-size: 2rem;
             }
-            
-            .btn {
-              width: 100%;
-              margin-bottom: 0.5rem;
-            }
-            
-            .d-flex.flex-column.flex-sm-row {
-              flex-direction: column !important;
-            }
-            
-            .gap-3 {
-              gap: 0.75rem !important;
-            }
-          }
-          
-          /* Enhanced hover effects */
-          .example-card:hover {
-            transform: translateY(-8px) !important;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
-          }
-          
-          /* Video placeholder styling */
-          .ratio {
-            position: relative;
-            width: 100%;
-          }
-          
-          .ratio::before {
-            display: block;
-            padding-top: var(--bs-aspect-ratio);
-            content: "";
-          }
-          
-          .ratio > * {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-          }
-          
-          .ratio-16x9 {
-            --bs-aspect-ratio: 56.25%;
-          }
-          
-          /* 9:16 aspect ratio for shorts format */
-          .ratio-9x16 {
-            --bs-aspect-ratio: 177.78%;
           }
         `
       }} />

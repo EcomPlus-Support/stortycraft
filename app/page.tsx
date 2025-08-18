@@ -24,6 +24,8 @@ import { translateError, type UserFriendlyError } from '@/lib/error-utils'
 import { DEFAULT_LANGUAGE } from './constants/languages'
 import { DEFAULT_ASPECT_RATIO } from './constants/aspectRatios'
 import { AspectRatioChangeDialog } from './components/aspect-ratio-change-dialog'
+import { UserProfileDropdown } from './components/user/user-profile-dropdown'
+import { CreditsDisplay } from './components/user/credits-display'
 
 const styles: Style[] = [
   { name: "Live-Action", image: "/styles/cinematic.jpg" },
@@ -36,6 +38,15 @@ const styles: Style[] = [
 // Default language imported from constants
 
 export default function Home() {
+  // Mock user data - in real app this would come from auth context
+  const [user] = useState({
+    username: 'John Doe',
+    email: 'john@example.com',
+    avatar: undefined,
+    credits: 127
+  })
+  const [isAuthenticated] = useState(true)
+  
   const [pitch, setPitch] = useState('')
   const [style, setStyle] = useState('Live-Action')
   const [language, setLanguage] = useState<Language>(DEFAULT_LANGUAGE)
@@ -369,21 +380,53 @@ export default function Home() {
     }
   }
 
+  const handleLogout = () => {
+    console.log('User logged out')
+    // In real app, clear auth state and redirect to landing
+    window.location.href = '/landing'
+  }
+
+  const handleAddCredits = () => {
+    console.log('Navigate to add credits page')
+  }
+
   console.log("Component rendered");
+
+  // Redirect to landing if not authenticated
+  if (!isAuthenticated) {
+    window.location.href = '/landing'
+    return null
+  }
 
   return (
     <main className="container mx-auto p-8 min-h-screen bg-background">
-      <div className="flex items-center justify-center gap-2 mb-8">
-        <Image 
-          src="/logo.png" 
-          alt="Storycraft" 
-          width={32} 
-          height={32} 
-          className="w-8 h-8" 
-        />
-        <h1 className="text-3xl font-bold text-primary">
-          StoryCraft
-        </h1>
+      {/* Header with Logo and User Profile */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex align-items-center gap-2">
+          <Image 
+            src="/logo.png" 
+            alt="ViralCraft" 
+            width={32} 
+            height={32} 
+            className="w-8 h-8" 
+          />
+          <h1 className="text-3xl font-bold text-primary mb-0">
+            ViralCraft
+          </h1>
+        </div>
+        
+        <div className="d-flex align-items-center gap-3">
+          <CreditsDisplay 
+            credits={user.credits}
+            onAddCredits={handleAddCredits}
+            size="sm"
+            className="d-none d-md-flex"
+          />
+          <UserProfileDropdown 
+            user={user}
+            onLogout={handleLogout}
+          />
+        </div>
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="w-full">

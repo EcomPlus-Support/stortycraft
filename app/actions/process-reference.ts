@@ -693,7 +693,7 @@ async function fetchWithTimeout(url: string, timeout: number): Promise<Response>
     const response = await fetch(url, {
       signal: controller.signal,
       headers: {
-        'User-Agent': 'StoryCraft/1.0'
+        'User-Agent': 'ViralCraft/1.0'
       }
     })
     clearTimeout(timeoutId)

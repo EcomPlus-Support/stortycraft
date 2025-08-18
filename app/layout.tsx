@@ -7,8 +7,8 @@ const dmSans = DM_Sans({
 })
 
 export const metadata = {
-  title: 'StoryCraft',
-  description: 'AI-powered storyboard generation',
+  title: 'ViralCraft',
+  description: 'AI-powered viral video creation',
 }
 
 export default function RootLayout({

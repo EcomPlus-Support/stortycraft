@@ -643,7 +643,7 @@ async function fetchWithTimeout(url, timeout) {
         const response = await fetch(url, {
             signal: controller.signal,
             headers: {
-                'User-Agent': 'StoryCraft/1.0'
+                'User-Agent': 'ViralCraft/1.0'
             }
         });
         clearTimeout(timeoutId);
