@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { jwtVerify, SignJWT } from 'jose'
 import { PrismaClient } from '@prisma/client'
+import { AuthenticationError } from './errors'
 
 const prisma = new PrismaClient()
 
@@ -108,4 +109,20 @@ export function createSuccessResponse(data: any, status: number = 200) {
       headers: { 'Content-Type': 'application/json' }
     }
   )
+}
+
+// Re-export AuthenticationError for backward compatibility
+export { AuthenticationError }
+
+// Mock auth manager for services that expect it
+export function getAuthManager() {
+  return {
+    getApiKey: () => process.env.GOOGLE_API_KEY || '',
+    getProjectId: () => process.env.GOOGLE_CLOUD_PROJECT_ID || 'fechen-aifactory',
+    getServiceAccountKey: () => process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '',
+    authenticate: async () => {
+      // Mock authentication for now
+      return true
+    }
+  }
 }

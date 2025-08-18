@@ -26,6 +26,7 @@ import { DEFAULT_ASPECT_RATIO } from './constants/aspectRatios'
 import { AspectRatioChangeDialog } from './components/aspect-ratio-change-dialog'
 import { UserProfileDropdown } from './components/user/user-profile-dropdown'
 import { CreditsDisplay } from './components/user/credits-display'
+import { useAuth } from '@/lib/auth-context'
 
 const styles: Style[] = [
   { name: "Live-Action", image: "/styles/cinematic.jpg" },
@@ -38,14 +39,7 @@ const styles: Style[] = [
 // Default language imported from constants
 
 export default function Home() {
-  // Mock user data - in real app this would come from auth context
-  const [user] = useState({
-    username: 'John Doe',
-    email: 'john@example.com',
-    avatar: undefined,
-    credits: 127
-  })
-  const [isAuthenticated] = useState(true)
+  const { user, isAuthenticated, logout } = useAuth()
   
   const [pitch, setPitch] = useState('')
   const [style, setStyle] = useState('Live-Action')
@@ -381,9 +375,7 @@ export default function Home() {
   }
 
   const handleLogout = () => {
-    console.log('User logged out')
-    // In real app, clear auth state and redirect to landing
-    window.location.href = '/landing'
+    logout()
   }
 
   const handleAddCredits = () => {
@@ -392,9 +384,28 @@ export default function Home() {
 
   console.log("Component rendered");
 
-  // Redirect to landing if not authenticated
-  if (!isAuthenticated) {
+  // Redirect to landing if not authenticated (only on client-side)
+  if (typeof window !== 'undefined' && !isAuthenticated) {
     window.location.href = '/landing'
+    return null
+  }
+
+  // Show loading state during auth initialization
+  if (typeof window !== 'undefined' && isAuthenticated && !user) {
+    return (
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
+        <div className="text-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <div className="mt-2">Loading your workspace...</div>
+        </div>
+      </div>
+    )
+  }
+  
+  // During SSR or when not authenticated, show nothing (will redirect)
+  if (typeof window === 'undefined' || !isAuthenticated || !user) {
     return null
   }
 
@@ -417,7 +428,7 @@ export default function Home() {
         
         <div className="d-flex align-items-center gap-3">
           <CreditsDisplay 
-            credits={user.credits}
+            credits={user?.credits || 0}
             onAddCredits={handleAddCredits}
             size="sm"
             className="d-none d-md-flex"
