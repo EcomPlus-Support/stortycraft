@@ -26,31 +26,15 @@ export function Navigation() {
   }
 
   return (
-    <nav className="navbar navbar-light bg-white shadow-sm fixed-top">
+    <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
       <div className="container">
         <a className="navbar-brand fw-bold text-primary fs-3" href="#">
           ViralCraft
         </a>
         
-        {/* Auth buttons - Always visible on mobile */}
-        <div className="d-flex d-lg-none gap-2 me-3">
-          <button 
-            className="btn btn-outline-secondary btn-sm"
-            onClick={handleSignIn}
-          >
-            Log In
-          </button>
-          <button 
-            className="btn btn-primary btn-sm px-3"
-            onClick={handleSignUp}
-          >
-            Sign Up
-          </button>
-        </div>
-        
-        {/* Mobile menu toggle - Pure React controlled */}
+        {/* Mobile menu toggle */}
         <button 
-          className="navbar-toggler d-lg-none"
+          className="navbar-toggler"
           type="button"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-controls="navbarNav"
@@ -60,45 +44,60 @@ export function Navigation() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Desktop navigation - Always visible on large screens */}
-        <div className="d-none d-lg-flex align-items-center w-100">
-          <ul className="navbar-nav me-auto mb-0">
+        {/* Main navigation - Always visible on desktop, collapsible on mobile */}
+        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
               <button 
-                className="nav-link btn btn-link text-decoration-none" 
-                onClick={() => smoothScrollTo('examples')}
-              >
-                Examples
-              </button>
-            </li>
-            <li className="nav-item">
-              <button 
-                className="nav-link btn btn-link text-decoration-none" 
-                onClick={() => smoothScrollTo('features')}
+                className="nav-link btn btn-link text-decoration-none border-0 bg-transparent p-2" 
+                onClick={() => {
+                  smoothScrollTo('features')
+                  setIsMenuOpen(false)
+                }}
               >
                 Features
               </button>
             </li>
             <li className="nav-item">
               <button 
-                className="nav-link btn btn-link text-decoration-none" 
-                onClick={() => smoothScrollTo('pricing')}
+                className="nav-link btn btn-link text-decoration-none border-0 bg-transparent p-2" 
+                onClick={() => {
+                  smoothScrollTo('examples')
+                  setIsMenuOpen(false)
+                }}
+              >
+                Examples
+              </button>
+            </li>
+            <li className="nav-item">
+              <button 
+                className="nav-link btn btn-link text-decoration-none border-0 bg-transparent p-2" 
+                onClick={() => {
+                  smoothScrollTo('pricing')
+                  setIsMenuOpen(false)
+                }}
               >
                 Pricing
               </button>
             </li>
             <li className="nav-item">
               <button 
-                className="nav-link btn btn-link text-decoration-none" 
-                onClick={() => smoothScrollTo('testimonials')}
+                className="nav-link btn btn-link text-decoration-none border-0 bg-transparent p-2" 
+                onClick={() => {
+                  smoothScrollTo('testimonials')
+                  setIsMenuOpen(false)
+                }}
               >
                 Reviews
               </button>
             </li>
             <li className="nav-item">
               <button 
-                className="nav-link btn btn-link text-decoration-none" 
-                onClick={() => smoothScrollTo('faq')}
+                className="nav-link btn btn-link text-decoration-none border-0 bg-transparent p-2" 
+                onClick={() => {
+                  smoothScrollTo('faq')
+                  setIsMenuOpen(false)
+                }}
               >
                 FAQ
               </button>
@@ -121,81 +120,7 @@ export function Navigation() {
           </div>
         </div>
 
-        {/* Mobile navigation menu - Pure React controlled */}
-        {isMenuOpen && (
-          <div className="d-lg-none position-absolute top-100 start-0 w-100 bg-white border-top shadow-sm" style={{zIndex: 1000}}>
-            <div className="container py-3">
-              <ul className="navbar-nav mb-0">
-                <li className="nav-item mb-2">
-                  <button 
-                    className="nav-link btn btn-link text-decoration-none text-start w-100 py-2" 
-                    onClick={() => {
-                      smoothScrollTo('examples')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    Examples
-                  </button>
-                </li>
-                <li className="nav-item mb-2">
-                  <button 
-                    className="nav-link btn btn-link text-decoration-none text-start w-100 py-2" 
-                    onClick={() => {
-                      smoothScrollTo('features')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    Features
-                  </button>
-                </li>
-                <li className="nav-item mb-2">
-                  <button 
-                    className="nav-link btn btn-link text-decoration-none text-start w-100 py-2" 
-                    onClick={() => {
-                      smoothScrollTo('pricing')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    Pricing
-                  </button>
-                </li>
-                <li className="nav-item mb-2">
-                  <button 
-                    className="nav-link btn btn-link text-decoration-none text-start w-100 py-2" 
-                    onClick={() => {
-                      smoothScrollTo('testimonials')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    Reviews
-                  </button>
-                </li>
-                <li className="nav-item mb-2">
-                  <button 
-                    className="nav-link btn btn-link text-decoration-none text-start w-100 py-2" 
-                    onClick={() => {
-                      smoothScrollTo('faq')
-                      setIsMenuOpen(false)
-                    }}
-                  >
-                    FAQ
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </div>
-        )}
       </div>
-      
-      
-      {/* Click outside to close mobile menu */}
-      {isMenuOpen && (
-        <div 
-          className="position-fixed top-0 start-0 w-100 h-100 d-lg-none" 
-          style={{zIndex: 999}} 
-          onClick={() => setIsMenuOpen(false)}
-        />
-      )}
       
     </nav>
   )

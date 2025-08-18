@@ -75,6 +75,41 @@ export default function LandingLayout({
             scroll-behavior: smooth;
           }
           
+          /* Ensure navbar collapse behaves correctly */
+          @media (min-width: 992px) {
+            .navbar-collapse {
+              display: flex !important;
+              flex-basis: auto;
+            }
+            
+            .navbar-collapse.collapse {
+              display: flex !important;
+            }
+          }
+          
+          @media (max-width: 991.98px) {
+            .navbar-collapse:not(.show) {
+              display: none !important;
+            }
+            
+            .navbar-collapse.show {
+              display: block !important;
+            }
+          }
+          
+          /* Ensure navigation buttons are visible */
+          .navbar-nav .nav-link {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+          }
+          
+          .navbar .btn {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+          }
+          
           .modal-content {
             border: none;
             border-radius: 1rem;

@@ -19,3 +19,56 @@
  GET /auth/login 200 in 882ms
  ✓ Compiled /auth/signup in 164ms (682 modules)
  GET /auth/signup 200 in 259ms
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /landing 200 in 83ms
+ ✓ Compiled /favicon.ico in 274ms (356 modules)
+ GET /favicon.ico 200 in 346ms
+ ✓ Compiled /auth/login in 83ms (416 modules)
+ ✓ Compiled /auth/signup in 84ms (422 modules)
+ ✓ Compiled /api/auth/register in 434ms (531 modules)
+Registration error: PrismaClientInitializationError: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+User `` was denied access on the database `viralcraft_dev.public`
+    at $n.handleRequestError (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/@prisma/client/runtime/library.js:121:7615)
+    at $n.handleAndLogRequestError (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/@prisma/client/runtime/library.js:121:6623)
+    at $n.request (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/@prisma/client/runtime/library.js:121:6307)
+    at async l (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/@prisma/client/runtime/library.js:130:9633)
+    at async POST (webpack-internal:///(rsc)/./app/api/auth/register/route.ts:31:30)
+    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:179:21)
+    at async handleRequest (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:359:24)
+    at async requestHandlerImpl (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/router-server.js:383:13)
+    at async Server.requestListener (/Users/shouian99/Desktop/macmbp/saas_app/storycraft-main/node_modules/next/dist/server/lib/start-server.js:141:13) {
+  clientVersion: '5.22.0',
+  errorCode: undefined
+}
+ POST /api/auth/register 500 in 609ms
+ ✓ Compiled in 551ms (696 modules)
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Compiled in 362ms (696 modules)
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /landing 200 in 116ms
+ ✓ Compiled /favicon.ico in 132ms (422 modules)
+ GET /favicon.ico 200 in 190ms
+ ✓ Compiled /_not-found in 188ms (717 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 260ms
+ ✓ Compiled in 358ms (696 modules)
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Compiled in 221ms (696 modules)
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ GET /landing 200 in 69ms
