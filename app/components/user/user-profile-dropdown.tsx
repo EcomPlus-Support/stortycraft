@@ -5,7 +5,7 @@ import { ChevronDown, User, Settings, CreditCard, History, Plus, LogOut, Link } 
 
 interface UserProfileDropdownProps {
   user: {
-    username: string
+    name?: string | null
     email: string
     avatar?: string
     credits: number
@@ -52,8 +52,12 @@ export function UserProfileDropdown({ user, onLogout }: UserProfileDropdownProps
     }
   }
 
-  const getInitials = (name: string) => {
+  const getInitials = (name: string | null | undefined) => {
+    if (!name || name.trim() === '') {
+      return 'U'
+    }
     return name
+      .trim()
       .split(' ')
       .map(word => word.charAt(0))
       .join('')
@@ -74,7 +78,7 @@ export function UserProfileDropdown({ user, onLogout }: UserProfileDropdownProps
           {user.avatar ? (
             <img
               src={user.avatar}
-              alt={user.username}
+              alt={user.name || 'User'}
               className="rounded-circle"
               style={{ width: '32px', height: '32px', objectFit: 'cover' }}
             />
@@ -83,7 +87,7 @@ export function UserProfileDropdown({ user, onLogout }: UserProfileDropdownProps
               className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
               style={{ width: '32px', height: '32px', fontSize: '12px' }}
             >
-              {getInitials(user.username)}
+              {getInitials(user.name)}
             </div>
           )}
         </div>
@@ -91,7 +95,7 @@ export function UserProfileDropdown({ user, onLogout }: UserProfileDropdownProps
         {/* Username and Credits */}
         <div className="text-start me-2 d-none d-md-block">
           <div className="fw-semibold text-dark" style={{ fontSize: '14px' }}>
-            {user.username}
+            {user.name || 'User'}
           </div>
           <div className="text-muted" style={{ fontSize: '12px' }}>
             {user.credits} credits
@@ -117,7 +121,7 @@ export function UserProfileDropdown({ user, onLogout }: UserProfileDropdownProps
               {user.avatar ? (
                 <img
                   src={user.avatar}
-                  alt={user.username}
+                  alt={user.name || 'User'}
                   className="rounded-circle me-2"
                   style={{ width: '40px', height: '40px', objectFit: 'cover' }}
                 />
@@ -126,11 +130,11 @@ export function UserProfileDropdown({ user, onLogout }: UserProfileDropdownProps
                   className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold me-2"
                   style={{ width: '40px', height: '40px', fontSize: '14px' }}
                 >
-                  {getInitials(user.username)}
+                  {getInitials(user.name)}
                 </div>
               )}
               <div>
-                <div className="fw-semibold">{user.username}</div>
+                <div className="fw-semibold">{user.name || 'User'}</div>
                 <div className="text-muted small">{user.email}</div>
               </div>
             </div>

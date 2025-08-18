@@ -83,16 +83,16 @@ export async function middleware(request: NextRequest) {
   })
 
   if (isProtectedRoute && !isAuthenticated) {
-    // Redirect to login for protected routes
+    // For root path, redirect to landing page
+    if (pathname === '/') {
+      return NextResponse.redirect(new URL('/landing', request.url))
+    }
+    
+    // For other protected routes, redirect to login
     const loginUrl = new URL('/auth/login', request.url)
     // Add return URL for redirect after login
     loginUrl.searchParams.set('returnUrl', pathname)
     return NextResponse.redirect(loginUrl)
-  }
-
-  // Handle root path redirect for unauthenticated users
-  if (pathname === '/' && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/landing', request.url))
   }
 
   return NextResponse.next()

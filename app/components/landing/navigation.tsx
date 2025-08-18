@@ -2,10 +2,13 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/auth-context'
 
 export function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const router = useRouter()
+  const { isAuthenticated, user } = useAuth()
+  
 
   const smoothScrollTo = (elementId: string) => {
     const element = document.getElementById(elementId)
@@ -22,7 +25,11 @@ export function Navigation() {
   }
 
   const handleSignIn = () => {
-    router.push('/auth/login')
+    if (isAuthenticated) {
+      router.push('/')
+    } else {
+      router.push('/auth/login')
+    }
   }
 
   return (
@@ -105,18 +112,47 @@ export function Navigation() {
           </ul>
           
           <div className="d-flex gap-2">
+            {/* 🔧 測試按鈕 - 簡化版 */}
+            <button 
+              style={{
+                border: '2px solid green',
+                padding: '8px 16px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                backgroundColor: 'lightgreen',
+                color: 'black',
+                zIndex: 10000,
+                position: 'relative',
+                cursor: 'pointer',
+                marginRight: '10px'
+              }}
+              onClick={() => {
+                try {
+                  console.log('🔧 Direct router test START')
+                  router.push('/auth/login')
+                  console.log('🔧 Direct router test SUCCESS ✅')
+                } catch (error) {
+                  console.error('🔧 Direct router test FAILED:', error)
+                }
+              }}
+            >
+              直接跳轉
+            </button>
+            
             <button 
               className="btn btn-outline-secondary"
               onClick={handleSignIn}
             >
-              Log In
+              {isAuthenticated ? '🏠 Go to Dashboard' : '🔑 Log In'}
             </button>
-            <button 
-              className="btn btn-primary px-4"
-              onClick={handleSignUp}
-            >
-              Sign Up Free
-            </button>
+            {!isAuthenticated && (
+              <button 
+                className="btn btn-primary px-4"
+                onClick={handleSignUp}
+              >
+                🎆 Sign Up Free
+              </button>
+            )}
           </div>
         </div>
 
